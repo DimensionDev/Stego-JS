@@ -75,7 +75,7 @@ export function clipImg(imageData: ImageData, size: number) {
     const p = i * 4;
 
     data[p] = clip(data[p], size);
-    data[p + 1] = clip(data[p], size);
-    data[p + 2] = clip(data[p], size);
+    data[p + 1] = clip(data[p + 1], size);
+    data[p + 2] = clip(data[p + 2], size);
   }
 }
