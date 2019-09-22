@@ -5,11 +5,12 @@ import { GrayscaleAlgorithm } from './grayscale';
 
 async function start() {
   const imageBuf = await encode(await rs2Buf(process.stdin), {
+    text: '',
     clip: 0,
-    copies: 5,
     size: 8,
     pass: '',
-    grayscaleAlgorithm: GrayscaleAlgorithm.NONE,
+    copies: 5,
+    grayscaleAlgorithm: GrayscaleAlgorithm.AVERAGE,
     transformAlgorithm: TransformAlgorithm.FFT1D,
   });
 

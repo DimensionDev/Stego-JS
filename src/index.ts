@@ -1,13 +1,14 @@
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm, transform, inverseTransform } from './transform';
 import { buf2Img, img2Buf } from './helper';
-import { applyBlock, divideImg } from './stego';
+import { applyBlock, divideImg, decolorImg } from './stego';
 
 export interface Options {
-  pass?: string;
+  text: string;
   clip: number;
-  copies: number;
   size: number;
+  pass?: string;
+  copies: number;
   grayscaleAlgorithm: GrayscaleAlgorithm;
   transformAlgorithm: TransformAlgorithm;
 }
@@ -18,9 +19,14 @@ export interface DecodeOptions extends Options {}
 
 export async function encode(
   imgBuf: Buffer,
-  { size, transformAlgorithm }: EncodeOptions
+  { size, clip, grayscaleAlgorithm, transformAlgorithm }: EncodeOptions
 ) {
   const imageData = await buf2Img(imgBuf);
+
+  // decoloring img prevent from overflowing
+  if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE) {
+    decolorImg(imageData, clip, grayscaleAlgorithm);
+  }
 
   let c = 0;
   let i = 0;

@@ -1,4 +1,5 @@
 import { clamp } from '../helper';
+import { GrayscaleAlgorithm, grayscale, clip } from '../grayscale';
 
 export function applyBlock(
   imageData: ImageData,
@@ -46,5 +47,26 @@ export function* divideImg(imageData: ImageData, size: number) {
         }
       }
     }
+  }
+}
+
+export function decolorImg(
+  imageData: ImageData,
+  size: number,
+  algorithm: GrayscaleAlgorithm
+) {
+  const { width, height, data } = imageData;
+  const length = width * height;
+
+  for (let i = 0; i < length; i += 1) {
+    const p = i * 4;
+    const g = clip(
+      grayscale(data[p], data[p + 1], data[p + 2], algorithm),
+      size
+    );
+
+    data[p] = g;
+    data[p + 1] = g;
+    data[p + 2] = g;
   }
 }
