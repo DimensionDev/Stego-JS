@@ -52,7 +52,6 @@ export function* divideImg(imageData: ImageData, size: number) {
 
 export function decolorImg(
   imageData: ImageData,
-  size: number,
   algorithm: GrayscaleAlgorithm
 ) {
   const { width, height, data } = imageData;
@@ -60,13 +59,23 @@ export function decolorImg(
 
   for (let i = 0; i < length; i += 1) {
     const p = i * 4;
-    const g = clip(
-      grayscale(data[p], data[p + 1], data[p + 2], algorithm),
-      size
-    );
+    const g = grayscale(data[p], data[p + 1], data[p + 2], algorithm);
 
     data[p] = g;
     data[p + 1] = g;
     data[p + 2] = g;
+  }
+}
+
+export function clipImg(imageData: ImageData, size: number) {
+  const { width, height, data } = imageData;
+  const length = width * height;
+
+  for (let i = 0; i < length; i += 1) {
+    const p = i * 4;
+
+    data[p] = clip(data[p], size);
+    data[p + 1] = clip(data[p], size);
+    data[p + 2] = clip(data[p], size);
   }
 }
