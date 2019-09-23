@@ -87,7 +87,7 @@ export function walkImg(
 ) {
   let c = 0; // channel
   let p = 0; // pixel position
-  let b = 0; // bit position
+  let b = 0; // bit/block position
 
   for (const block of divideImg(imageData, size)) {
     callback(block, { c, p, b });
