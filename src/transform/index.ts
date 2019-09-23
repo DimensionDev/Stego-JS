@@ -1,4 +1,5 @@
 import FFT from '../fft';
+import { Options } from '..';
 
 export enum TransformAlgorithm {
   FFT1D = 'FFT1D',
@@ -8,8 +9,8 @@ export enum TransformAlgorithm {
 export function transform(
   re: number[],
   im: number[],
-  size: number,
-  algorithm: TransformAlgorithm
+  algorithm: TransformAlgorithm,
+  { size }: Options
 ) {
   switch (algorithm) {
     case TransformAlgorithm.FFT1D:
@@ -28,8 +29,8 @@ export function transform(
 export function inverseTransform(
   re: number[],
   im: number[],
-  size: number,
-  algorithm: TransformAlgorithm
+  algorithm: TransformAlgorithm,
+  { size }: Options
 ) {
   switch (algorithm) {
     case TransformAlgorithm.FFT1D:

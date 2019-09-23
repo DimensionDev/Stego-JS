@@ -51,11 +51,10 @@ export function clamp(v: number, min: number, max: number) {
 }
 
 export function hash(input: string) {
-  const len = input.length;
   let code = 0;
 
-  if (len === 0) return code;
-  for (let i = 0; i < len; i += 1) {
+  if (input.length === 0) return code;
+  for (let i = 0; i < input.length; i += 1) {
     const char = input.charCodeAt(i);
 
     code = (code << 5) - code + char;
@@ -82,16 +81,15 @@ export function shuffle(
   seed: number[],
   unshuffle: boolean = false
 ) {
-  const len = nums.length;
   const swap = (a: number, b: number) =>
     ([nums[a], nums[b]] = [nums[b], nums[a]]);
 
   for (
-    let i = unshuffle ? len - 1 : 0;
-    (unshuffle && i >= 0) || (!unshuffle && i < len);
+    let i = unshuffle ? nums.length - 1 : 0;
+    (unshuffle && i >= 0) || (!unshuffle && i < nums.length);
     i += unshuffle ? -1 : 1
   ) {
-    swap(seed[i % seed.length] % len, i);
+    swap(seed[i % seed.length] % nums.length, i);
   }
 }
 

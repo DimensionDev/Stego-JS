@@ -1,7 +1,8 @@
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm, transform, inverseTransform } from './transform';
 import { buf2Img, img2Buf } from './helper';
-import { applyBlock, divideImg, decolorImg, clipImg } from './image';
+import { updateImg, decolorImg, clipImg, walkImg } from './image';
+import { mergeBits, createBits, str2bits, setBit, getBit, Bit } from './bit';
 
 export interface Options {
   text: string;
@@ -9,6 +10,7 @@ export interface Options {
   size: number;
   pass?: string;
   copies: number;
+  tolerance: number;
   grayscaleAlgorithm: GrayscaleAlgorithm;
   transformAlgorithm: TransformAlgorithm;
 }
@@ -17,39 +19,56 @@ export interface EncodeOptions extends Options {}
 
 export interface DecodeOptions extends Options {}
 
-export async function encode(
-  imgBuf: Buffer,
-  { size, clip, grayscaleAlgorithm, transformAlgorithm }: EncodeOptions
-) {
+export async function encode(imgBuf: Buffer, options: EncodeOptions) {
+  const {
+    text,
+    size,
+    clip,
+    copies,
+    grayscaleAlgorithm,
+    transformAlgorithm,
+  } = options;
   const imageData = await buf2Img(imgBuf);
+  const { width, height } = imageData;
+  const sizeOfBlocks = Math.floor(width / size) * Math.floor(height / size);
+  const textBits = str2bits(text, copies);
+  const bits = mergeBits(
+    createBits(sizeOfBlocks),
+    textBits,
+    createBits(8 * copies).fill(1) // end of message
+  );
 
+  if (textBits.length + 8 * copies > sizeOfBlocks) {
+    console.warn('bits overflow! try to shrink text or reduce copies.');
+  }
   if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE) {
     decolorImg(imageData, grayscaleAlgorithm);
   }
   if (clip > 0) {
     clipImg(imageData, clip);
   }
-
-  let c = 0;
-  let i = 0;
-
-  for (const block of divideImg(imageData, size)) {
+  walkImg(imageData, size, (block, loc) => {
     const re = block;
     const im = new Array(size * size).fill(0);
 
-    transform(re, im, size, transformAlgorithm);
-    // set bits
-    inverseTransform(re, im, size, transformAlgorithm);
-    applyBlock(imageData, re, size, i, c);
-
-    // update location for next block
-    c += 1;
-    if (c === 3) {
-      i += 1;
-      c = 0;
-    }
-  }
+    transform(re, im, transformAlgorithm, options);
+    // setBit(re, bits[loc.b], loc, options);
+    inverseTransform(re, im, transformAlgorithm, options);
+    updateImg(imageData, re, loc, options);
+  });
   return img2Buf(imageData);
 }
 
-export function decode(imgBuf: Buffer, options: DecodeOptions) {}
+export async function decode(imgBuf: Buffer, options: EncodeOptions) {
+  const { size, pass, transformAlgorithm } = options;
+  const imageData = await buf2Img(imgBuf);
+  const bits: Array<Bit> = [];
+
+  walkImg(imageData, size, (block, loc) => {
+    const re = block;
+    const im = new Array(size * size).fill(0);
+
+    transform(re, im, transformAlgorithm, options);
+    bits.push(getBit(re, pass, loc, options));
+  });
+}

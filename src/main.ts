@@ -10,6 +10,7 @@ async function start() {
     size: 8,
     pass: '',
     copies: 5,
+    tolerance: 50,
     grayscaleAlgorithm: GrayscaleAlgorithm.AVERAGE,
     transformAlgorithm: TransformAlgorithm.FFT1D,
   });

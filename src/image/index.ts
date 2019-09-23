@@ -1,23 +1,23 @@
 import { clamp } from '../helper';
 import { GrayscaleAlgorithm, grayscale, clip } from '../grayscale';
+import { Loc } from '../bit';
+import { Options } from '..';
 
-export function applyBlock(
+export function updateImg(
   imageData: ImageData,
   block: Array<number>,
-  size: number,
-  index: number,
-  channel: number
+  { p, c }: Loc,
+  { size }: Options
 ) {
   const { width } = imageData;
-  const length = block.length;
-  const h1 = Math.floor(index / Math.floor(width / size)) * size;
-  const w1 = (index % Math.floor(width / size)) * size;
+  const h1 = Math.floor(p / Math.floor(width / size)) * size;
+  const w1 = (p % Math.floor(width / size)) * size;
 
-  for (let i = 0; i < length; i += 1) {
+  for (let i = 0; i < block.length; i += 1) {
     const h2 = Math.floor(i / size);
     const w2 = i % size;
 
-    imageData.data[((h1 + h2) * width + w1 + w2) * 4 + channel] = clamp(
+    imageData.data[((h1 + h2) * width + w1 + w2) * 4 + c] = clamp(
       Math.round(block[i]),
       0,
       255
@@ -77,5 +77,25 @@ export function clipImg(imageData: ImageData, size: number) {
     data[p] = clip(data[p], size);
     data[p + 1] = clip(data[p + 1], size);
     data[p + 2] = clip(data[p + 2], size);
+  }
+}
+
+export function walkImg(
+  imageData: ImageData,
+  size: number,
+  callback: (block: Array<number>, loc: Loc) => void
+) {
+  let c = 0; // channel
+  let p = 0; // pixel position
+  let b = 0; // bit position
+
+  for (const block of divideImg(imageData, size)) {
+    callback(block, { c, p, b });
+    c += 1;
+    b += 1;
+    if (c === 3) {
+      p += 1;
+      c = 0;
+    }
   }
 }
