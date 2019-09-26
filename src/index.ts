@@ -69,6 +69,6 @@ export async function decode(imgBuf: Buffer, options: EncodeOptions) {
     const im = new Array(size * size).fill(0);
 
     transform(re, im, transformAlgorithm, options);
-    bits.push(getBit(re, pass, loc, options));
+    bits.push(getBit(re, loc, options));
   });
 }

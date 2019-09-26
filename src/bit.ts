@@ -1,4 +1,5 @@
 import { Options } from '.';
+import { getPositionInBlock } from './position';
 
 export type Bit = 0 | 1;
 
@@ -96,13 +97,9 @@ export function createBits(size: number) {
   return bits;
 }
 
-export function getBit(
-  block: number[],
-  pass: string,
-  { c, p, b }: Loc,
-  { size, tolerance }: Options
-) {
-  const position = size * size; // getPositionInBlock(algorithm, pwd, b, c, size);
+export function getBit(block: number[], loc: Loc, options: Options) {
+  const position = getPositionInBlock(loc, options);
+  const { tolerance } = options;
 
   return Math.abs(Math.round(block[position] / tolerance) % 2) as Bit;
 }
@@ -110,10 +107,12 @@ export function getBit(
 export function setBit(
   block: number[],
   bits: Array<Bit>,
-  { c, p, b }: Loc,
-  { size, pass, tolerance }: Options
+  loc: Loc,
+  options: Options
 ) {
-  const position = size * size; // getPositionInBlock(algorithm, pass, b, c, size);
+  const position = getPositionInBlock(loc, options);
+  const { b } = loc;
+  const { tolerance } = options;
   const v = Math.floor(block[position] / tolerance);
 
   if (bits[b]) {
