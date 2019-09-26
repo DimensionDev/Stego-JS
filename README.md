@@ -1,5 +1,17 @@
 # node-stego
 
+## Installation
+
+```bash
+npm i -g node-stego
+```
+
+## Usage
+
+```bash
+stego -h
+```
+
 ## Refs
 
 - [Javascript implementation of Java’s String.hashCode() method](https://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/)
