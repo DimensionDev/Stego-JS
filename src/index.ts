@@ -2,7 +2,15 @@ import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm, transform, inverseTransform } from './transform';
 import { buf2Img, img2Buf } from './helper';
 import { updateImg, decolorImg, clipImg, walkImg } from './image';
-import { mergeBits, createBits, str2bits, setBit, getBit, Bit } from './bit';
+import {
+  mergeBits,
+  createBits,
+  str2bits,
+  setBit,
+  getBit,
+  Bit,
+  bits2str,
+} from './bit';
 
 export interface Options {
   text: string;
@@ -60,7 +68,7 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
 }
 
 export async function decode(imgBuf: Buffer, options: EncodeOptions) {
-  const { size, pass, transformAlgorithm } = options;
+  const { size, copies, transformAlgorithm } = options;
   const imageData = await buf2Img(imgBuf);
   const bits: Array<Bit> = [];
 
@@ -71,4 +79,5 @@ export async function decode(imgBuf: Buffer, options: EncodeOptions) {
     transform(re, im, transformAlgorithm, options);
     bits.push(getBit(re, loc, options));
   });
+  return bits2str(bits, copies);
 }
