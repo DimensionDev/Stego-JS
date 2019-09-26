@@ -3,6 +3,7 @@
     "jsx": "react",
     "lib": ["es2015", "esnext.array"],
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "noImplicitAny": true,
     "downlevelIteration": true,
     "outDir": "./dist/"

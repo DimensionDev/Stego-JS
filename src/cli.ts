@@ -3,6 +3,7 @@ import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
 import { rs2Buf } from './helper';
 import { Options, encode, decode } from '.';
+import pkg from '../package.json';
 
 const CLI_NAME = 'stego';
 
@@ -12,6 +13,7 @@ const cli = meow(
 
 Options
   -h, --help       Print help message
+  -v, --version    Print version message
   -e, --encode     Encode message into given image
   -d, --decode     Decode message from given image
   -m, --message    Specify the message
@@ -27,14 +29,24 @@ Options
   -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D'
 
 Examples
-  $ cat ./input.png | stego -e -m 'hello world' > output.png
-  $ cat ./output.png | stego -d
+  $ cat ./input.png | ${CLI_NAME} -e -m 'hello world' > output.png
+  $ cat ./output.png | ${CLI_NAME} -d
 `,
   {
     flags: {
+      help: {
+        type: 'boolean',
+        default: false,
+        alias: 'h',
+      },
+      version: {
+        type: 'boolean',
+        default: false,
+        alias: 'v',
+      },
       encode: {
         type: 'boolean',
-        default: true,
+        default: false,
         alias: 'e',
       },
       decode: {
@@ -76,6 +88,7 @@ Examples
         alias: 'f',
       },
     },
+    pkg,
     autoHelp: true,
     autoVersion: true,
     inferType: true,
@@ -163,9 +176,12 @@ export async function run() {
   }
 
   const options = flags2Options(flags);
-  const imgBuf = await rs2Buf(process.stdin);
+  const imgBuf =
+    flags.encode || flags.decode ? await rs2Buf(process.stdin) : null;
 
-  process.stdout.write(
-    flags.encode ? await encode(imgBuf, options) : await decode(imgBuf, options)
-  );
+  if (flags.encode) {
+    process.stdout.write(await encode(imgBuf, options));
+  } else if (flags.decode) {
+    process.stdout.write(await decode(imgBuf, options));
+  }
 }
