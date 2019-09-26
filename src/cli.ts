@@ -88,14 +88,13 @@ Examples
         alias: 'f',
       },
     },
-    pkg,
-    autoHelp: true,
-    autoVersion: true,
     inferType: true,
   }
 );
 
 export interface Flags {
+  help: boolean;
+  version: boolean;
   encode: boolean;
   decode: boolean;
   message: string;
@@ -168,6 +167,15 @@ export function flags2Options({
 
 export async function run() {
   const flags = normalize(cli.flags);
+
+  if (flags.help) {
+    process.stdout.write(cli.help);
+    process.exit(0);
+  } else if (flags.version) {
+    process.stdout.write(`${pkg.version}\n`);
+    process.exit(0);
+  }
+
   const errMsg = validate(flags);
 
   if (errMsg) {

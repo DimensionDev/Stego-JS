@@ -113,9 +113,6 @@ var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " -e > <out
             alias: 'f'
         }
     },
-    pkg: package_json_1["default"],
-    autoHelp: true,
-    autoVersion: true,
     inferType: true
 });
 function normalize(flags) {
@@ -165,6 +162,14 @@ function run() {
             switch (_f.label) {
                 case 0:
                     flags = normalize(cli.flags);
+                    if (flags.help) {
+                        process.stdout.write(cli.help);
+                        process.exit(0);
+                    }
+                    else if (flags.version) {
+                        process.stdout.write(package_json_1["default"].version + "\n");
+                        process.exit(0);
+                    }
                     errMsg = validate(flags);
                     if (errMsg) {
                         process.stderr.write(errMsg + "\n");

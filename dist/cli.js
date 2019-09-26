@@ -56,8 +56,18 @@ var transform_1 = require("./transform");
 var helper_1 = require("./helper");
 var _1 = require(".");
 var CLI_NAME = 'stego';
-var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " -e > <output>\n\nOptions\n  -h, --help       Print help message\n  -e, --encode     Encode message into given image\n  -d, --decode     Decode message from given image\n  -m, --message    Specify the message\n  -s, --size       Size of encoding block with radix-2 required: 8 (default).\n  -c, --copies     Encode duplicate messages in order to survive from\n                   compression attack with odd numbers required: 3 (default).\n  -t, --tolerance  The robustness level to compression.\n  -p, --pass       A seed text for generating random encoding position\n                   for specific algorithm ('FFT1D').\n  -g, --grayscale  Specify grayscale algorithm: 'NONE' (default), 'AVG',\n                   'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE',\n                   'MIN_DE', 'MID_DE', 'R', 'G', 'B'.\n  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D'\n\nExamples\n  $ cat ./input.png | stego -e -m 'hello world' > output.png\n  $ cat ./output.png | stego -d\n", {
+var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " -e > <output>\n\nOptions\n  -h, --help       Print help message\n  -v, --version    Print version message\n  -e, --encode     Encode message into given image\n  -d, --decode     Decode message from given image\n  -m, --message    Specify the message\n  -s, --size       Size of encoding block with radix-2 required: 8 (default).\n  -c, --copies     Encode duplicate messages in order to survive from\n                   compression attack with odd numbers required: 3 (default).\n  -t, --tolerance  The robustness level to compression.\n  -p, --pass       A seed text for generating random encoding position\n                   for specific algorithm ('FFT1D').\n  -g, --grayscale  Specify grayscale algorithm: 'NONE' (default), 'AVG',\n                   'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE',\n                   'MIN_DE', 'MID_DE', 'R', 'G', 'B'.\n  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D'\n\nExamples\n  $ cat ./input.png | " + CLI_NAME + " -e -m 'hello world' > output.png\n  $ cat ./output.png | " + CLI_NAME + " -d\n", {
     flags: {
+        help: {
+            type: 'boolean',
+            "default": false,
+            alias: 'h'
+        },
+        version: {
+            type: 'boolean',
+            "default": false,
+            alias: 'v'
+        },
         encode: {
             type: 'boolean',
             "default": false,
@@ -102,8 +112,6 @@ var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " -e > <out
             alias: 'f'
         }
     },
-    autoHelp: true,
-    autoVersion: true,
     inferType: true
 });
 function normalize(flags) {
@@ -148,11 +156,19 @@ function flags2Options(_a) {
 exports.flags2Options = flags2Options;
 function run() {
     return __awaiter(this, void 0, void 0, function () {
-        var flags, errMsg, options, inputBuf, _a, _b, _c, _d, _e;
+        var flags, errMsg, options, imgBuf, _a, _b, _c, _d, _e;
         return __generator(this, function (_f) {
             switch (_f.label) {
                 case 0:
                     flags = normalize(cli.flags);
+                    if (flags.help) {
+                        process.stdout.write(cli.help);
+                        process.exit(0);
+                    }
+                    else if (flags.version) {
+                        process.stdout.write('1.0.0\n');
+                        process.exit(0);
+                    }
                     errMsg = validate(flags);
                     if (errMsg) {
                         process.stderr.write(errMsg + "\n");
@@ -168,17 +184,17 @@ function run() {
                     _a = null;
                     _f.label = 3;
                 case 3:
-                    inputBuf = _a;
+                    imgBuf = _a;
                     if (!flags.encode) return [3 /*break*/, 5];
                     _c = (_b = process.stdout).write;
-                    return [4 /*yield*/, _1.encode(inputBuf, options)];
+                    return [4 /*yield*/, _1.encode(imgBuf, options)];
                 case 4:
                     _c.apply(_b, [_f.sent()]);
                     return [3 /*break*/, 7];
                 case 5:
                     if (!flags.decode) return [3 /*break*/, 7];
                     _e = (_d = process.stdout).write;
-                    return [4 /*yield*/, _1.decode(inputBuf, options)];
+                    return [4 /*yield*/, _1.decode(imgBuf, options)];
                 case 6:
                     _e.apply(_d, [_f.sent()]);
                     _f.label = 7;

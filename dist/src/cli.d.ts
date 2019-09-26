@@ -2,6 +2,8 @@ import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
 import { Options } from '.';
 export interface Flags {
+    help: boolean;
+    version: boolean;
     encode: boolean;
     decode: boolean;
     message: string;
