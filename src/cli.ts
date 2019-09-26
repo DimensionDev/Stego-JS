@@ -93,9 +93,29 @@ export interface Flags {
   transform: TransformAlgorithm;
 }
 
-export function validate({ size, copies, grayscale, transform }: Flags) {
+export function normalize(flags: any) {
+  const { encode, decode } = flags;
+
+  return {
+    ...flags,
+    encode: encode && !decode,
+    decode,
+  } as Flags;
+}
+
+export function validate({
+  encode,
+  message,
+  size,
+  copies,
+  grayscale,
+  transform,
+}: Flags) {
   const radix = Math.log(size) / Math.log(2);
 
+  if (!message && encode) {
+    return '-m, --message is required';
+  }
   if (size <= 0 || radix !== Math.floor(radix)) {
     return '-s, --size should be a postive radix-2 number';
   }
@@ -122,7 +142,7 @@ export function flags2Options({
 }: Flags): Options {
   return {
     text: message,
-    clip: 5,
+    clip: 0,
     size,
     pass,
     copies,
@@ -133,19 +153,18 @@ export function flags2Options({
 }
 
 export async function run() {
-  const errMsg = validate(cli.flags as Flags);
+  const flags = normalize(cli.flags);
+  const errMsg = validate(flags);
 
   if (errMsg) {
-    console.log(errMsg);
+    process.stderr.write(`${errMsg}\n`);
     process.exit(1);
   }
 
-  const options = flags2Options(cli.flags as Flags);
+  const options = flags2Options(flags);
   const imgBuf = await rs2Buf(process.stdin);
 
   process.stdout.write(
-    cli.flags.encode
-      ? await encode(imgBuf, options)
-      : await decode(imgBuf, options)
+    flags.encode ? await encode(imgBuf, options) : await decode(imgBuf, options)
   );
 }

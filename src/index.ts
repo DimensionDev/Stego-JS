@@ -47,7 +47,9 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
   );
 
   if (textBits.length + 8 * copies > sizeOfBlocks) {
-    console.warn('bits overflow! try to shrink text or reduce copies.');
+    process.stderr.write(
+      'bits overflow! try to shrink text or reduce copies.\n'
+    );
   }
   if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE) {
     decolorImg(imageData, grayscaleAlgorithm);
