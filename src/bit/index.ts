@@ -3,9 +3,9 @@ import { Options } from '..';
 export type Bit = 0 | 1;
 
 export interface Loc {
-  c: number;
-  p: number; // position of pixel
-  b: number; // position of bit
+  c: number; // channel
+  p: number; // pixel position
+  b: number; // bit or block position
 }
 
 export function str2bits(text: string, copies: number): Array<Bit> {
