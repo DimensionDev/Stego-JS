@@ -27,7 +27,8 @@ Options
   -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D'
 
 Examples
-  $ cat ./input.png | stego -e > output.png
+  $ cat ./input.png | stego -e -m 'hello world' > output.png
+  $ cat ./output.png | stego -d
 `,
   {
     flags: {
