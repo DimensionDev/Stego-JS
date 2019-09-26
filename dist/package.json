@@ -1,0 +1,32 @@
+{
+    "name": "node-stego",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/index.js",
+    "scripts": {
+        "start": "npx ts-node src/index.ts",
+        "build": "npx tsc -d",
+        "postbuild": "cp -r src/fft ./dist",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "bin": {
+        "stego": "./bin/stego.js"
+    },
+    "files": [
+        "dist",
+        "bin"
+    ],
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/meow": "^5.0.0",
+        "@types/node": "^12.7.5",
+        "ts-node": "^8.4.1",
+        "typescript": "^3.6.3"
+    },
+    "dependencies": {
+        "canvas": "^2.6.0",
+        "meow": "^5.0.0"
+    }
+}

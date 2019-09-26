@@ -1,1 +1,3 @@
-dist/
+*.png
+*.jpg
+*.jpeg
