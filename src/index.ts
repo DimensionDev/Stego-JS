@@ -52,7 +52,7 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
     const im = new Array(size * size).fill(0);
 
     transform(re, im, transformAlgorithm, options);
-    // setBit(re, bits[loc.b], loc, options);
+    setBit(re, bits, loc, options);
     inverseTransform(re, im, transformAlgorithm, options);
     updateImg(imageData, re, loc, options);
   });

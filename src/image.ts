@@ -1,7 +1,7 @@
-import { clamp } from '../helper';
-import { GrayscaleAlgorithm, grayscale, clip } from '../grayscale';
-import { Loc } from '../bit';
-import { Options } from '..';
+import { clamp } from './helper';
+import { GrayscaleAlgorithm, grayscale, clip } from './grayscale';
+import { Loc } from './bit';
+import { Options } from '.';
 
 export function updateImg(
   imageData: ImageData,

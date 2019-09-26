@@ -1,5 +1,5 @@
-import FFT from '../fft';
-import { Options } from '..';
+import FFT from './fft';
+import { Options } from '.';
 
 export enum TransformAlgorithm {
   FFT1D = 'FFT1D',
