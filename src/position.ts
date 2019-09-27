@@ -8,7 +8,7 @@ export function getPositionInBlock(
 ) {
   switch (transformAlgorithm) {
     case TransformAlgorithm.FFT1D:
-      return size * size;
+      return size * size / 2 + size / 2;
     case TransformAlgorithm.FFT2D:
       return 0;
   }

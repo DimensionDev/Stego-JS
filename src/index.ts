@@ -52,12 +52,12 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
     );
   }
   if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE) {
-    decolorImg(imageData, grayscaleAlgorithm);
+    decolorImg(imageData, options);
   }
   if (clip > 0) {
-    clipImg(imageData, clip);
+    clipImg(imageData, options);
   }
-  walkImg(imageData, size, (block, loc) => {
+  walkImg(imageData, options, (block, loc) => {
     const re = block;
     const im = new Array(size * size).fill(0);
 
@@ -74,7 +74,7 @@ export async function decode(imgBuf: Buffer, options: EncodeOptions) {
   const imageData = await buf2Img(imgBuf);
   const bits: Array<Bit> = [];
 
-  walkImg(imageData, size, (block, loc) => {
+  walkImg(imageData, options, (block, loc) => {
     const re = block;
     const im = new Array(size * size).fill(0);
 

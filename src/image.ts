@@ -25,24 +25,20 @@ export function updateImg(
   }
 }
 
-export function* divideImg(imageData: ImageData, size: number) {
+export function* divideImg(imageData: ImageData, { size }: Options) {
   const { width, height, data } = imageData;
 
   for (let h = 0; h < height; h += size) {
     for (let w = 0; w < width; w += size) {
-      for (let c = 0; c < 3; c += 1) {
-        const block: Array<number> = [];
+      if (h + size < height && w + size < width) {
+        for (let c = 0; c < 3; c += 1) {
+          const block: Array<number> = [];
 
-        for (let h1 = 0; h1 < size; h1 += 1) {
-          for (let w1 = 0; w1 < size; w1 += 1) {
-            if (h + h1 < height && w + w1 < width) {
+          for (let h1 = 0; h1 < size; h1 += 1) {
+            for (let w1 = 0; w1 < size; w1 += 1) {
               block[h1 * size + w1] = data[((h + h1) * width + w + w1) * 4 + c];
-            } else {
-              break;
             }
           }
-        }
-        if (block.length === size * size) {
           yield block;
         }
       }
@@ -52,14 +48,14 @@ export function* divideImg(imageData: ImageData, size: number) {
 
 export function decolorImg(
   imageData: ImageData,
-  algorithm: GrayscaleAlgorithm
+  { grayscaleAlgorithm }: Options
 ) {
   const { width, height, data } = imageData;
   const length = width * height;
 
   for (let i = 0; i < length; i += 1) {
     const p = i * 4;
-    const g = grayscale(data[p], data[p + 1], data[p + 2], algorithm);
+    const g = grayscale(data[p], data[p + 1], data[p + 2], grayscaleAlgorithm);
 
     data[p] = g;
     data[p + 1] = g;
@@ -67,29 +63,29 @@ export function decolorImg(
   }
 }
 
-export function clipImg(imageData: ImageData, size: number) {
+export function clipImg(imageData: ImageData, { clip: clipSize }: Options) {
   const { width, height, data } = imageData;
   const length = width * height;
 
   for (let i = 0; i < length; i += 1) {
     const p = i * 4;
 
-    data[p] = clip(data[p], size);
-    data[p + 1] = clip(data[p + 1], size);
-    data[p + 2] = clip(data[p + 2], size);
+    data[p] = clip(data[p], clipSize);
+    data[p + 1] = clip(data[p + 1], clipSize);
+    data[p + 2] = clip(data[p + 2], clipSize);
   }
 }
 
 export function walkImg(
   imageData: ImageData,
-  size: number,
+  options: Options,
   callback: (block: Array<number>, loc: Loc) => void
 ) {
   let c = 0;
   let p = 0;
   let b = 0;
 
-  for (const block of divideImg(imageData, size)) {
+  for (const block of divideImg(imageData, options)) {
     callback(block, { c, p, b });
     c += 1;
     b += 1;
