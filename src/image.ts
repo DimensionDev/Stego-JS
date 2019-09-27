@@ -1,7 +1,7 @@
 import { clamp } from './helper';
-import { GrayscaleAlgorithm, grayscale, clip } from './grayscale';
+import { grayscale, clip } from './grayscale';
 import { Loc } from './bit';
-import { Options } from '.';
+import { Options, EncodeOptions } from '.';
 
 export function updateImg(
   imageData: ImageData,
@@ -48,7 +48,7 @@ export function* divideImg(imageData: ImageData, { size }: Options) {
 
 export function decolorImg(
   imageData: ImageData,
-  { grayscaleAlgorithm }: Options
+  { grayscaleAlgorithm }: EncodeOptions
 ) {
   const { width, height, data } = imageData;
   const length = width * height;
@@ -63,7 +63,7 @@ export function decolorImg(
   }
 }
 
-export function clipImg(imageData: ImageData, { clip: clipSize }: Options) {
+export function clipImg(imageData: ImageData, { clip: clipSize }: EncodeOptions) {
   const { width, height, data } = imageData;
   const length = width * height;
 

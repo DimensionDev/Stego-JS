@@ -2,7 +2,7 @@ import meow from 'meow';
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
 import { rs2Buf } from './helper';
-import { Options, encode, decode } from '.';
+import { Options, encode, decode, EncodeOptions, DecodeOptions } from '.';
 import pkg from '../package.json';
 
 const CLI_NAME = 'stego';
@@ -152,7 +152,7 @@ export function flags2Options({
   tolerance,
   grayscale,
   transform,
-}: Flags): Options {
+}: Flags) {
   return {
     text: message,
     clip: 0,
@@ -162,7 +162,7 @@ export function flags2Options({
     tolerance,
     grayscaleAlgorithm: grayscale,
     transformAlgorithm: transform,
-  } as Options;
+  } as EncodeOptions & DecodeOptions;
 }
 
 export async function run() {

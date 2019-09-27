@@ -13,17 +13,18 @@ import {
 } from './bit';
 
 export interface Options {
-  text: string;
-  clip: number;
   size: number;
   pass?: string;
   copies: number;
   tolerance: number;
-  grayscaleAlgorithm: GrayscaleAlgorithm;
   transformAlgorithm: TransformAlgorithm;
 }
 
-export interface EncodeOptions extends Options {}
+export interface EncodeOptions extends Options {
+  text: string;
+  clip: number;
+  grayscaleAlgorithm: GrayscaleAlgorithm;
+}
 
 export interface DecodeOptions extends Options {}
 
@@ -69,7 +70,7 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
   return img2Buf(imageData);
 }
 
-export async function decode(imgBuf: Buffer, options: EncodeOptions) {
+export async function decode(imgBuf: Buffer, options: DecodeOptions) {
   const { size, copies, transformAlgorithm } = options;
   const imageData = await buf2Img(imgBuf);
   const bits: Array<Bit> = [];
