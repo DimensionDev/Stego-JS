@@ -1,12 +1,12 @@
 {
     "name": "node-stego",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "",
     "main": "dist/index.js",
     "scripts": {
         "start": "npx ts-node src/index.ts",
         "build": "npx tsc -d",
-        "postbuild": "cp -r src/fft ./dist",
+        "postbuild": "cp -r src/fft ./dist/src/",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "bin": {

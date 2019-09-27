@@ -57,7 +57,7 @@ var helper_1 = require("./helper");
 var _1 = require(".");
 var package_json_1 = __importDefault(require("../package.json"));
 var CLI_NAME = 'stego';
-var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " -e > <output>\n\nOptions\n  -h, --help       Print help message\n  -v, --version    Print version message\n  -e, --encode     Encode message into given image\n  -d, --decode     Decode message from given image\n  -m, --message    Specify the message\n  -s, --size       Size of encoding block with radix-2 required: 8 (default).\n  -c, --copies     Encode duplicate messages in order to survive from\n                   compression attack with odd numbers required: 3 (default).\n  -t, --tolerance  The robustness level to compression.\n  -p, --pass       A seed text for generating random encoding position\n                   for specific algorithm ('FFT1D').\n  -g, --grayscale  Specify grayscale algorithm: 'NONE' (default), 'AVG',\n                   'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE',\n                   'MIN_DE', 'MID_DE', 'R', 'G', 'B'.\n  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D'\n\nExamples\n  $ cat ./input.png | " + CLI_NAME + " -e -m 'hello world' > output.png\n  $ cat ./output.png | " + CLI_NAME + " -d\n", {
+var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " [...options] > <output>\n\nOptions\n  -h, --help       Print help message\n  -v, --version    Print version message\n  -e, --encode     Encode message into given image\n  -d, --decode     Decode message from given image\n  -m, --message    Specify the message\n  -s, --size       Size of encoding block with radix-2 required: 8 (default).\n  -c, --copies     Encode duplicate messages in order to survive from\n                   compression attack with odd numbers required: 3 (default).\n  -t, --tolerance  The robustness level to compression.\n  -p, --pass       A seed text for generating random encoding position\n                   for specific algorithm ('FFT1D').\n  -g, --grayscale  Specify grayscale algorithm: 'NONE' (default), 'AVG',\n                   'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE',\n                   'MIN_DE', 'MID_DE', 'R', 'G', 'B'.\n  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D'\n\nExamples\n  $ cat ./input.png | " + CLI_NAME + " -e -m 'hello world' > output.png\n  $ cat ./output.png | " + CLI_NAME + " -d\n", {
     flags: {
         help: {
             type: 'boolean',
@@ -81,6 +81,7 @@ var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " -e > <out
         },
         message: {
             type: 'string',
+            "default": '',
             alias: 'm'
         },
         size: {
@@ -100,6 +101,7 @@ var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " -e > <out
         },
         pass: {
             type: 'string',
+            "default": '',
             alias: 'p'
         },
         grayscale: {
@@ -116,21 +118,24 @@ var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " -e > <out
     inferType: true
 });
 function normalize(flags) {
-    var encode = flags.encode, decode = flags.decode;
-    return __assign(__assign({}, flags), { encode: encode && !decode, decode: decode });
+    var encode = flags.encode, decode = flags.decode, size = flags.size, copies = flags.copies, tolerance = flags.tolerance;
+    return __assign(__assign({}, flags), { size: parseInt(size, 10), copies: parseInt(copies, 10), tolerance: parseInt(tolerance, 10), encode: encode && !decode, decode: decode });
 }
 exports.normalize = normalize;
 function validate(_a) {
-    var encode = _a.encode, message = _a.message, size = _a.size, copies = _a.copies, grayscale = _a.grayscale, transform = _a.transform;
+    var encode = _a.encode, message = _a.message, size = _a.size, copies = _a.copies, tolerance = _a.tolerance, grayscale = _a.grayscale, transform = _a.transform;
     var radix = Math.log(size) / Math.log(2);
     if (!message && encode) {
         return '-m, --message is required';
     }
-    if (size <= 0 || radix !== Math.floor(radix)) {
+    if (isNaN(size) || size <= 0 || radix !== Math.floor(radix)) {
         return '-s, --size should be a postive radix-2 number';
     }
-    if (copies <= 0 || copies % 2 === 0) {
+    if (isNaN(copies) || copies <= 0 || copies % 2 === 0) {
         return '-c, --copies should be a postive odd number';
+    }
+    if (isNaN(tolerance) || tolerance <= 0 || tolerance > 128) {
+        return '-t, --tolerance should be a positive number between [0-128]';
     }
     if (!Object.keys(grayscale_1.GrayscaleAlgorithm).includes(grayscale)) {
         return 'unknown grayscale algorithm';
@@ -142,7 +147,7 @@ function validate(_a) {
 }
 exports.validate = validate;
 function flags2Options(_a) {
-    var message = _a.message, size = _a.size, pass = _a.pass, copies = _a.copies, tolerance = _a.tolerance, grayscale = _a.grayscale, transform = _a.transform;
+    var message = _a.message, size = _a.size, _b = _a.pass, pass = _b === void 0 ? '' : _b, copies = _a.copies, tolerance = _a.tolerance, grayscale = _a.grayscale, transform = _a.transform;
     return {
         text: message,
         clip: 0,
