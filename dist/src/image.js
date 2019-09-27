@@ -53,40 +53,36 @@ function updateImg(imageData, block, _a, _b) {
     }
 }
 exports.updateImg = updateImg;
-function divideImg(imageData, size) {
+function divideImg(imageData, _a) {
     var width, height, data, h, w, c, block, h1, w1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var size = _a.size;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 width = imageData.width, height = imageData.height, data = imageData.data;
                 h = 0;
-                _a.label = 1;
+                _b.label = 1;
             case 1:
                 if (!(h < height)) return [3 /*break*/, 8];
                 w = 0;
-                _a.label = 2;
+                _b.label = 2;
             case 2:
                 if (!(w < width)) return [3 /*break*/, 7];
+                if (!(h + size <= height && w + size <= width)) return [3 /*break*/, 6];
                 c = 0;
-                _a.label = 3;
+                _b.label = 3;
             case 3:
                 if (!(c < 3)) return [3 /*break*/, 6];
                 block = [];
                 for (h1 = 0; h1 < size; h1 += 1) {
                     for (w1 = 0; w1 < size; w1 += 1) {
-                        if (h + h1 < height && w + w1 < width) {
-                            block[h1 * size + w1] = data[((h + h1) * width + w + w1) * 4 + c];
-                        }
-                        else {
-                            break;
-                        }
+                        block[h1 * size + w1] = data[((h + h1) * width + w + w1) * 4 + c];
                     }
                 }
-                if (!(block.length === size * size)) return [3 /*break*/, 5];
                 return [4 /*yield*/, block];
             case 4:
-                _a.sent();
-                _a.label = 5;
+                _b.sent();
+                _b.label = 5;
             case 5:
                 c += 1;
                 return [3 /*break*/, 3];
@@ -101,36 +97,38 @@ function divideImg(imageData, size) {
     });
 }
 exports.divideImg = divideImg;
-function decolorImg(imageData, algorithm) {
+function decolorImg(imageData, _a) {
+    var grayscaleAlgorithm = _a.grayscaleAlgorithm;
     var width = imageData.width, height = imageData.height, data = imageData.data;
     var length = width * height;
     for (var i = 0; i < length; i += 1) {
         var p = i * 4;
-        var g = grayscale_1.grayscale(data[p], data[p + 1], data[p + 2], algorithm);
+        var g = grayscale_1.grayscale(data[p], data[p + 1], data[p + 2], grayscaleAlgorithm);
         data[p] = g;
         data[p + 1] = g;
         data[p + 2] = g;
     }
 }
 exports.decolorImg = decolorImg;
-function clipImg(imageData, size) {
+function clipImg(imageData, _a) {
+    var clipSize = _a.clip;
     var width = imageData.width, height = imageData.height, data = imageData.data;
     var length = width * height;
     for (var i = 0; i < length; i += 1) {
         var p = i * 4;
-        data[p] = grayscale_1.clip(data[p], size);
-        data[p + 1] = grayscale_1.clip(data[p + 1], size);
-        data[p + 2] = grayscale_1.clip(data[p + 2], size);
+        data[p] = grayscale_1.clip(data[p], clipSize);
+        data[p + 1] = grayscale_1.clip(data[p + 1], clipSize);
+        data[p + 2] = grayscale_1.clip(data[p + 2], clipSize);
     }
 }
 exports.clipImg = clipImg;
-function walkImg(imageData, size, callback) {
+function walkImg(imageData, options, callback) {
     var e_1, _a;
     var c = 0;
     var p = 0;
     var b = 0;
     try {
-        for (var _b = __values(divideImg(imageData, size)), _c = _b.next(); !_c.done; _c = _b.next()) {
+        for (var _b = __values(divideImg(imageData, options)), _c = _b.next(); !_c.done; _c = _b.next()) {
             var block = _c.value;
             callback(block, { c: c, p: p, b: b });
             c += 1;

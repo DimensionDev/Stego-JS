@@ -52,7 +52,7 @@ function encode(imgBuf, options) {
                 case 1:
                     imageData = _a.sent();
                     width = imageData.width, height = imageData.height;
-                    sizeOfBlocks = Math.floor(width / size) * Math.floor(height / size);
+                    sizeOfBlocks = Math.floor(width / size) * Math.floor(height / size) * 3;
                     textBits = bit_1.str2bits(text, copies);
                     bits = bit_1.mergeBits(bit_1.createBits(sizeOfBlocks), textBits, bit_1.createBits(8 * copies).fill(1) // end of message
                     );
@@ -60,12 +60,12 @@ function encode(imgBuf, options) {
                         process.stderr.write('bits overflow! try to shrink text or reduce copies.\n');
                     }
                     if (grayscaleAlgorithm !== grayscale_1.GrayscaleAlgorithm.NONE) {
-                        image_1.decolorImg(imageData, grayscaleAlgorithm);
+                        image_1.decolorImg(imageData, options);
                     }
                     if (clip > 0) {
-                        image_1.clipImg(imageData, clip);
+                        image_1.clipImg(imageData, options);
                     }
-                    image_1.walkImg(imageData, size, function (block, loc) {
+                    image_1.walkImg(imageData, options, function (block, loc) {
                         var re = block;
                         var im = new Array(size * size).fill(0);
                         transform_1.transform(re, im, transformAlgorithm, options);
@@ -90,7 +90,7 @@ function decode(imgBuf, options) {
                 case 1:
                     imageData = _a.sent();
                     bits = [];
-                    image_1.walkImg(imageData, size, function (block, loc) {
+                    image_1.walkImg(imageData, options, function (block, loc) {
                         var re = block;
                         var im = new Array(size * size).fill(0);
                         transform_1.transform(re, im, transformAlgorithm, options);
