@@ -9,7 +9,7 @@ const CLI_NAME = 'stego';
 
 const cli = meow(
   `Usage
-  $ cat <input> | ${CLI_NAME} [...options] > <output>
+  $ cat <input> | ${CLI_NAME} [options...] > <output>
 
 Options
   -h, --help       Print help message
