@@ -39,7 +39,7 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
   } = options;
   const imageData = await buf2Img(imgBuf);
   const { width, height } = imageData;
-  const sizeOfBlocks = Math.floor(width / size) * Math.floor(height / size);
+  const sizeOfBlocks = Math.floor(width / size) * Math.floor(height / size) * 3;
   const textBits = str2bits(text, copies);
   const bits = mergeBits(
     createBits(sizeOfBlocks),

@@ -56,6 +56,7 @@ Examples
       },
       message: {
         type: 'string',
+        default: '',
         alias: 'm',
       },
       size: {
@@ -75,6 +76,7 @@ Examples
       },
       pass: {
         type: 'string',
+        default: '',
         alias: 'p',
       },
       grayscale: {
@@ -107,10 +109,13 @@ export interface Flags {
 }
 
 export function normalize(flags: any) {
-  const { encode, decode } = flags;
+  const { encode, decode, size, copies, tolerance } = flags;
 
   return {
     ...flags,
+    size: parseInt(size, 10),
+    copies: parseInt(copies, 10),
+    tolerance: parseInt(tolerance, 10),
     encode: encode && !decode,
     decode,
   } as Flags;
@@ -121,6 +126,7 @@ export function validate({
   message,
   size,
   copies,
+  tolerance,
   grayscale,
   transform,
 }: Flags) {
@@ -129,11 +135,14 @@ export function validate({
   if (!message && encode) {
     return '-m, --message is required';
   }
-  if (size <= 0 || radix !== Math.floor(radix)) {
+  if (isNaN(size) || size <= 0 || radix !== Math.floor(radix)) {
     return '-s, --size should be a postive radix-2 number';
   }
-  if (copies <= 0 || copies % 2 === 0) {
+  if (isNaN(copies) || copies <= 0 || copies % 2 === 0) {
     return '-c, --copies should be a postive odd number';
+  }
+  if (isNaN(tolerance) || tolerance <= 0 || tolerance > 128) {
+    return '-t, --tolerance should be a positive number between [0-128]';
   }
   if (!Object.keys(GrayscaleAlgorithm).includes(grayscale)) {
     return 'unknown grayscale algorithm';
@@ -147,7 +156,7 @@ export function validate({
 export function flags2Options({
   message,
   size,
-  pass,
+  pass = '',
   copies,
   tolerance,
   grayscale,

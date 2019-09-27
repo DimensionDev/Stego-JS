@@ -30,7 +30,7 @@ export function* divideImg(imageData: ImageData, { size }: Options) {
 
   for (let h = 0; h < height; h += size) {
     for (let w = 0; w < width; w += size) {
-      if (h + size < height && w + size < width) {
+      if (h + size <= height && w + size <= width) {
         for (let c = 0; c < 3; c += 1) {
           const block: Array<number> = [];
 
@@ -63,7 +63,10 @@ export function decolorImg(
   }
 }
 
-export function clipImg(imageData: ImageData, { clip: clipSize }: EncodeOptions) {
+export function clipImg(
+  imageData: ImageData,
+  { clip: clipSize }: EncodeOptions
+) {
   const { width, height, data } = imageData;
   const length = width * height;
 
