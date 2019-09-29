@@ -1,3 +1,14 @@
 import { Options } from '.';
 import { Loc } from './bit';
-export declare function getPositionInBlock(loc: Loc, { size, transformAlgorithm }: Options): number;
+export interface Accumulator {
+    prevPos: number;
+    prevCode: string;
+    indices: number[];
+}
+export declare function createAcc({ size, transformAlgorithm }: Options): {
+    prevPos: number;
+    prevCode: string;
+    indices: number[];
+};
+export declare function getPosFromAcc(acc: Accumulator, { c }: Loc, { pass }: Options): number;
+export declare function getPos(acc: Accumulator, loc: Loc, options: Options): number;

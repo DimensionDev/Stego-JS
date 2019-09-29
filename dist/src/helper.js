@@ -117,3 +117,38 @@ function yuv2rgb(y, cb, cr) {
     ];
 }
 exports.yuv2rgb = yuv2rgb;
+function createIndices(size, predicator) {
+    var indices = [];
+    for (var i = 0; i < size * size; i += 1) {
+        if (predicator(i)) {
+            indices.push(i);
+        }
+    }
+    return indices;
+}
+exports.createIndices = createIndices;
+function squareTopLeftCircleExclude(size, radius) {
+    return createIndices(size, function (i) {
+        var x = Math.floor(i / size);
+        var y = i % size;
+        return Math.sqrt(y * y + x * x) > radius;
+    });
+}
+exports.squareTopLeftCircleExclude = squareTopLeftCircleExclude;
+function squareBottonRightCircleExclude(size, radius) {
+    return createIndices(size, function (i) {
+        var x = Math.floor(i / size);
+        var y = i % size;
+        return (Math.sqrt(Math.pow(size - y - 1, 2) + Math.pow(size - x - 1, 2)) > radius);
+    });
+}
+exports.squareBottonRightCircleExclude = squareBottonRightCircleExclude;
+function squareCircleIntersect(size, radius) {
+    var mid = (size + 1) / 2 - 1;
+    return createIndices(size, function (i) {
+        var x = Math.floor(i / size);
+        var y = i % size;
+        return Math.sqrt(Math.pow(mid - x, 2) + Math.pow(mid - y, 2)) <= radius;
+    });
+}
+exports.squareCircleIntersect = squareCircleIntersect;
