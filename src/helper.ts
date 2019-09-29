@@ -3,7 +3,7 @@ import { createCanvas, Image } from 'canvas';
 
 export function rs2Buf(rs: Readable) {
   return new Promise<Buffer>((resolve, reject) => {
-    const bufs: Array<Uint8Array> = [];
+    const bufs: Uint8Array[] = [];
 
     rs.on('data', c => bufs.push(c));
     rs.on('end', () => resolve(Buffer.concat(bufs)));
@@ -111,4 +111,49 @@ export function yuv2rgb(y: number, cb: number, cr: number) {
     y - 0.3455 * (cb - 128) - 0.7169 * (cr - 128),
     y + 1.779 * (cb - 128),
   ];
+}
+
+export function createIndices(
+  size: number,
+  predicator: (i: number) => boolean
+) {
+  const indices: number[] = [];
+
+  for (let i = 0; i < size * size; i += 1) {
+    if (predicator(i)) {
+      indices.push(i);
+    }
+  }
+  return indices;
+}
+
+export function squareTopLeftCircleExclude(size: number, radius: number) {
+  return createIndices(size, i => {
+    const x = Math.floor(i / size);
+    const y = i % size;
+
+    return Math.sqrt(y * y + x * x) > radius;
+  });
+}
+
+export function squareBottonRightCircleExclude(size: number, radius: number) {
+  return createIndices(size, i => {
+    const x = Math.floor(i / size);
+    const y = i % size;
+
+    return (
+      Math.sqrt(Math.pow(size - y - 1, 2) + Math.pow(size - x - 1, 2)) > radius
+    );
+  });
+}
+
+export function squareCircleIntersect(size: number, radius: number) {
+  const mid = (size + 1) / 2 - 1;
+
+  return createIndices(size, i => {
+    const x = Math.floor(i / size);
+    const y = i % size;
+
+    return Math.sqrt(Math.pow(mid - x, 2) + Math.pow(mid - y, 2)) <= radius;
+  });
 }

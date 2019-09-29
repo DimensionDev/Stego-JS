@@ -1,5 +1,5 @@
 import { Options } from '.';
-import { getPositionInBlock } from './position';
+import { getPos, Accumulator } from './position';
 
 export type Bit = 0 | 1;
 
@@ -9,10 +9,10 @@ export interface Loc {
   b: number; // bit or block position
 }
 
-export function str2bits(text: string, copies: number): Array<Bit> {
+export function str2bits(text: string, copies: number): Bit[] {
   const chars = text.split('');
-  const bits: Array<Bit> = [];
-  const pushByte = (byte: Array<Bit>, n: number) => {
+  const bits: Bit[] = [];
+  const pushByte = (byte: Bit[], n: number) => {
     for (let i = 0; i < 8; i += 1) {
       let j = 0;
 
@@ -26,7 +26,7 @@ export function str2bits(text: string, copies: number): Array<Bit> {
     const codes = encodeURI(chars[i]).split('');
 
     for (let j = 0; j < codes.length; j += 1) {
-      const byte: Array<Bit> = [];
+      const byte: Bit[] = [];
       let reminder: Bit = 0;
       let code = codes[j].charCodeAt(0);
 
@@ -45,11 +45,11 @@ export function str2bits(text: string, copies: number): Array<Bit> {
   return bits;
 }
 
-export function bits2str(bits: Array<Bit>, copies: number) {
+export function bits2str(bits: Bit[], copies: number) {
   let k = 128;
   let temp = 0;
   const chars: string[] = [];
-  const candidates: Array<Bit> = [];
+  const candidates: Bit[] = [];
   const elect = () =>
     candidates.filter(c => c === 1).length >= copies / 2 ? 1 : 0;
 
@@ -75,7 +75,7 @@ export function bits2str(bits: Array<Bit>, copies: number) {
   return decodeURI(chars.join(''));
 }
 
-export function mergeBits(dest: Array<Bit>, ...src: Array<Array<Bit>>) {
+export function mergeBits(dest: Bit[], ...src: Bit[][]) {
   let k = 0;
 
   for (let i = 0; i < src.length; i += 1) {
@@ -89,7 +89,7 @@ export function mergeBits(dest: Array<Bit>, ...src: Array<Array<Bit>>) {
 }
 
 export function createBits(size: number) {
-  const bits: Array<Bit> = new Array(size).fill(0);
+  const bits: Bit[] = new Array(size).fill(0);
 
   for (let i = 0; i < size; i += 1) {
     bits[i] = Math.floor(Math.random() * 2) as Bit;
@@ -97,27 +97,28 @@ export function createBits(size: number) {
   return bits;
 }
 
-export function getBit(block: number[], loc: Loc, options: Options) {
-  const position = getPositionInBlock(loc, options);
+export function getBit(block: number[], acc: Accumulator, loc: Loc, options: Options) {
+  const pos = getPos(acc, loc, options);
   const { tolerance } = options;
 
-  return Math.abs(Math.round(block[position] / tolerance) % 2) as Bit;
+  return Math.abs(Math.round(block[pos] / tolerance) % 2) as Bit;
 }
 
 export function setBit(
   block: number[],
-  bits: Array<Bit>,
+  bits: Bit[],
+  acc: Accumulator,
   loc: Loc,
   options: Options
 ) {
-  const position = getPositionInBlock(loc, options);
+  const pos = getPos(acc, loc, options);
   const { b } = loc;
   const { tolerance } = options;
-  const v = Math.floor(block[position] / tolerance);
+  const v = Math.floor(block[pos] / tolerance);
 
   if (bits[b]) {
-    block[position] = v % 2 === 1 ? v * tolerance : (v + 1) * tolerance;
+    block[pos] = v % 2 === 1 ? v * tolerance : (v + 1) * tolerance;
   } else {
-    block[position] = v % 2 === 1 ? (v - 1) * tolerance : v * tolerance;
+    block[pos] = v % 2 === 1 ? (v - 1) * tolerance : v * tolerance;
   }
 }
