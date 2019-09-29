@@ -5,7 +5,7 @@ import { Options, EncodeOptions } from '.';
 
 export function updateImg(
   imageData: ImageData,
-  block: Array<number>,
+  block: number[],
   { p, c }: Loc,
   { size }: Options
 ) {
@@ -32,7 +32,7 @@ export function* divideImg(imageData: ImageData, { size }: Options) {
     for (let w = 0; w < width; w += size) {
       if (h + size <= height && w + size <= width) {
         for (let c = 0; c < 3; c += 1) {
-          const block: Array<number> = [];
+          const block: number[] = [];
 
           for (let h1 = 0; h1 < size; h1 += 1) {
             for (let w1 = 0; w1 < size; w1 += 1) {
@@ -82,7 +82,7 @@ export function clipImg(
 export function walkImg(
   imageData: ImageData,
   options: Options,
-  callback: (block: Array<number>, loc: Loc) => void
+  callback: (block: number[], loc: Loc) => void
 ) {
   let c = 0;
   let p = 0;

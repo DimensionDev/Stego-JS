@@ -1,8 +1,8 @@
-import meow from 'meow';
+import meow, { Result } from 'meow';
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
 import { rs2Buf } from './helper';
-import { Options, encode, decode, EncodeOptions, DecodeOptions } from '.';
+import { encode, decode, EncodeOptions, DecodeOptions } from '.';
 import pkg from '../package.json';
 
 const CLI_NAME = 'stego';
@@ -108,7 +108,7 @@ export interface Flags {
   transform: TransformAlgorithm;
 }
 
-export function normalize(flags: any) {
+export function normalize(flags: Result['flags']) {
   const { encode, decode, size, copies, tolerance } = flags;
 
   return {

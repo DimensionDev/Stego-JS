@@ -11,6 +11,7 @@ import {
   Bit,
   bits2str,
 } from './bit';
+import { createAcc } from './position';
 
 export interface Options {
   size: number;
@@ -58,12 +59,15 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
   if (clip > 0) {
     clipImg(imageData, options);
   }
+
+  const acc = createAcc(options);
+
   walkImg(imageData, options, (block, loc) => {
     const re = block;
     const im = new Array(size * size).fill(0);
 
     transform(re, im, transformAlgorithm, options);
-    setBit(re, bits, loc, options);
+    setBit(re, bits, acc, loc, options);
     inverseTransform(re, im, transformAlgorithm, options);
     updateImg(imageData, re, loc, options);
   });
@@ -73,14 +77,15 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
 export async function decode(imgBuf: Buffer, options: DecodeOptions) {
   const { size, copies, transformAlgorithm } = options;
   const imageData = await buf2Img(imgBuf);
-  const bits: Array<Bit> = [];
+  const bits: Bit[] = [];
+  const acc = createAcc(options);
 
   walkImg(imageData, options, (block, loc) => {
     const re = block;
     const im = new Array(size * size).fill(0);
 
     transform(re, im, transformAlgorithm, options);
-    bits.push(getBit(re, loc, options));
+    bits.push(getBit(re, acc, loc, options));
   });
   return bits2str(bits, copies);
 }
