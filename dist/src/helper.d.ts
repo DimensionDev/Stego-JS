@@ -10,7 +10,7 @@ export declare function shuffle(nums: number[], seed: number[], unshuffle?: bool
 export declare function unshuffle(nums: number[], seed: number[]): void;
 export declare function rgb2yuv(r: number, g: number, b: number): number[];
 export declare function yuv2rgb(y: number, cb: number, cr: number): number[];
-export declare function createIndices(size: number, predicator: (i: number) => boolean): number[];
+export declare function filterIndices(size: number, predicator: (i: number) => boolean): number[];
 export declare function squareTopLeftCircleExclude(size: number, radius: number): number[];
 export declare function squareBottonRightCircleExclude(size: number, radius: number): number[];
 export declare function squareCircleIntersect(size: number, radius: number): number[];

@@ -117,7 +117,7 @@ function yuv2rgb(y, cb, cr) {
     ];
 }
 exports.yuv2rgb = yuv2rgb;
-function createIndices(size, predicator) {
+function filterIndices(size, predicator) {
     var indices = [];
     for (var i = 0; i < size * size; i += 1) {
         if (predicator(i)) {
@@ -126,9 +126,9 @@ function createIndices(size, predicator) {
     }
     return indices;
 }
-exports.createIndices = createIndices;
+exports.filterIndices = filterIndices;
 function squareTopLeftCircleExclude(size, radius) {
-    return createIndices(size, function (i) {
+    return filterIndices(size, function (i) {
         var x = Math.floor(i / size);
         var y = i % size;
         return Math.sqrt(y * y + x * x) > radius;
@@ -136,7 +136,7 @@ function squareTopLeftCircleExclude(size, radius) {
 }
 exports.squareTopLeftCircleExclude = squareTopLeftCircleExclude;
 function squareBottonRightCircleExclude(size, radius) {
-    return createIndices(size, function (i) {
+    return filterIndices(size, function (i) {
         var x = Math.floor(i / size);
         var y = i % size;
         return (Math.sqrt(Math.pow(size - y - 1, 2) + Math.pow(size - x - 1, 2)) > radius);
@@ -145,7 +145,7 @@ function squareBottonRightCircleExclude(size, radius) {
 exports.squareBottonRightCircleExclude = squareBottonRightCircleExclude;
 function squareCircleIntersect(size, radius) {
     var mid = (size + 1) / 2 - 1;
-    return createIndices(size, function (i) {
+    return filterIndices(size, function (i) {
         var x = Math.floor(i / size);
         var y = i % size;
         return Math.sqrt(Math.pow(mid - x, 2) + Math.pow(mid - y, 2)) <= radius;
