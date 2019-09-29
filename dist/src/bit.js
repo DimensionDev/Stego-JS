@@ -84,22 +84,22 @@ function createBits(size) {
     return bits;
 }
 exports.createBits = createBits;
-function getBit(block, loc, options) {
-    var position = position_1.getPositionInBlock(loc, options);
+function getBit(block, acc, loc, options) {
+    var pos = position_1.getPos(acc, loc, options);
     var tolerance = options.tolerance;
-    return Math.abs(Math.round(block[position] / tolerance) % 2);
+    return Math.abs(Math.round(block[pos] / tolerance) % 2);
 }
 exports.getBit = getBit;
-function setBit(block, bits, loc, options) {
-    var position = position_1.getPositionInBlock(loc, options);
+function setBit(block, bits, acc, loc, options) {
+    var pos = position_1.getPos(acc, loc, options);
     var b = loc.b;
     var tolerance = options.tolerance;
-    var v = Math.floor(block[position] / tolerance);
+    var v = Math.floor(block[pos] / tolerance);
     if (bits[b]) {
-        block[position] = v % 2 === 1 ? v * tolerance : (v + 1) * tolerance;
+        block[pos] = v % 2 === 1 ? v * tolerance : (v + 1) * tolerance;
     }
     else {
-        block[position] = v % 2 === 1 ? (v - 1) * tolerance : v * tolerance;
+        block[pos] = v % 2 === 1 ? (v - 1) * tolerance : v * tolerance;
     }
 }
 exports.setBit = setBit;

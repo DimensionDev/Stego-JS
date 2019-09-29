@@ -41,9 +41,10 @@ var transform_1 = require("./transform");
 var helper_1 = require("./helper");
 var image_1 = require("./image");
 var bit_1 = require("./bit");
+var position_1 = require("./position");
 function encode(imgBuf, options) {
     return __awaiter(this, void 0, void 0, function () {
-        var text, size, clip, copies, grayscaleAlgorithm, transformAlgorithm, imageData, width, height, sizeOfBlocks, textBits, bits;
+        var text, size, clip, copies, grayscaleAlgorithm, transformAlgorithm, imageData, width, height, sizeOfBlocks, textBits, bits, acc;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -65,11 +66,12 @@ function encode(imgBuf, options) {
                     if (clip > 0) {
                         image_1.clipImg(imageData, options);
                     }
+                    acc = position_1.createAcc(options);
                     image_1.walkImg(imageData, options, function (block, loc) {
                         var re = block;
                         var im = new Array(size * size).fill(0);
                         transform_1.transform(re, im, transformAlgorithm, options);
-                        bit_1.setBit(re, bits, loc, options);
+                        bit_1.setBit(re, bits, acc, loc, options);
                         transform_1.inverseTransform(re, im, transformAlgorithm, options);
                         image_1.updateImg(imageData, re, loc, options);
                     });
@@ -81,7 +83,7 @@ function encode(imgBuf, options) {
 exports.encode = encode;
 function decode(imgBuf, options) {
     return __awaiter(this, void 0, void 0, function () {
-        var size, copies, transformAlgorithm, imageData, bits;
+        var size, copies, transformAlgorithm, imageData, bits, acc;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -90,11 +92,12 @@ function decode(imgBuf, options) {
                 case 1:
                     imageData = _a.sent();
                     bits = [];
+                    acc = position_1.createAcc(options);
                     image_1.walkImg(imageData, options, function (block, loc) {
                         var re = block;
                         var im = new Array(size * size).fill(0);
                         transform_1.transform(re, im, transformAlgorithm, options);
-                        bits.push(bit_1.getBit(re, loc, options));
+                        bits.push(bit_1.getBit(re, acc, loc, options));
                     });
                     return [2 /*return*/, bit_1.bits2str(bits, copies)];
             }
