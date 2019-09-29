@@ -113,7 +113,7 @@ export function yuv2rgb(y: number, cb: number, cr: number) {
   ];
 }
 
-export function createIndices(
+export function filterIndices(
   size: number,
   predicator: (i: number) => boolean
 ) {
@@ -128,7 +128,7 @@ export function createIndices(
 }
 
 export function squareTopLeftCircleExclude(size: number, radius: number) {
-  return createIndices(size, i => {
+  return filterIndices(size, i => {
     const x = Math.floor(i / size);
     const y = i % size;
 
@@ -137,7 +137,7 @@ export function squareTopLeftCircleExclude(size: number, radius: number) {
 }
 
 export function squareBottonRightCircleExclude(size: number, radius: number) {
-  return createIndices(size, i => {
+  return filterIndices(size, i => {
     const x = Math.floor(i / size);
     const y = i % size;
 
@@ -150,7 +150,7 @@ export function squareBottonRightCircleExclude(size: number, radius: number) {
 export function squareCircleIntersect(size: number, radius: number) {
   const mid = (size + 1) / 2 - 1;
 
-  return createIndices(size, i => {
+  return filterIndices(size, i => {
     const x = Math.floor(i / size);
     const y = i % size;
 
