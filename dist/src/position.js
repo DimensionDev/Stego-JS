@@ -56,6 +56,8 @@ function getPos(acc, loc, options) {
             return getPosFromAcc(acc, loc, options);
         case transform_1.TransformAlgorithm.FFT2D:
             return 0;
+        case transform_1.TransformAlgorithm.DCT:
+            return 0;
         default:
             throw new Error("unknown algortihm: " + transformAlgorithm);
     }
