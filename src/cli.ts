@@ -26,7 +26,8 @@ Options
   -g, --grayscale  Specify grayscale algorithm: 'NONE' (default), 'AVG',
                    'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE',
                    'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
-  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D'
+  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D',
+                   'DCT'
 
 Examples
   $ cat ./input.png | ${CLI_NAME} -e -m 'hello world' > output.png

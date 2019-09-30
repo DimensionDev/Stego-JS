@@ -1,9 +1,11 @@
 import FFT from './fft';
+import * as DCT from './dct';
 import { Options } from '.';
 
 export enum TransformAlgorithm {
   FFT1D = 'FFT1D',
   FFT2D = 'FFT2D',
+  DCT = 'DCT',
 }
 
 export function transform(
@@ -20,6 +22,9 @@ export function transform(
     case TransformAlgorithm.FFT2D:
       FFT.init(size);
       FFT.fft2d(re, im);
+      break;
+    case TransformAlgorithm.DCT:
+      DCT.dct(re, size);
       break;
     default:
       throw new Error(`unknown algorithm: ${algorithm}`);
@@ -40,6 +45,9 @@ export function inverseTransform(
     case TransformAlgorithm.FFT2D:
       FFT.init(size);
       FFT.ifft2d(re, im);
+      break;
+    case TransformAlgorithm.DCT:
+      DCT.idct(re, size);
       break;
     default:
       throw new Error(`unknown algorithm: ${algorithm}`);

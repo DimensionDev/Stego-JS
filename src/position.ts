@@ -48,6 +48,8 @@ export function getPos(acc: Accumulator, loc: Loc, options: Options) {
       return getPosFromAcc(acc, loc, options);
     case TransformAlgorithm.FFT2D:
       return 0;
+    case TransformAlgorithm.DCT:
+      return 0;
     default:
       throw new Error(`unknown algortihm: ${transformAlgorithm}`);
   }
