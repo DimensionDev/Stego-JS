@@ -50,10 +50,12 @@ function getPosFromAcc(acc, _a, _b) {
 }
 exports.getPosFromAcc = getPosFromAcc;
 function getPos(acc, loc, options) {
-    var transformAlgorithm = options.transformAlgorithm;
+    var pass = options.pass, size = options.size, transformAlgorithm = options.transformAlgorithm;
     switch (transformAlgorithm) {
         case transform_1.TransformAlgorithm.FFT1D:
-            return getPosFromAcc(acc, loc, options);
+            return pass
+                ? getPosFromAcc(acc, loc, options)
+                : (size * size) / 2 + size / 2;
         case transform_1.TransformAlgorithm.FFT2D:
             return 0;
         case transform_1.TransformAlgorithm.DCT:

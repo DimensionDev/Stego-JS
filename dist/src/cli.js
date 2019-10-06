@@ -57,7 +57,7 @@ var helper_1 = require("./helper");
 var _1 = require(".");
 var package_json_1 = __importDefault(require("../package.json"));
 var CLI_NAME = 'stego';
-var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " [options...] > <output>\n\nOptions\n  -h, --help       Print help message\n  -v, --version    Print version message\n  -e, --encode     Encode message into given image\n  -d, --decode     Decode message from given image\n  -m, --message    Specify the message\n  -s, --size       Size of encoding block with radix-2 required: 8 (default).\n  -c, --copies     Encode duplicate messages in order to survive from\n                   compression attack with odd numbers required: 3 (default).\n  -t, --tolerance  The robustness level to compression.\n  -p, --pass       A seed text for generating random encoding position\n                   for specific algorithm ('FFT1D').\n  -g, --grayscale  Specify grayscale algorithm: 'NONE' (default), 'AVG',\n                   'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE',\n                   'MIN_DE', 'MID_DE', 'R', 'G', 'B'.\n  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D',\n                   'DCT'\n\nExamples\n  $ cat ./input.png | " + CLI_NAME + " -e -m 'hello world' > output.png\n  $ cat ./output.png | " + CLI_NAME + " -d\n", {
+var cli = meow_1["default"]("Usage\n  $ cat <input> | " + CLI_NAME + " [options...] > <output>\n\nOptions\n  -h, --help       Print help message\n  -v, --version    Print version message\n  -e, --encode     Encode message into given image\n  -d, --decode     Decode message from given image\n  -m, --message    Specify the message\n  -s, --size       Size of encoding block with radix-2 required: 8 (default).\n  -c, --copies     Encode duplicate messages in order to survive from\n                   compression attack with odd numbers required: 3 (default).\n  -t, --tolerance  The robustness level to compression.\n  -p, --pass       A seed text for generating random encoding position\n                   for specific algorithm ('FFT1D').\n  -g, --grayscale  Specify grayscale algorithm: 'NONE' (default), 'AVG',\n                   'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE',\n                   'MIN_DE', 'MID_DE', 'R', 'G', 'B'.\n  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D',\n                   'DCT'.\n\nExamples\n  $ cat ./input.png | " + CLI_NAME + " -e -m 'hello world' > output.png\n  $ cat ./output.png | " + CLI_NAME + " -d\n", {
     flags: {
         help: {
             type: 'boolean',
@@ -167,7 +167,7 @@ function run() {
             switch (_f.label) {
                 case 0:
                     flags = normalize(cli.flags);
-                    if (flags.help) {
+                    if (flags.help || (!flags.encode && !flags.decode)) {
                         process.stdout.write(cli.help);
                         process.exit(0);
                     }
