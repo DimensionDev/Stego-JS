@@ -135,14 +135,14 @@ function squareTopLeftCircleExclude(size, radius) {
     });
 }
 exports.squareTopLeftCircleExclude = squareTopLeftCircleExclude;
-function squareBottonRightCircleExclude(size, radius) {
+function squareBottomRightCircleExclude(size, radius) {
     return filterIndices(size, function (i) {
         var x = Math.floor(i / size);
         var y = i % size;
         return (Math.sqrt(Math.pow(size - y - 1, 2) + Math.pow(size - x - 1, 2)) > radius);
     });
 }
-exports.squareBottonRightCircleExclude = squareBottonRightCircleExclude;
+exports.squareBottomRightCircleExclude = squareBottomRightCircleExclude;
 function squareCircleIntersect(size, radius) {
     var mid = (size + 1) / 2 - 1;
     return filterIndices(size, function (i) {
