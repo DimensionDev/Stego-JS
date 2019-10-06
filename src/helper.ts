@@ -136,7 +136,7 @@ export function squareTopLeftCircleExclude(size: number, radius: number) {
   });
 }
 
-export function squareBottonRightCircleExclude(size: number, radius: number) {
+export function squareBottomRightCircleExclude(size: number, radius: number) {
   return filterIndices(size, i => {
     const x = Math.floor(i / size);
     const y = i % size;
