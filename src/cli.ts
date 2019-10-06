@@ -178,7 +178,7 @@ export function flags2Options({
 export async function run() {
   const flags = normalize(cli.flags);
 
-  if (flags.help) {
+  if (flags.help || (!flags.encode && !flags.decode)) {
     process.stdout.write(cli.help);
     process.exit(0);
   } else if (flags.version) {
