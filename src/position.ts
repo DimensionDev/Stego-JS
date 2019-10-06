@@ -41,11 +41,13 @@ export function getPosFromAcc(acc: Accumulator, { c }: Loc, { pass }: Options) {
 }
 
 export function getPos(acc: Accumulator, loc: Loc, options: Options) {
-  const { transformAlgorithm } = options;
+  const { pass, size, transformAlgorithm } = options;
 
   switch (transformAlgorithm) {
     case TransformAlgorithm.FFT1D:
-      return getPosFromAcc(acc, loc, options);
+      return pass
+        ? getPosFromAcc(acc, loc, options)
+        : (size * size) / 2 + size / 2;
     case TransformAlgorithm.FFT2D:
       return 0;
     case TransformAlgorithm.DCT:
