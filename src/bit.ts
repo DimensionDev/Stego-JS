@@ -72,7 +72,11 @@ export function bits2str(bits: Bit[], copies: number) {
       }
     }
   }
-  return decodeURI(chars.join(''));
+  try {
+    return decodeURI(chars.join(''));
+  } catch (e) {
+    return '';
+  }
 }
 
 export function mergeBits(dest: Bit[], ...src: Bit[][]) {
@@ -97,7 +101,12 @@ export function createBits(size: number) {
   return bits;
 }
 
-export function getBit(block: number[], acc: Accumulator, loc: Loc, options: Options) {
+export function getBit(
+  block: number[],
+  acc: Accumulator,
+  loc: Loc,
+  options: Options
+) {
   const pos = getPos(acc, loc, options);
   const { tolerance } = options;
 
