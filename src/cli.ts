@@ -181,7 +181,7 @@ export async function run() {
     process.stdout.write(cli.help);
     process.exit(0);
   } else if (flags.version) {
-    process.stdout.write(`${process.env.npm_package_version}\n`);
+    process.stdout.write(`${version}\n`);
     process.exit(0);
   }
 
@@ -202,3 +202,5 @@ export async function run() {
     process.stdout.write(await decode(imgBuf, options));
   }
 }
+
+export const version = process.env.npm_package_version;
