@@ -3,7 +3,6 @@ import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
 import { rs2Buf } from './helper';
 import { encode, decode, EncodeOptions, DecodeOptions } from '.';
-import pkg from '../package.json';
 
 const CLI_NAME = 'stego';
 
@@ -182,7 +181,7 @@ export async function run() {
     process.stdout.write(cli.help);
     process.exit(0);
   } else if (flags.version) {
-    process.stdout.write(`${pkg.version}\n`);
+    process.stdout.write(`${process.env.npm_package_version}\n`);
     process.exit(0);
   }
 
