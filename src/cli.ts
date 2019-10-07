@@ -22,19 +22,14 @@ Options
   
   -e, --encode     Encode message into given image
   -d, --decode     Decode message from given image
-  
-  -m, --message    Specify the message
-  -p, --pass       A seed text for generating random encoding position
-                   for specific algorithm ('FFT1D').
+
+  -m, --message    Specify the message to be encoded.
+  -p, --pass       Specify the seed text for generating random encoding position when using 'FFT1D'.
+  -t, --tolerance  Specify the number to be added into wave amplitude: ${DEFAULT_TOLERANCE} (default).
   -s, --size       Size of encoding block with radix-2 required: ${DEFAULT_SIZE} (default).
-  -c, --copies     Encode duplicate messages in order to survive from
-                  compression attack with odd numbers required: ${DEFAULT_COPIES} (default).
-  -t, --tolerance  The robustness level to compression: ${DEFAULT_TOLERANCE} (default).
-  -g, --grayscale  Specify grayscale algorithm: 'NONE' (default), 'AVG',
-                   'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE',
-                   'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
-  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D',
-                   'DCT'.
+  -c, --copies     Size of duplications with odd numbers required: ${DEFAULT_COPIES} (default).
+  -g, --grayscale  Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
+  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D', 'DCT'.
 
 Examples
   $ cat ./input.png | ${CLI_NAME} -e -m 'hello world' > output.png
@@ -111,7 +106,7 @@ export async function run() {
   const flags = normalizeFlags(cli.flags);
 
   if (flags.help || (!flags.encode && !flags.decode)) {
-    process.stdout.write(cli.help);
+    process.stdout.write(`${cli.help}\n`);
     process.exit(0);
   } else if (flags.version) {
     process.stdout.write(`${version}\n`);
