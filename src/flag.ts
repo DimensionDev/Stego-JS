@@ -55,10 +55,10 @@ export function validateFlags({
   if (isNaN(tolerance) || tolerance <= 0 || tolerance > 128) {
     return '-t, --tolerance should be a positive number between [0-128]';
   }
-  if (!Object.keys(GrayscaleAlgorithm).includes(grayscale)) {
+  if (!Object.values(GrayscaleAlgorithm).includes(grayscale)) {
     return 'unknown grayscale algorithm';
   }
-  if (!Object.keys(TransformAlgorithm).includes(transform)) {
+  if (!Object.values(TransformAlgorithm).includes(transform)) {
     return 'unknown transform algorithm';
   }
   return '';
