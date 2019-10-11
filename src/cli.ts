@@ -102,6 +102,8 @@ Examples
   }
 );
 
+export const version = process.env.npm_package_version;
+
 export async function run() {
   const flags = normalizeFlags(cli.flags);
 
@@ -130,5 +132,3 @@ export async function run() {
     process.stdout.write(await decode(imgBuf, options));
   }
 }
-
-export const version = process.env.npm_package_version;
