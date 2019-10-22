@@ -11,7 +11,7 @@ export function rs2Buf(rs: Readable) {
   });
 }
 
-export function buf2Img(imageBuf: Buffer) {
+export function buf2Img(imgBuf: Buffer) {
   return new Promise<ImageData>((resolve, reject) => {
     const image = new Image();
 
@@ -25,16 +25,19 @@ export function buf2Img(imageBuf: Buffer) {
     };
     image.onerror = err => reject(err);
     image.dataMode = Image.MODE_IMAGE;
-    image.src = imageBuf;
+    image.src = imgBuf;
   });
 }
 
-export function img2Buf(imageData: ImageData) {
-  const { width, height } = imageData;
+export function img2Buf(
+  imgData: ImageData,
+  width = imgData.width,
+  height = imgData.height
+) {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext('2d');
 
-  ctx.putImageData(imageData, 0, 0);
+  ctx.putImageData(imgData, 0, 0, 0, 0, width, height);
   return canvas.toBuffer('image/png');
 }
 

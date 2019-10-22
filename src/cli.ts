@@ -7,8 +7,9 @@ import {
   DEFAULT_COPIES,
   DEFAULT_TOLERANCE,
   DEFAULT_SIZE,
-  DEFAULT_CLIP,
+  DEFAULT_NARROW,
   CLI_NAME,
+  DEFAULT_NO_EDGE_PIXELS,
 } from './constant';
 import { normalizeFlags, validateFlags, flags2Options } from './flag';
 
@@ -17,19 +18,21 @@ const cli = meow(
   $ cat <input> | ${CLI_NAME} [options...] > <output>
 
 Options
-  -h, --help       Print help message
-  -v, --version    Print version message
+  -h, --help             Print help message.
+  -v, --version          Print version message.
   
-  -e, --encode     Encode message into given image
-  -d, --decode     Decode message from given image
+  -e, --encode           Encode message into given image.
+  -d, --decode           Decode message from given image.
 
-  -m, --message    Specify the message to be encoded.
-  -p, --pass       Specify the seed text for generating random encoding position when using 'FFT1D'.
-  -t, --tolerance  Specify the number to be added into wave amplitude: ${DEFAULT_TOLERANCE} (default).
-  -s, --size       Size of encoding block with radix-2 required: ${DEFAULT_SIZE} (default).
-  -c, --copies     Size of duplications with odd numbers required: ${DEFAULT_COPIES} (default).
-  -g, --grayscale  Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
-  -f, --transform  Specify transform algorithm: 'FFT1D' (default), 'FFT2D', 'DCT'.
+  -m, --message          Specify the message to be encoded.
+  -p, --pass             Specify the seed text for generating random encoding position when using 'FFT1D'.
+  -t, --tolerance        Specify the number to be added into wave amplitude: ${DEFAULT_TOLERANCE} (default).
+  -s, --size             Size of encoding block with radix-2 required: ${DEFAULT_SIZE} (default).
+  -c, --copies           Size of duplications with odd numbers required: ${DEFAULT_COPIES} (default).
+  -g, --grayscale        Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
+  -f, --transform        Specify transform algorithm: 'FFT1D' (default), 'FFT2D', 'DCT'.
+
+      --noClipEdgePixels Do not clip edge pixels.
 
 Examples
   $ cat ./input.png | ${CLI_NAME} -e -m 'hello world' > output.png
@@ -72,9 +75,9 @@ Examples
         default: DEFAULT_SIZE,
         alias: 's',
       },
-      clip: {
+      narrow: {
         type: 'string',
-        default: DEFAULT_CLIP,
+        default: DEFAULT_NARROW,
         alias: 'i',
       },
       copies: {
@@ -96,6 +99,10 @@ Examples
         type: 'string',
         default: TransformAlgorithm.FFT1D,
         alias: 'f',
+      },
+      noClipEdgePixels: {
+        type: 'boolean',
+        default: DEFAULT_NO_EDGE_PIXELS,
       },
     },
     inferType: true,

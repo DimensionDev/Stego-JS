@@ -9,21 +9,22 @@ export interface Flags {
   encode: boolean;
   decode: boolean;
   message: string;
-  clip: number;
+  narrow: number;
   size: number;
   copies: number;
   pass?: string;
   tolerance: number;
   grayscale: GrayscaleAlgorithm;
   transform: TransformAlgorithm;
+  noClipEdgePixels: boolean;
 }
 
 export function normalizeFlags(flags: Result['flags']) {
-  const { encode, decode, size, clip, copies, tolerance } = flags;
+  const { encode, decode, size, narrow, copies, tolerance } = flags;
 
   return {
     ...flags,
-    clip: parseInt(clip, 10),
+    narrow: parseInt(narrow, 10),
     size: parseInt(size, 10),
     copies: parseInt(copies, 10),
     tolerance: parseInt(tolerance, 10),
@@ -67,21 +68,23 @@ export function validateFlags({
 export function flags2Options({
   message = '',
   pass = '',
-  clip,
+  narrow,
   size,
   copies,
   tolerance,
   grayscale,
   transform,
+  noClipEdgePixels,
 }: Flags) {
   return {
     text: message,
     pass,
-    clip,
+    narrow,
     size,
     copies,
     tolerance,
     grayscaleAlgorithm: grayscale,
     transformAlgorithm: transform,
+    noClipEdgePixels,
   } as EncodeOptions & DecodeOptions;
 }

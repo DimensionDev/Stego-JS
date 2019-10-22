@@ -55,6 +55,6 @@ export function shades(r: number, g: number, b: number, size: number) {
   return Math.floor((r + g + b) / 3 / factor + 0.5) * factor;
 }
 
-export function clip(gray: number, size: number) {
+export function narrow(gray: number, size: number) {
   return clamp(Math.round(gray), size, 255 - size);
 }

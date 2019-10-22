@@ -1,15 +1,15 @@
 import { clamp } from './helper';
-import { grayscale, clip } from './grayscale';
+import { grayscale, narrow } from './grayscale';
 import { Loc } from './bit';
 import { Options, EncodeOptions } from '.';
 
 export function updateImg(
-  imageData: ImageData,
+  imgData: ImageData,
   block: number[],
   { p, c }: Loc,
   { size }: Options
 ) {
-  const { width } = imageData;
+  const { width } = imgData;
   const h1 = Math.floor(p / Math.floor(width / size)) * size;
   const w1 = (p % Math.floor(width / size)) * size;
 
@@ -17,7 +17,7 @@ export function updateImg(
     const h2 = Math.floor(i / size);
     const w2 = i % size;
 
-    imageData.data[((h1 + h2) * width + w1 + w2) * 4 + c] = clamp(
+    imgData.data[((h1 + h2) * width + w1 + w2) * 4 + c] = clamp(
       Math.round(block[i]),
       0,
       255
@@ -25,8 +25,8 @@ export function updateImg(
   }
 }
 
-export function* divideImg(imageData: ImageData, { size }: Options) {
-  const { width, height, data } = imageData;
+export function* divideImg(imgData: ImageData, { size }: Options) {
+  const { width, height, data } = imgData;
 
   for (let h = 0; h < height; h += size) {
     for (let w = 0; w < width; w += size) {
@@ -47,10 +47,10 @@ export function* divideImg(imageData: ImageData, { size }: Options) {
 }
 
 export function decolorImg(
-  imageData: ImageData,
+  imgData: ImageData,
   { grayscaleAlgorithm }: EncodeOptions
 ) {
-  const { width, height, data } = imageData;
+  const { width, height, data } = imgData;
   const length = width * height;
 
   for (let i = 0; i < length; i += 1) {
@@ -63,24 +63,24 @@ export function decolorImg(
   }
 }
 
-export function clipImg(
-  imageData: ImageData,
-  { clip: clipSize }: EncodeOptions
+export function narrowImg(
+  imgData: ImageData,
+  { narrow: narrowSize }: EncodeOptions
 ) {
-  const { width, height, data } = imageData;
+  const { width, height, data } = imgData;
   const length = width * height;
 
   for (let i = 0; i < length; i += 1) {
     const p = i * 4;
 
-    data[p] = clip(data[p], clipSize);
-    data[p + 1] = clip(data[p + 1], clipSize);
-    data[p + 2] = clip(data[p + 2], clipSize);
+    data[p] = narrow(data[p], narrowSize);
+    data[p + 1] = narrow(data[p + 1], narrowSize);
+    data[p + 2] = narrow(data[p + 2], narrowSize);
   }
 }
 
 export function walkImg(
-  imageData: ImageData,
+  imgData: ImageData,
   options: Options,
   callback: (block: number[], loc: Loc) => void
 ) {
@@ -88,7 +88,7 @@ export function walkImg(
   let p = 0;
   let b = 0;
 
-  for (const block of divideImg(imageData, options)) {
+  for (const block of divideImg(imgData, options)) {
     callback(block, { c, p, b });
     c += 1;
     b += 1;

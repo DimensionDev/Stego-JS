@@ -1,7 +1,7 @@
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm, transform, inverseTransform } from './transform';
 import { buf2Img, img2Buf } from './helper';
-import { updateImg, decolorImg, clipImg, walkImg } from './image';
+import { updateImg, decolorImg, narrowImg, walkImg } from './image';
 import {
   mergeBits,
   createBits,
@@ -23,8 +23,9 @@ export interface Options {
 
 export interface EncodeOptions extends Options {
   text: string;
-  clip: number;
+  narrow: number;
   grayscaleAlgorithm: GrayscaleAlgorithm;
+  noClipEdgePixels: boolean;
 }
 
 export interface DecodeOptions extends Options {}
@@ -33,14 +34,17 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
   const {
     text,
     size,
-    clip,
+    narrow,
     copies,
     grayscaleAlgorithm,
     transformAlgorithm,
+    noClipEdgePixels,
   } = options;
-  const imageData = await buf2Img(imgBuf);
-  const { width, height } = imageData;
-  const sizeOfBlocks = Math.floor(width / size) * Math.floor(height / size) * 3;
+  const imgData = await buf2Img(imgBuf);
+  const { width, height } = imgData;
+  const sizeOfRowBlocks = Math.floor(width / size);
+  const sizeOfColumnBlocks = Math.floor(height / size);
+  const sizeOfBlocks = sizeOfRowBlocks * sizeOfColumnBlocks * 3;
   const textBits = str2bits(text, copies);
   const bits = mergeBits(
     createBits(sizeOfBlocks),
@@ -54,33 +58,37 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
     );
   }
   if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE) {
-    decolorImg(imageData, options);
+    decolorImg(imgData, options);
   }
-  if (clip > 0) {
-    clipImg(imageData, options);
+  if (narrow > 0) {
+    narrowImg(imgData, options);
   }
 
   const acc = createAcc(options);
 
-  walkImg(imageData, options, (block, loc) => {
+  walkImg(imgData, options, (block, loc) => {
     const re = block;
     const im = new Array(size * size).fill(0);
 
     transform(re, im, transformAlgorithm, options);
     setBit(re, bits, acc, loc, options);
     inverseTransform(re, im, transformAlgorithm, options);
-    updateImg(imageData, re, loc, options);
+    updateImg(imgData, re, loc, options);
   });
-  return img2Buf(imageData);
+  return img2Buf(
+    imgData,
+    noClipEdgePixels ? width : sizeOfRowBlocks * size,
+    noClipEdgePixels ? height : sizeOfColumnBlocks * size
+  );
 }
 
 export async function decode(imgBuf: Buffer, options: DecodeOptions) {
   const { size, copies, transformAlgorithm } = options;
-  const imageData = await buf2Img(imgBuf);
+  const imgData = await buf2Img(imgBuf);
   const bits: Bit[] = [];
   const acc = createAcc(options);
 
-  walkImg(imageData, options, (block, loc) => {
+  walkImg(imgData, options, (block, loc) => {
     const re = block;
     const im = new Array(size * size).fill(0);
 
