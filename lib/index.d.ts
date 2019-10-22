@@ -10,8 +10,9 @@ export interface Options {
 }
 export interface EncodeOptions extends Options {
     text: string;
-    clip: number;
+    narrow: number;
     grayscaleAlgorithm: GrayscaleAlgorithm;
+    noClipEdgePixels: boolean;
 }
 export interface DecodeOptions extends Options {
 }

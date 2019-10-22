@@ -13,4 +13,4 @@ export declare enum GrayscaleAlgorithm {
 }
 export declare function grayscale(r: number, g: number, b: number, algorithm: GrayscaleAlgorithm): number;
 export declare function shades(r: number, g: number, b: number, size: number): number;
-export declare function clip(gray: number, size: number): number;
+export declare function narrow(gray: number, size: number): number;
