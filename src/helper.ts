@@ -1,5 +1,4 @@
 import { Readable } from 'stream';
-import { createCanvas, Image } from 'canvas';
 
 export function rs2Buf(rs: Readable) {
   return new Promise<Buffer>((resolve, reject) => {
@@ -9,36 +8,6 @@ export function rs2Buf(rs: Readable) {
     rs.on('end', () => resolve(Buffer.concat(bufs)));
     rs.on('error', err => reject(err));
   });
-}
-
-export function buf2Img(imgBuf: Buffer) {
-  return new Promise<ImageData>((resolve, reject) => {
-    const image = new Image();
-
-    image.onload = () => {
-      const { width, height } = image;
-      const canvas = createCanvas(width, height);
-      const ctx = canvas.getContext('2d');
-
-      ctx.drawImage(image, 0, 0, width, height);
-      resolve(ctx.getImageData(0, 0, width, height));
-    };
-    image.onerror = err => reject(err);
-    image.dataMode = Image.MODE_IMAGE;
-    image.src = imgBuf;
-  });
-}
-
-export function img2Buf(
-  imgData: ImageData,
-  width = imgData.width,
-  height = imgData.height
-) {
-  const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext('2d');
-
-  ctx.putImageData(imgData, 0, 0, 0, 0, width, height);
-  return canvas.toBuffer('image/png');
 }
 
 export function clamp(v: number, min: number, max: number) {

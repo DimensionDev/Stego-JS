@@ -1,6 +1,6 @@
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm, transform, inverseTransform } from './transform';
-import { buf2Img, img2Buf } from './helper';
+import { buf2Img } from './canvas';
 import { updateImg, decolorImg, narrowImg, walkImg } from './image';
 import {
   mergeBits,
@@ -12,6 +12,7 @@ import {
   bits2str,
 } from './bit';
 import { createAcc } from './position';
+import { img2Buf } from './canvas';
 
 export interface Options {
   size: number;

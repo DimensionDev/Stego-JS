@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "lib": ["es2015", "esnext.array"],
+    "lib": ["es2015", "esnext.array", "dom"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "noImplicitAny": true,
