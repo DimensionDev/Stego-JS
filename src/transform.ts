@@ -1,6 +1,6 @@
 import FFT from './fft/index.js';
 import * as DCT from './dct';
-import { Options } from './index';
+import { Options } from './stego';
 
 export enum TransformAlgorithm {
   FFT1D = 'FFT1D',

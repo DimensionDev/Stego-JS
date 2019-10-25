@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-const { run } = require('../lib/cli');
+const { run } = require('../es/cli');
 
 run();

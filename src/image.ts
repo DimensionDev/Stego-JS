@@ -1,7 +1,14 @@
 import { clamp } from './helper';
 import { grayscale, narrow } from './grayscale';
 import { Loc } from './bit';
-import { Options, EncodeOptions } from './index';
+import { Options, EncodeOptions } from './stego';
+
+export function cropImg({ width, height }: ImageData, { size }: Options) {
+  return [
+    Math.floor(width / size) * size,
+    Math.floor(height / size) * size,
+  ] as const;
+}
 
 export function updateImg(
   imgData: ImageData,

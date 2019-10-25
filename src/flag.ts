@@ -1,5 +1,5 @@
 import { Result } from 'meow';
-import { EncodeOptions, DecodeOptions } from './index';
+import { EncodeOptions, DecodeOptions } from './stego';
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
 
@@ -16,7 +16,7 @@ export interface Flags {
   tolerance: number;
   grayscale: GrayscaleAlgorithm;
   transform: TransformAlgorithm;
-  noClipEdgePixels: boolean;
+  noCropEdgePixels: boolean;
 }
 
 export function normalizeFlags(flags: Result['flags']) {
@@ -74,7 +74,7 @@ export function flags2Options({
   tolerance,
   grayscale,
   transform,
-  noClipEdgePixels,
+  noCropEdgePixels,
 }: Flags) {
   return {
     text: message,
@@ -85,6 +85,6 @@ export function flags2Options({
     tolerance,
     grayscaleAlgorithm: grayscale,
     transformAlgorithm: transform,
-    noClipEdgePixels,
+    noCropEdgePixels,
   } as EncodeOptions & DecodeOptions;
 }

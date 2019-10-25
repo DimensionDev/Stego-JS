@@ -2,7 +2,7 @@ import meow from 'meow';
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
 import { rs2Buf } from './helper';
-import { encode, decode } from './index';
+import { encode, decode } from './node';
 import {
   CLI_NAME,
   DEFAULT_COPIES,
@@ -32,7 +32,7 @@ Options
   -g, --grayscale        Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
   -f, --transform        Specify transform algorithm: 'FFT1D' (default), 'FFT2D', 'DCT'.
 
-      --noClipEdgePixels Do not clip edge pixels.
+      --noCropEdgePixels Do not crop edge pixels.
 
 Examples
   $ cat ./input.png | ${CLI_NAME} -e -m 'hello world' > output.png
@@ -100,7 +100,7 @@ Examples
         default: TransformAlgorithm.FFT1D,
         alias: 'f',
       },
-      noClipEdgePixels: {
+      noCropEdgePixels: {
         type: 'boolean',
         default: DEFAULT_NO_EDGE_PIXELS,
       },

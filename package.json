@@ -4,10 +4,14 @@
   "description": "",
   "module": "es/index.js",
   "main": "umd/index.js",
+  "typings": "es/",
   "scripts": {
     "start": "npx ts-node src/index.ts",
-    "build": "npx tsc -d",
-    "postbuild": "cp -r src/fft lib/",
+    "clean": "rm -rf umd es",
+    "build": "npm run build:umd && npm run build:es",
+    "build:es": "npx tsc -d",
+    "build:umd": "npx rollup -c",
+    "prebuild": "npm run clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
@@ -15,7 +19,8 @@
   },
   "files": [
     "bin",
-    "lib"
+    "es",
+    "umd"
   ],
   "keywords": [],
   "author": "",
@@ -29,7 +34,7 @@
     "rollup-plugin-typescript2": "^0.24.3",
     "ts-node": "^8.4.1",
     "tslib": "^1.10.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.1-rc"
   },
   "dependencies": {
     "canvas": "^2.6.0",

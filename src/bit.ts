@@ -1,4 +1,4 @@
-import { Options } from './index';
+import { Options } from './stego';
 import { getPos, Accumulator } from './position';
 
 export type Bit = 0 | 1;

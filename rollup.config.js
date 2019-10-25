@@ -2,7 +2,7 @@ import replace from 'rollup-plugin-replace';
 import typescript from 'rollup-plugin-typescript2';
 
 export default {
-  input: 'src/index.ts',
+  input: 'src/browser.ts',
   output: {
     file: 'umd/index.js',
     format: 'umd',

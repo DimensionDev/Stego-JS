@@ -1,7 +1,6 @@
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm, transform, inverseTransform } from './transform';
-import { buf2Img, img2Buf, blob2Img, img2Blob } from './canvas';
-import { updateImg, decolorImg, narrowImg, walkImg } from './image';
+import { updateImg, decolorImg, narrowImg, walkImg, cropImg } from './image';
 import {
   mergeBits,
   createBits,
@@ -25,12 +24,12 @@ export interface EncodeOptions extends Options {
   text: string;
   narrow: number;
   grayscaleAlgorithm: GrayscaleAlgorithm;
-  noClipEdgePixels: boolean;
+  noCropEdgePixels: boolean;
 }
 
 export interface DecodeOptions extends Options {}
 
-export async function encode(img: Buffer | Blob, options: EncodeOptions) {
+export async function encodeImg(imgData: ImageData, options: EncodeOptions) {
   const {
     text,
     size,
@@ -38,16 +37,9 @@ export async function encode(img: Buffer | Blob, options: EncodeOptions) {
     copies,
     grayscaleAlgorithm,
     transformAlgorithm,
-    noClipEdgePixels,
   } = options;
-  const imgData =
-    process.env.PLATFORM === 'node'
-      ? await buf2Img(img as Buffer)
-      : await blob2Img(img as Blob);
-  const { width, height } = imgData;
-  const sizeOfRowBlocks = Math.floor(width / size);
-  const sizeOfColumnBlocks = Math.floor(height / size);
-  const sizeOfBlocks = sizeOfRowBlocks * sizeOfColumnBlocks * 3;
+  const [width, height] = cropImg(imgData, options);
+  const sizeOfBlocks = width * height * 3;
   const textBits = str2bits(text, copies);
   const bits = mergeBits(
     createBits(sizeOfBlocks),
@@ -78,26 +70,11 @@ export async function encode(img: Buffer | Blob, options: EncodeOptions) {
     inverseTransform(re, im, transformAlgorithm, options);
     updateImg(imgData, re, loc, options);
   });
-  if (process.env.PLATFORM === 'node') {
-    return img2Buf(
-      imgData,
-      noClipEdgePixels ? width : sizeOfRowBlocks * size,
-      noClipEdgePixels ? height : sizeOfColumnBlocks * size
-    );
-  }
-  return img2Blob(
-    imgData,
-    noClipEdgePixels ? width : sizeOfRowBlocks * size,
-    noClipEdgePixels ? height : sizeOfColumnBlocks * size
-  );
+  return imgData;
 }
 
-export async function decode(img: Buffer | Blob, options: DecodeOptions) {
+export async function decodeImg(imgData: ImageData, options: DecodeOptions) {
   const { size, copies, transformAlgorithm } = options;
-  const imgData =
-    process.env.PLATFORM === 'node'
-      ? await buf2Img(img as Buffer)
-      : await blob2Img(img as Blob);
   const bits: Bit[] = [];
   const acc = createAcc(options);
 

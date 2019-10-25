@@ -2,6 +2,8 @@
   "compilerOptions": {
     "jsx": "react",
     "lib": ["es2015", "esnext.array", "dom"],
+    "target": "es5",
+    "allowJs": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -9,5 +11,5 @@
     "downlevelIteration": true,
     "outDir": "es/"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/fft/*"]
 }
