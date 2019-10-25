@@ -1,4 +1,4 @@
-import FFT from './fft';
+import FFT from './fft/index.js';
 import * as DCT from './dct';
 import { Options } from './index';
 
