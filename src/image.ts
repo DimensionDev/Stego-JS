@@ -1,7 +1,7 @@
 import { clamp } from './helper';
 import { grayscale, narrow } from './grayscale';
 import { Loc } from './bit';
-import { Options, EncodeOptions } from '.';
+import { Options, EncodeOptions } from './index';
 
 export function updateImg(
   imgData: ImageData,

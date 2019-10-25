@@ -1,4 +1,4 @@
-import { Options } from '.';
+import { Options } from './index';
 import { Loc } from './bit';
 import { TransformAlgorithm } from './transform';
 import { hashCode, squareCircleIntersect } from './helper';

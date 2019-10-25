@@ -1,6 +1,6 @@
 import FFT from './fft';
 import * as DCT from './dct';
-import { Options } from '.';
+import { Options } from './index';
 
 export enum TransformAlgorithm {
   FFT1D = 'FFT1D',

@@ -1,4 +1,4 @@
-import { Options } from '.';
+import { Options } from './index';
 import { getPos, Accumulator } from './position';
 
 export type Bit = 0 | 1;

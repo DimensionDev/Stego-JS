@@ -2,13 +2,13 @@ import meow from 'meow';
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
 import { rs2Buf } from './helper';
-import { encode, decode } from '.';
+import { encode, decode } from './index';
 import {
+  CLI_NAME,
   DEFAULT_COPIES,
   DEFAULT_TOLERANCE,
   DEFAULT_SIZE,
   DEFAULT_NARROW,
-  CLI_NAME,
   DEFAULT_NO_EDGE_PIXELS,
 } from './constant';
 import { normalizeFlags, validateFlags, flags2Options } from './flag';
