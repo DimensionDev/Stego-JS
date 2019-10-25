@@ -43,7 +43,7 @@ var meow_1 = __importDefault(require("meow"));
 var grayscale_1 = require("./grayscale");
 var transform_1 = require("./transform");
 var helper_1 = require("./helper");
-var _1 = require(".");
+var index_1 = require("./index");
 var constant_1 = require("./constant");
 var flag_1 = require("./flag");
 var cli = meow_1["default"]("Usage\n  $ cat <input> | " + constant_1.CLI_NAME + " [options...] > <output>\n\nOptions\n  -h, --help             Print help message.\n  -v, --version          Print version message.\n  \n  -e, --encode           Encode message into given image.\n  -d, --decode           Decode message from given image.\n\n  -m, --message          Specify the message to be encoded.\n  -p, --pass             Specify the seed text for generating random encoding position when using 'FFT1D'.\n  -t, --tolerance        Specify the number to be added into wave amplitude: " + constant_1.DEFAULT_TOLERANCE + " (default).\n  -s, --size             Size of encoding block with radix-2 required: " + constant_1.DEFAULT_SIZE + " (default).\n  -c, --copies           Size of duplications with odd numbers required: " + constant_1.DEFAULT_COPIES + " (default).\n  -g, --grayscale        Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.\n  -f, --transform        Specify transform algorithm: 'FFT1D' (default), 'FFT2D', 'DCT'.\n\n      --noClipEdgePixels Do not clip edge pixels.\n\nExamples\n  $ cat ./input.png | " + constant_1.CLI_NAME + " -e -m 'hello world' > output.png\n  $ cat ./output.png | " + constant_1.CLI_NAME + " -d\n", {
@@ -149,14 +149,14 @@ function run() {
                     imgBuf = _a;
                     if (!flags.encode) return [3 /*break*/, 5];
                     _c = (_b = process.stdout).write;
-                    return [4 /*yield*/, _1.encode(imgBuf, options)];
+                    return [4 /*yield*/, index_1.encode(imgBuf, options)];
                 case 4:
-                    _c.apply(_b, [_f.sent()]);
+                    _c.apply(_b, [(_f.sent())]);
                     return [3 /*break*/, 7];
                 case 5:
                     if (!flags.decode) return [3 /*break*/, 7];
                     _e = (_d = process.stdout).write;
-                    return [4 /*yield*/, _1.decode(imgBuf, options)];
+                    return [4 /*yield*/, index_1.decode(imgBuf, options)];
                 case 6:
                     _e.apply(_d, [_f.sent()]);
                     _f.label = 7;

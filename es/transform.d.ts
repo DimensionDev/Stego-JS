@@ -1,4 +1,4 @@
-import { Options } from '.';
+import { Options } from './index';
 export declare enum TransformAlgorithm {
     FFT1D = "FFT1D",
     FFT2D = "FFT2D",

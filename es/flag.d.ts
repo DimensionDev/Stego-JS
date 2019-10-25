@@ -1,5 +1,5 @@
 import { Result } from 'meow';
-import { EncodeOptions, DecodeOptions } from '.';
+import { EncodeOptions, DecodeOptions } from './index';
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
 export interface Flags {

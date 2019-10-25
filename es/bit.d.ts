@@ -1,4 +1,4 @@
-import { Options } from '.';
+import { Options } from './index';
 import { Accumulator } from './position';
 export declare type Bit = 0 | 1;
 export interface Loc {

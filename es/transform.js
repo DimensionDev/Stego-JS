@@ -10,7 +10,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 exports.__esModule = true;
-var fft_1 = __importDefault(require("./fft"));
+var index_js_1 = __importDefault(require("./fft/index.js"));
 var DCT = __importStar(require("./dct"));
 var TransformAlgorithm;
 (function (TransformAlgorithm) {
@@ -22,12 +22,12 @@ function transform(re, im, algorithm, _a) {
     var size = _a.size;
     switch (algorithm) {
         case TransformAlgorithm.FFT1D:
-            fft_1["default"].init(size);
-            fft_1["default"].fft1d(re, im);
+            index_js_1["default"].init(size);
+            index_js_1["default"].fft1d(re, im);
             break;
         case TransformAlgorithm.FFT2D:
-            fft_1["default"].init(size);
-            fft_1["default"].fft2d(re, im);
+            index_js_1["default"].init(size);
+            index_js_1["default"].fft2d(re, im);
             break;
         case TransformAlgorithm.DCT:
             DCT.dct(re, size);
@@ -41,12 +41,12 @@ function inverseTransform(re, im, algorithm, _a) {
     var size = _a.size;
     switch (algorithm) {
         case TransformAlgorithm.FFT1D:
-            fft_1["default"].init(size);
-            fft_1["default"].ifft1d(re, im);
+            index_js_1["default"].init(size);
+            index_js_1["default"].ifft1d(re, im);
             break;
         case TransformAlgorithm.FFT2D:
-            fft_1["default"].init(size);
-            fft_1["default"].ifft2d(re, im);
+            index_js_1["default"].init(size);
+            index_js_1["default"].ifft2d(re, im);
             break;
         case TransformAlgorithm.DCT:
             DCT.idct(re, size);
