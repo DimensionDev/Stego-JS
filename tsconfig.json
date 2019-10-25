@@ -2,11 +2,12 @@
   "compilerOptions": {
     "jsx": "react",
     "lib": ["es2015", "esnext.array", "dom"],
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "noImplicitAny": true,
     "downlevelIteration": true,
-    "outDir": "./lib/"
+    "outDir": "es/"
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
