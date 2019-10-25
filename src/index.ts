@@ -1,6 +1,6 @@
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm, transform, inverseTransform } from './transform';
-import { buf2Img } from './canvas';
+import { buf2Img, img2Buf, blob2Img, img2Blob } from './canvas';
 import { updateImg, decolorImg, narrowImg, walkImg } from './image';
 import {
   mergeBits,
@@ -12,7 +12,6 @@ import {
   bits2str,
 } from './bit';
 import { createAcc } from './position';
-import { img2Buf } from './canvas';
 
 export interface Options {
   size: number;
@@ -31,7 +30,7 @@ export interface EncodeOptions extends Options {
 
 export interface DecodeOptions extends Options {}
 
-export async function encode(imgBuf: Buffer, options: EncodeOptions) {
+export async function encode(img: Buffer | Blob, options: EncodeOptions) {
   const {
     text,
     size,
@@ -41,7 +40,10 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
     transformAlgorithm,
     noClipEdgePixels,
   } = options;
-  const imgData = await buf2Img(imgBuf);
+  const imgData =
+    process.env.PLATFORM === 'node'
+      ? await buf2Img(img as Buffer)
+      : await blob2Img(img as Blob);
   const { width, height } = imgData;
   const sizeOfRowBlocks = Math.floor(width / size);
   const sizeOfColumnBlocks = Math.floor(height / size);
@@ -76,16 +78,26 @@ export async function encode(imgBuf: Buffer, options: EncodeOptions) {
     inverseTransform(re, im, transformAlgorithm, options);
     updateImg(imgData, re, loc, options);
   });
-  return img2Buf(
+  if (process.env.PLATFORM === 'node') {
+    return img2Buf(
+      imgData,
+      noClipEdgePixels ? width : sizeOfRowBlocks * size,
+      noClipEdgePixels ? height : sizeOfColumnBlocks * size
+    );
+  }
+  return img2Blob(
     imgData,
     noClipEdgePixels ? width : sizeOfRowBlocks * size,
     noClipEdgePixels ? height : sizeOfColumnBlocks * size
   );
 }
 
-export async function decode(imgBuf: Buffer, options: DecodeOptions) {
+export async function decode(img: Buffer | Blob, options: DecodeOptions) {
   const { size, copies, transformAlgorithm } = options;
-  const imgData = await buf2Img(imgBuf);
+  const imgData =
+    process.env.PLATFORM === 'node'
+      ? await buf2Img(img as Buffer)
+      : await blob2Img(img as Blob);
   const bits: Bit[] = [];
   const acc = createAcc(options);
 
