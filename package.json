@@ -1,18 +1,16 @@
 {
   "name": "node-stego",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "",
-  "module": "es/index.js",
-  "main": "umd/index.js",
-  "typings": "es/",
+  "module": "es/browser.js",
+  "main": "umd/browser.js",
+  "types": "es/browser.d.ts",
   "scripts": {
-    "start": "npx ts-node src/index.ts",
     "clean": "rm -rf umd es",
     "build": "npm run build:umd && npm run build:es",
     "build:es": "npx tsc -d",
     "build:umd": "npx rollup -c",
-    "prebuild": "npm run clean",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prebuild": "npm run clean"
   },
   "bin": {
     "stego": "./bin/stego.js"
