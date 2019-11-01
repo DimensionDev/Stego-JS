@@ -1,6 +1,6 @@
 {
   "name": "node-stego",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "",
   "module": "es/browser.js",
   "main": "umd/browser.js",
@@ -35,7 +35,9 @@
     "typescript": "^3.7.1-rc"
   },
   "dependencies": {
-    "canvas": "^2.6.0",
     "meow": "^5.0.0"
+  },
+  "peerDependencies": {
+    "canvas": "^2.6.0"
   }
 }

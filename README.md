@@ -3,13 +3,26 @@
 ## Installation
 
 ```bash
-npm i -g node-stego
+# node
+npm i -g node-stego canvas@2.6.0
+
+# browser
+npm i node-stego
 ```
 
 ## Usage
 
 ```bash
+# cli
 stego -h
+```
+
+```javascript
+// node
+import { encode, decode } from "node-stego/es/node";
+
+// browser
+import { encode, decode } from "node-stego/es/browser";
 ```
 
 ## Refs
