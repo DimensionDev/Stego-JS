@@ -1,5 +1,5 @@
 import { EncodeOptions, DecodeOptions, encodeImg, decodeImg } from './stego';
-import { buf2Img, img2Buf } from './canvas';
+import { buf2Img, img2Buf } from './canvas/node';
 import { cropImg } from './image';
 
 export async function encode(buf: Buffer, options: EncodeOptions) {

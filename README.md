@@ -6,7 +6,7 @@
 # node
 npm i -g node-stego canvas@2.6.0
 
-# browser
+# dom
 npm i node-stego
 ```
 
@@ -19,10 +19,10 @@ stego -h
 
 ```javascript
 // node
-import { encode, decode } from "node-stego/es/node";
+import { encode, decode } from 'node-stego/es/node';
 
-// browser
-import { encode, decode } from "node-stego/es/browser";
+// dom
+import { encode, decode } from 'node-stego/es/dom';
 ```
 
 ## Refs
