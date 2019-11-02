@@ -129,3 +129,36 @@ export function squareCircleIntersect(size: number, radius: number) {
     return Math.sqrt(Math.pow(mid - x, 2) + Math.pow(mid - y, 2)) <= radius;
   });
 }
+
+export function isJPEG(buf: Uint8Array) {
+  if (!buf || buf.length < 3) {
+    return false;
+  }
+  return buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
+}
+
+export function isPNG(buf: Uint8Array) {
+  if (!buf || buf.length < 8) {
+    return false;
+  }
+  return (
+    buf[0] === 0x89 &&
+    buf[1] === 0x50 &&
+    buf[2] === 0x4e &&
+    buf[3] === 0x47 &&
+    buf[4] === 0x0d &&
+    buf[5] === 0x0a &&
+    buf[6] === 0x1a &&
+    buf[7] === 0x0a
+  );
+}
+
+export function imgType(buf: Uint8Array) {
+  if (isJPEG(buf)) {
+    return 'image/jpeg';
+  }
+  if (isPNG(buf)) {
+    return 'image/png';
+  }
+  return '';
+}

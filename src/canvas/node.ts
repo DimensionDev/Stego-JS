@@ -1,6 +1,6 @@
-import * as NodeCanvas from "canvas";
+import * as NodeCanvas from 'canvas';
 
-export function createNodeCanvas(width: number, height: number) {
+export function createCanvas(width: number, height: number) {
   return NodeCanvas.createCanvas(width, height);
 }
 
@@ -10,7 +10,7 @@ export function buf2Img(imgBuf: Buffer) {
 
     image.onload = () => {
       const { width, height } = image;
-      const ctx = createNodeCanvas(width, height).getContext("2d");
+      const ctx = createCanvas(width, height).getContext('2d');
 
       ctx.drawImage(image, 0, 0, width, height);
       resolve(ctx.getImageData(0, 0, width, height));
@@ -26,9 +26,9 @@ export function img2Buf(
   width = imgData.width,
   height = imgData.height
 ) {
-  const canvas = createNodeCanvas(width, height);
-  const ctx = canvas.getContext("2d");
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext('2d');
 
   ctx.putImageData(imgData, 0, 0, 0, 0, width, height);
-  return canvas.toBuffer("image/png");
+  return canvas.toBuffer('image/png');
 }

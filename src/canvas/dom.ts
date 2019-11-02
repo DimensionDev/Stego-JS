@@ -1,18 +1,24 @@
-export function createDOMCanvas(width: number, height: number) {
-  const canvas = document.createElement("canvas");
+import { imgType } from '../helper';
+
+export function createCanvas(width: number, height: number) {
+  const canvas = document.createElement('canvas');
 
   canvas.width = width;
   canvas.height = height;
   return canvas;
 }
 
-export function url2Img(url: string) {
+export function buf2Img(imgBuf: ArrayBuffer) {
+  const url = URL.createObjectURL(
+    new Blob([imgBuf], { type: imgType(new Uint8Array(imgBuf)) })
+  );
+
   return new Promise<ImageData>((resolve, reject) => {
     const image = new Image();
 
     image.onload = () => {
       const { width, height } = image;
-      const ctx = createDOMCanvas(width, height).getContext("2d");
+      const ctx = createCanvas(width, height).getContext('2d');
 
       ctx.drawImage(image, 0, 0, width, height);
       resolve(ctx.getImageData(0, 0, width, height));
@@ -22,28 +28,22 @@ export function url2Img(url: string) {
   });
 }
 
-export async function img2Url(
+export function img2Buf(
   imgData: ImageData,
   width = imgData.width,
   height = imgData.height
 ) {
-  return URL.createObjectURL(await img2Blob(imgData, width, height));
-}
-
-export function img2Blob(
-  imgData: ImageData,
-  width = imgData.width,
-  height = imgData.height
-) {
-  const canvas = createDOMCanvas(width, height);
-  const ctx = canvas.getContext("2d");
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext('2d');
 
   ctx.putImageData(imgData, 0, 0, 0, 0, width, height);
-  return new Promise<Blob>(resolve =>
-    canvas.toBlob(blob => resolve(blob), "image/png")
-  );
-}
+  return new Promise<ArrayBuffer>((resolve, reject) =>
+    canvas.toBlob(blob => {
+      const fileReader = new FileReader();
 
-export function blob2Img(imgBlob: Blob) {
-  return url2Img(URL.createObjectURL(imgBlob));
+      fileReader.onload = ({ target }) => resolve(target.result as ArrayBuffer);
+      fileReader.onerror = err => reject(err);
+      fileReader.readAsArrayBuffer(blob);
+    }, 'image/png')
+  );
 }
