@@ -1,6 +1,6 @@
 {
   "name": "node-stego",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "",
   "module": "es/browser.js",
   "main": "umd/browser.js",
