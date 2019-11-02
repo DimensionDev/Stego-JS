@@ -10,7 +10,7 @@ export interface Loc {
 }
 
 export function str2bits(text: string, copies: number): Bit[] {
-  const chars = text.split('');
+  const chars = Array.from(text);
   const bits: Bit[] = [];
   const pushByte = (byte: Bit[], n: number) => {
     for (let i = 0; i < 8; i += 1) {
@@ -23,7 +23,7 @@ export function str2bits(text: string, copies: number): Bit[] {
   };
 
   for (let i = 0; i < chars.length; i += 1) {
-    const codes = encodeURI(chars[i]).split('');
+    const codes = Array.from(encodeURI(chars[i]));
 
     for (let j = 0; j < codes.length; j += 1) {
       const byte: Bit[] = [];
