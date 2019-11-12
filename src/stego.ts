@@ -1,20 +1,22 @@
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm, transform, inverseTransform } from './transform';
-import { updateImg, decolorImg, narrowImg, walkImg, cropImg } from './image';
+import { updateImg, decolorImg, narrowImg, visitImg, cropImg } from './image';
 import {
   mergeBits,
   createBits,
   str2bits,
   setBit,
   getBit,
-  Bit,
   bits2str,
+  Bit,
 } from './bit';
 import { createAcc } from './position';
+import { Visibility, isBlockVisibleAt } from './mask';
 
 export interface Options {
-  size: number;
   pass?: string;
+  mask: Visibility[];
+  size: number;
   copies: number;
   tolerance: number;
   transformAlgorithm: TransformAlgorithm;
@@ -61,7 +63,7 @@ export async function encodeImg(imgData: ImageData, options: EncodeOptions) {
 
   const acc = createAcc(options);
 
-  walkImg(imgData, options, (block, loc) => {
+  visitImg(imgData, options, (block, loc) => {
     const re = block;
     const im = new Array(size * size).fill(0);
 
@@ -78,7 +80,7 @@ export async function decodeImg(imgData: ImageData, options: DecodeOptions) {
   const bits: Bit[] = [];
   const acc = createAcc(options);
 
-  walkImg(imgData, options, (block, loc) => {
+  visitImg(imgData, options, (block, loc) => {
     const re = block;
     const im = new Array(size * size).fill(0);
 

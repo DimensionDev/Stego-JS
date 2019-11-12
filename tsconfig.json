@@ -9,6 +9,7 @@
     "resolveJsonModule": true,
     "noImplicitAny": true,
     "downlevelIteration": true,
+    "strictNullChecks": true,
     "outDir": "es/"
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/fft/*"]

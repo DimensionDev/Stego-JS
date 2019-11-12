@@ -133,9 +133,9 @@ export async function run() {
   const imgBuf =
     flags.encode || flags.decode ? await rs2Buf(process.stdin) : null;
 
-  if (flags.encode) {
+  if (flags.encode && imgBuf) {
     process.stdout.write((await encode(imgBuf, options)) as Buffer);
-  } else if (flags.decode) {
+  } else if (flags.decode && imgBuf) {
     process.stdout.write(await decode(imgBuf, options));
   }
 }

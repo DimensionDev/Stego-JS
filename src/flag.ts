@@ -78,6 +78,7 @@ export function flags2Options({
 }: Flags) {
   return {
     text: message,
+    mask: [],
     pass,
     narrow,
     size,

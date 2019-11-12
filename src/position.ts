@@ -1,12 +1,21 @@
 import { Options } from './stego';
-import { Loc } from './bit';
+import { Locator } from './image';
 import { TransformAlgorithm } from './transform';
 import { hashCode, squareCircleIntersect } from './helper';
 
 export interface Accumulator {
-  prevPos: number; // previous bit position
-  prevCode: string; // previous hash code
-  indices: number[]; // available indices
+  /**
+   * previous bit position
+   */
+  prevPos: number;
+  /**
+   * previous hash code
+   */
+  prevCode: string;
+  /**
+   * available indices
+   */
+  indices: number[];
 }
 
 export function createAcc({ size, transformAlgorithm }: Options) {
@@ -26,7 +35,11 @@ export function createAcc({ size, transformAlgorithm }: Options) {
   }
 }
 
-export function getPosFromAcc(acc: Accumulator, { c }: Loc, { pass }: Options) {
+export function getPosFromAcc(
+  acc: Accumulator,
+  { c }: Locator,
+  { pass }: Options
+) {
   const { prevCode, prevPos, indices } = acc;
 
   if (c !== 0) {
@@ -40,14 +53,12 @@ export function getPosFromAcc(acc: Accumulator, { c }: Loc, { pass }: Options) {
   return indices[index];
 }
 
-export function getPos(acc: Accumulator, loc: Loc, options: Options) {
+export function getPos(acc: Accumulator, loc: Locator, options: Options) {
   const { pass, size, transformAlgorithm } = options;
 
   switch (transformAlgorithm) {
     case TransformAlgorithm.FFT1D:
-      return pass
-        ? getPosFromAcc(acc, loc, options)
-        : (size * size) / 2 + size / 2;
+      return pass ? getPosFromAcc(acc, loc, options) : (size * size + size) / 2;
     case TransformAlgorithm.FFT2D:
       return 0;
     case TransformAlgorithm.DCT:

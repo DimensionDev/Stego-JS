@@ -18,7 +18,7 @@ export function buf2Img(imgBuf: ArrayBuffer) {
 
     image.onload = () => {
       const { width, height } = image;
-      const ctx = createCanvas(width, height).getContext('2d');
+      const ctx = createCanvas(width, height).getContext('2d')!;
 
       ctx.drawImage(image, 0, 0, width, height);
       resolve(ctx.getImageData(0, 0, width, height));
@@ -34,16 +34,26 @@ export function img2Buf(
   height = imgData.height
 ) {
   const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d')!;
 
   ctx.putImageData(imgData, 0, 0, 0, 0, width, height);
   return new Promise<ArrayBuffer>((resolve, reject) =>
     canvas.toBlob(blob => {
-      const fileReader = new FileReader();
+      if (blob) {
+        const fileReader = new FileReader();
 
-      fileReader.onload = ({ target }) => resolve(target.result as ArrayBuffer);
-      fileReader.onerror = err => reject(err);
-      fileReader.readAsArrayBuffer(blob);
+        fileReader.onload = ({ target }) => {
+          if (target) {
+            resolve(target.result as ArrayBuffer);
+          } else {
+            reject(new Error('fail to generate array buffer'));
+          }
+        };
+        fileReader.onerror = err => reject(err);
+        fileReader.readAsArrayBuffer(blob);
+      } else {
+        reject(new Error('fail to generate array buffer'));
+      }
     }, 'image/png')
   );
 }

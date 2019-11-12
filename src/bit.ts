@@ -1,13 +1,8 @@
 import { Options } from './stego';
 import { getPos, Accumulator } from './position';
+import { Locator } from './image';
 
 export type Bit = 0 | 1;
-
-export interface Loc {
-  c: number; // channel
-  p: number; // pixel position
-  b: number; // bit or block position
-}
 
 export function str2bits(text: string, copies: number): Bit[] {
   const chars = Array.from(text);
@@ -104,7 +99,7 @@ export function createBits(size: number) {
 export function getBit(
   block: number[],
   acc: Accumulator,
-  loc: Loc,
+  loc: Locator,
   options: Options
 ) {
   const pos = getPos(acc, loc, options);
@@ -117,15 +112,14 @@ export function setBit(
   block: number[],
   bits: Bit[],
   acc: Accumulator,
-  loc: Loc,
+  loc: Locator,
   options: Options
 ) {
   const pos = getPos(acc, loc, options);
-  const { b } = loc;
   const { tolerance } = options;
   const v = Math.floor(block[pos] / tolerance);
 
-  if (bits[b]) {
+  if (bits[loc.b]) {
     block[pos] = v % 2 === 1 ? v * tolerance : (v + 1) * tolerance;
   } else {
     block[pos] = v % 2 === 1 ? (v - 1) * tolerance : v * tolerance;
