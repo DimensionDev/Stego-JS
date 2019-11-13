@@ -10,6 +10,7 @@ import {
   DEFAULT_SIZE,
   DEFAULT_NARROW,
   DEFAULT_NO_EDGE_PIXELS,
+  DEFAULT_MASK,
 } from './constant';
 import { normalizeFlags, validateFlags, flags2Options } from './flag';
 
@@ -132,10 +133,11 @@ export async function run() {
   const options = flags2Options(flags);
   const imgBuf =
     flags.encode || flags.decode ? await rs2Buf(process.stdin) : null;
+  const maskBuf = Buffer.from(DEFAULT_MASK);
 
   if (flags.encode && imgBuf) {
-    process.stdout.write((await encode(imgBuf, options)) as Buffer);
+    process.stdout.write(await encode(imgBuf, maskBuf, options));
   } else if (flags.decode && imgBuf) {
-    process.stdout.write(await decode(imgBuf, options));
+    process.stdout.write(await decode(imgBuf, maskBuf, options));
   }
 }

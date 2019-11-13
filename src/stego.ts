@@ -1,6 +1,11 @@
-import { GrayscaleAlgorithm } from './grayscale';
+import { GrayscaleAlgorithm, grayscale, narrow } from './grayscale';
 import { TransformAlgorithm, transform, inverseTransform } from './transform';
-import { updateImg, decolorImg, narrowImg, visitImg, cropImg } from './image';
+import {
+  cropImg,
+  updateImgByBlock,
+  updateImgByPixel,
+  visitImgByBlock,
+} from './image';
 import {
   mergeBits,
   createBits,
@@ -11,11 +16,10 @@ import {
   Bit,
 } from './bit';
 import { createAcc } from './position';
-import { Visibility, isBlockVisibleAt } from './mask';
+import { isPixelVisibleAt, isBlockVisibleAt } from './mask';
 
 export interface Options {
   pass?: string;
-  mask: Visibility[];
   size: number;
   copies: number;
   tolerance: number;
@@ -31,11 +35,15 @@ export interface EncodeOptions extends Options {
 
 export interface DecodeOptions extends Options {}
 
-export async function encodeImg(imgData: ImageData, options: EncodeOptions) {
+export async function encodeImg(
+  imgData: ImageData,
+  maskData: ImageData,
+  options: EncodeOptions
+) {
   const {
     text,
     size,
-    narrow,
+    narrow: narrowSize,
     copies,
     grayscaleAlgorithm,
     transformAlgorithm,
@@ -46,7 +54,7 @@ export async function encodeImg(imgData: ImageData, options: EncodeOptions) {
   const bits = mergeBits(
     createBits(sizeOfBlocks),
     textBits,
-    createBits(8 * copies).fill(1) // end of message
+    createBits(8 * copies).fill(1) // the end of message
   );
 
   if (textBits.length + 8 * copies > sizeOfBlocks) {
@@ -54,33 +62,62 @@ export async function encodeImg(imgData: ImageData, options: EncodeOptions) {
       'bits overflow! try to shrink text or reduce copies.\n'
     );
   }
-  if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE) {
-    decolorImg(imgData, options);
-  }
-  if (narrow > 0) {
-    narrowImg(imgData, options);
+  if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE || narrowSize > 0) {
+    updateImgByPixel(imgData, options, ([r, g, b, a], loc) => {
+      if (!isPixelVisibleAt(maskData, loc, options)) {
+        return [r, g, b, a];
+      }
+
+      // decolor
+      if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE) {
+        const y = grayscale(r, g, b, grayscaleAlgorithm);
+
+        r = y;
+        g = y;
+        b = y;
+      }
+
+      // narrow color value
+      if (narrowSize > 0) {
+        r = narrow(r, narrowSize);
+        g = narrow(g, narrowSize);
+        b = narrow(b, narrowSize);
+      }
+      return [r, g, b, a];
+    });
   }
 
   const acc = createAcc(options);
 
-  visitImg(imgData, options, (block, loc) => {
+  updateImgByBlock(imgData, options, (block, loc) => {
+    if (!isBlockVisibleAt(maskData, loc, options)) {
+      return;
+    }
+
     const re = block;
     const im = new Array(size * size).fill(0);
 
     transform(re, im, transformAlgorithm, options);
     setBit(re, bits, acc, loc, options);
     inverseTransform(re, im, transformAlgorithm, options);
-    updateImg(imgData, re, loc, options);
   });
   return imgData;
 }
 
-export async function decodeImg(imgData: ImageData, options: DecodeOptions) {
+export async function decodeImg(
+  imgData: ImageData,
+  maskData: ImageData,
+  options: DecodeOptions
+) {
   const { size, copies, transformAlgorithm } = options;
   const bits: Bit[] = [];
   const acc = createAcc(options);
 
-  visitImg(imgData, options, (block, loc) => {
+  visitImgByBlock(imgData, options, (block, loc) => {
+    if (!isBlockVisibleAt(maskData, loc, options)) {
+      return;
+    }
+
     const re = block;
     const im = new Array(size * size).fill(0);
 
