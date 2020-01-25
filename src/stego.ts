@@ -54,7 +54,7 @@ export async function encodeImg(
   const sizeOfBlocks = width * height * 3;
   const textBits = str2bits(text, copies);
   const bits = mergeBits(
-    createBits(noExhaustPixels ? textBits.length : sizeOfBlocks),
+    createBits(noExhaustPixels ? textBits.length + 8 * copies : sizeOfBlocks),
     textBits,
     createBits(8 * copies).fill(1) // the end of message
   );
@@ -90,6 +90,7 @@ export async function encodeImg(
   }
 
   const acc = createAcc(options);
+  const im = new Array(size * size);
 
   updateImgByBlock(imgData, options, (block, loc) => {
     if (noExhaustPixels && loc.b > bits.length) {
@@ -98,13 +99,9 @@ export async function encodeImg(
     if (!isBlockVisibleAt(maskData, loc, options)) {
       return;
     }
-
-    const re = block;
-    const im = new Array(size * size).fill(0);
-
-    transform(re, im, transformAlgorithm, options);
-    setBit(re, bits, acc, loc, options);
-    inverseTransform(re, im, transformAlgorithm, options);
+    transform(block, im.fill(0), transformAlgorithm, options);
+    setBit(block, bits, acc, loc, options);
+    inverseTransform(block, im, transformAlgorithm, options);
   });
   return imgData;
 }
@@ -117,17 +114,14 @@ export async function decodeImg(
   const { size, copies, transformAlgorithm } = options;
   const bits: Bit[] = [];
   const acc = createAcc(options);
+  const im = new Array(size * size);
 
   visitImgByBlock(imgData, options, (block, loc) => {
     if (!isBlockVisibleAt(maskData, loc, options)) {
       return;
     }
-
-    const re = block;
-    const im = new Array(size * size).fill(0);
-
-    transform(re, im, transformAlgorithm, options);
-    bits.push(getBit(re, acc, loc, options));
+    transform(block, im.fill(0), transformAlgorithm, options);
+    bits.push(getBit(block, acc, loc, options));
   });
   return bits2str(bits, copies);
 }
