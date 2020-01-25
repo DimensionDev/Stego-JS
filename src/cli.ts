@@ -12,6 +12,7 @@ import {
   DEFAULT_NARROW,
   DEFAULT_NO_EDGE_PIXELS,
   DEFAULT_MASK,
+  DEFAULT_NO_EXHAUST_PIXELS,
 } from './constant';
 import { normalizeFlags, validateFlags, flags2Options } from './flag';
 
@@ -33,7 +34,7 @@ Options
   -c, --copies           Size of duplications with odd numbers required: ${DEFAULT_COPIES} (default).
   -g, --grayscale        Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
   -f, --transform        Specify transform algorithm: 'FFT1D' (default), 'FFT2D', 'DCT'.
-
+      --noExhaustPixels  Do not encode extra pixels.
       --noCropEdgePixels Do not crop edge pixels.
 
 Examples
@@ -106,6 +107,10 @@ Examples
         type: 'string',
         default: TransformAlgorithm.FFT1D,
         alias: 'f',
+      },
+      noExhaustPixels: {
+        type: 'boolean',
+        default: DEFAULT_NO_EXHAUST_PIXELS,
       },
       noCropEdgePixels: {
         type: 'boolean',

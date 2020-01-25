@@ -30,6 +30,7 @@ export interface EncodeOptions extends Options {
   text: string;
   narrow: number;
   grayscaleAlgorithm: GrayscaleAlgorithm;
+  noExhaustPixels: boolean;
   noCropEdgePixels: boolean;
 }
 
@@ -47,12 +48,13 @@ export async function encodeImg(
     copies,
     grayscaleAlgorithm,
     transformAlgorithm,
+    noExhaustPixels,
   } = options;
   const [width, height] = cropImg(imgData, options);
   const sizeOfBlocks = width * height * 3;
   const textBits = str2bits(text, copies);
   const bits = mergeBits(
-    createBits(sizeOfBlocks),
+    createBits(noExhaustPixels ? textBits.length : sizeOfBlocks),
     textBits,
     createBits(8 * copies).fill(1) // the end of message
   );
@@ -90,6 +92,9 @@ export async function encodeImg(
   const acc = createAcc(options);
 
   updateImgByBlock(imgData, options, (block, loc) => {
+    if (noExhaustPixels && loc.b > bits.length) {
+      return;
+    }
     if (!isBlockVisibleAt(maskData, loc, options)) {
       return;
     }

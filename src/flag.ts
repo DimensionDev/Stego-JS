@@ -18,6 +18,7 @@ export interface Flags {
   tolerance: number;
   grayscale: GrayscaleAlgorithm;
   transform: TransformAlgorithm;
+  noExhaustPixels: boolean;
   noCropEdgePixels: boolean;
 }
 
@@ -77,6 +78,7 @@ export function flags2Options({
   tolerance,
   grayscale,
   transform,
+  noExhaustPixels,
   noCropEdgePixels,
 }: Flags) {
   return {
@@ -89,6 +91,7 @@ export function flags2Options({
     tolerance,
     grayscaleAlgorithm: grayscale,
     transformAlgorithm: transform,
+    noExhaustPixels,
     noCropEdgePixels,
   } as EncodeOptions & DecodeOptions;
 }
