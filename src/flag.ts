@@ -1,4 +1,5 @@
 import { Result } from 'meow';
+import { resolve as resolvePath } from 'path';
 import { EncodeOptions, DecodeOptions } from './stego';
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
@@ -9,6 +10,7 @@ export interface Flags {
   encode: boolean;
   decode: boolean;
   message: string;
+  mask: string;
   narrow: number;
   size: number;
   copies: number;
@@ -20,7 +22,7 @@ export interface Flags {
 }
 
 export function normalizeFlags(flags: Result['flags']) {
-  const { encode, decode, size, narrow, copies, tolerance } = flags;
+  const { encode, decode, size, narrow, copies, tolerance, mask } = flags;
 
   return {
     ...flags,
@@ -30,6 +32,7 @@ export function normalizeFlags(flags: Result['flags']) {
     tolerance: parseInt(tolerance, 10),
     encode: encode && !decode,
     decode,
+    mask: mask ? resolvePath(process.cwd(), mask) : '',
   } as Flags;
 }
 

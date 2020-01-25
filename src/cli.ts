@@ -1,4 +1,5 @@
 import meow from 'meow';
+import { createReadStream } from 'fs';
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
 import { rs2Buf } from './helper';
@@ -71,6 +72,11 @@ Examples
         default: '',
         alias: 'p',
       },
+      mask: {
+        type: 'string',
+        default: '',
+        alias: 'k',
+      },
       size: {
         type: 'string',
         default: DEFAULT_SIZE,
@@ -133,7 +139,9 @@ export async function run() {
   const options = flags2Options(flags);
   const imgBuf =
     flags.encode || flags.decode ? await rs2Buf(process.stdin) : null;
-  const maskBuf = Buffer.from(DEFAULT_MASK);
+  const maskBuf = flags.mask
+    ? await rs2Buf(createReadStream(flags.mask))
+    : Buffer.from(DEFAULT_MASK);
 
   if (flags.encode && imgBuf) {
     process.stdout.write(await encode(imgBuf, maskBuf, options));
