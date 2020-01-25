@@ -72,7 +72,7 @@ export function visitImgByPixel(
 export function visitImgByBlock(
   imgData: ImageData,
   options: Options,
-  visitor: (block: number[], loc: Locator, imgData: ImageData) => void
+  visitor: (block: number[], loc: Locator, imgData: ImageData) => boolean
 ) {
   const { width: w, height: h } = imgData;
   let c = 0;
@@ -80,9 +80,12 @@ export function visitImgByBlock(
   let b = 0;
 
   for (const block of divideImg(imgData, options)) {
-    visitor(block, { c, p, b, w, h }, imgData);
+    const bitConsumed = visitor(block, { c, p, b, w, h }, imgData);
+
     c += 1;
-    b += 1;
+    if (bitConsumed) {
+      b += 1;
+    }
     if (c === 3) {
       p += 1;
       c = 0;
@@ -110,26 +113,26 @@ export function updateImgByPixel(
 export function updateImgByBlock(
   imgData: ImageData,
   options: Options,
-  updater: (block: number[], loc: Locator, imgData: ImageData) => void
+  updater: (block: number[], loc: Locator, imgData: ImageData) => boolean
 ) {
   visitImgByBlock(imgData, options, (block, loc) => {
-    updater(block, loc, imgData);
+    const bitConsumed = updater(block, loc, imgData);
 
-    const { p, c, w } = loc;
-    const { data } = imgData;
-    const { size } = options;
-    const h1 = Math.floor(p / Math.floor(w / size)) * size;
-    const w1 = (p % Math.floor(w / size)) * size;
+    if (bitConsumed) {
+      const { p, c, w } = loc;
+      const { data } = imgData;
+      const { size } = options;
+      const h1 = Math.floor(p / Math.floor(w / size)) * size;
+      const w1 = (p % Math.floor(w / size)) * size;
 
-    for (let i = 0; i < size * size; i += 1) {
-      const h2 = Math.floor(i / size);
-      const w2 = i % size;
+      for (let i = 0; i < size * size; i += 1) {
+        const h2 = Math.floor(i / size);
+        const w2 = i % size;
 
-      data[((h1 + h2) * w + w1 + w2) * 4 + c] = clamp(
-        Math.round(block[i]),
-        0,
-        255
-      );
+        block[i] = Math.round(block[i]);
+        data[((h1 + h2) * w + w1 + w2) * 4 + c] = clamp(block[i], 0, 255);
+      }
     }
+    return bitConsumed;
   });
 }

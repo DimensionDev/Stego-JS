@@ -59,6 +59,8 @@ export async function encodeImg(
     createBits(8 * copies).fill(1) // the end of message
   );
 
+  console.error(bits.length);
+
   if (textBits.length + 8 * copies > sizeOfBlocks) {
     process.stderr.write(
       'bits overflow! try to shrink text or reduce copies.\n'
@@ -93,15 +95,16 @@ export async function encodeImg(
   const im = new Array(size * size);
 
   updateImgByBlock(imgData, options, (block, loc) => {
-    if (noExhaustPixels && loc.b > bits.length) {
-      return;
+    if (noExhaustPixels && loc.b >= bits.length) {
+      return false;
     }
     if (!isBlockVisibleAt(maskData, loc, options)) {
-      return;
+      return false;
     }
     transform(block, im.fill(0), transformAlgorithm, options);
     setBit(block, bits, acc, loc, options);
     inverseTransform(block, im, transformAlgorithm, options);
+    return true;
   });
   return imgData;
 }
@@ -118,10 +121,11 @@ export async function decodeImg(
 
   visitImgByBlock(imgData, options, (block, loc) => {
     if (!isBlockVisibleAt(maskData, loc, options)) {
-      return;
+      return false;
     }
     transform(block, im.fill(0), transformAlgorithm, options);
     bits.push(getBit(block, acc, loc, options));
+    return true;
   });
   return bits2str(bits, copies);
 }
