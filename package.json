@@ -1,6 +1,6 @@
 {
   "name": "node-stego",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "",
   "module": "es/node.js",
   "main": "umd/node.js",
