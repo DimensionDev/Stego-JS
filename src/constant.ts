@@ -4,8 +4,9 @@ export const DEFAULT_NARROW = 0;
 export const DEFAULT_COPIES = 3;
 export const DEFAULT_SIZE = 8;
 export const DEFAULT_TOLERANCE = 128;
-export const DEFAULT_NO_EXHAUST_PIXELS = false;
-export const DEFAULT_NO_EDGE_PIXELS = false;
+export const DEFAULT_FAKE_MASK_PIXELS = false;
+export const DEFAULT_EXHAUST_PIXELS = true;
+export const DEFAULT_CROP_EDGE_PIXELS = true;
 
 export const DEFAULT_MASK = [
   0x89,

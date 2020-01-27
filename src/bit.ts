@@ -1,6 +1,6 @@
 import { Options } from './stego';
 import { getPos, Accumulator } from './position';
-import { Locator } from './image';
+import { Locator } from './locator';
 
 export type Bit = 0 | 1;
 

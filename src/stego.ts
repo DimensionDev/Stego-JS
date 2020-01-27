@@ -5,6 +5,7 @@ import {
   updateImgByBlock,
   updateImgByPixel,
   visitImgByBlock,
+  updateImgByPixelAt,
 } from './image';
 import {
   mergeBits,
@@ -17,6 +18,8 @@ import {
 } from './bit';
 import { createAcc } from './position';
 import { isPixelVisibleAt, isBlockVisibleAt } from './mask';
+import { rand } from './helper';
+import { loc2idx, loc2coord } from './locator';
 
 export interface Options {
   pass?: string;
@@ -30,8 +33,9 @@ export interface EncodeOptions extends Options {
   text: string;
   narrow: number;
   grayscaleAlgorithm: GrayscaleAlgorithm;
-  noExhaustPixels: boolean;
-  noCropEdgePixels: boolean;
+  exhaustPixels: boolean;
+  cropEdgePixels: boolean;
+  fakeMaskPixels: boolean;
 }
 
 export interface DecodeOptions extends Options {}
@@ -48,18 +52,16 @@ export async function encodeImg(
     copies,
     grayscaleAlgorithm,
     transformAlgorithm,
-    noExhaustPixels,
+    exhaustPixels,
   } = options;
   const [width, height] = cropImg(imgData, options);
   const sizeOfBlocks = width * height * 3;
   const textBits = str2bits(text, copies);
   const bits = mergeBits(
-    createBits(noExhaustPixels ? textBits.length + 8 * copies : sizeOfBlocks),
+    createBits(exhaustPixels ? sizeOfBlocks : textBits.length + 8 * copies),
     textBits,
     createBits(8 * copies).fill(1) // the end of message
   );
-
-  console.error(bits.length);
 
   if (textBits.length + 8 * copies > sizeOfBlocks) {
     process.stderr.write(
@@ -95,10 +97,21 @@ export async function encodeImg(
   const im = new Array(size * size);
 
   updateImgByBlock(imgData, options, (block, loc) => {
-    if (noExhaustPixels && loc.b >= bits.length) {
+    if (!exhaustPixels && loc.b >= bits.length) {
       return false;
     }
     if (!isBlockVisibleAt(maskData, loc, options)) {
+      if (options.fakeMaskPixels && loc.c === 0) {
+        const [x, y] = loc2coord(loc, options);
+        const g = rand(10, 127);
+
+        updateImgByPixelAt(
+          imgData,
+          options,
+          [g, g, g, 255],
+          loc2idx(loc, options, x, y, rand(0, 64))
+        );
+      }
       return false;
     }
     transform(block, im.fill(0), transformAlgorithm, options);

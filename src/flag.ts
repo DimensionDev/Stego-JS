@@ -18,8 +18,9 @@ export interface Flags {
   tolerance: number;
   grayscale: GrayscaleAlgorithm;
   transform: TransformAlgorithm;
-  noExhaustPixels: boolean;
-  noCropEdgePixels: boolean;
+  exhaustPixels: boolean;
+  cropEdgePixels: boolean;
+  fakeMaskPixels: boolean;
 }
 
 export function normalizeFlags(flags: Result['flags']) {
@@ -78,8 +79,9 @@ export function flags2Options({
   tolerance,
   grayscale,
   transform,
-  noExhaustPixels,
-  noCropEdgePixels,
+  exhaustPixels,
+  cropEdgePixels,
+  fakeMaskPixels,
 }: Flags) {
   return {
     text: message,
@@ -91,7 +93,8 @@ export function flags2Options({
     tolerance,
     grayscaleAlgorithm: grayscale,
     transformAlgorithm: transform,
-    noExhaustPixels,
-    noCropEdgePixels,
+    exhaustPixels,
+    cropEdgePixels,
+    fakeMaskPixels,
   } as EncodeOptions & DecodeOptions;
 }

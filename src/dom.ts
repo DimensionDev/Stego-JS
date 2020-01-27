@@ -11,14 +11,14 @@ export async function encode(
     buf2Img(imgBuf),
     buf2Img(maskBuf),
   ]);
-  const { noCropEdgePixels } = options;
+  const { cropEdgePixels } = options;
   const { width, height } = imgData;
   const [cropWidth, cropHeight] = cropImg(imgData, options);
 
   return img2Buf(
     await encodeImg(imgData, maskData, options),
-    noCropEdgePixels ? width : cropWidth,
-    noCropEdgePixels ? height : cropHeight
+    cropEdgePixels ? cropWidth : width,
+    cropEdgePixels ? cropHeight : height
   );
 }
 

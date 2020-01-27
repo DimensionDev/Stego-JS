@@ -10,6 +10,10 @@ export function rs2Buf(rs: Readable) {
   });
 }
 
+export function rand(min: number, max: number) {
+  return Math.round(Math.random() * max + min);
+}
+
 export function clamp(v: number, min: number, max: number) {
   if (v < min) {
     console.warn(`clamp min: ${v}`);

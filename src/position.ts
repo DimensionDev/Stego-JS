@@ -1,7 +1,7 @@
 import { Options } from './stego';
-import { Locator } from './image';
 import { TransformAlgorithm } from './transform';
 import { hashCode, squareCircleIntersect } from './helper';
+import { Locator } from './locator';
 
 export interface Accumulator {
   /**

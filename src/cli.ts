@@ -10,9 +10,10 @@ import {
   DEFAULT_TOLERANCE,
   DEFAULT_SIZE,
   DEFAULT_NARROW,
-  DEFAULT_NO_EDGE_PIXELS,
+  DEFAULT_CROP_EDGE_PIXELS,
   DEFAULT_MASK,
-  DEFAULT_NO_EXHAUST_PIXELS,
+  DEFAULT_EXHAUST_PIXELS,
+  DEFAULT_FAKE_MASK_PIXELS,
 } from './constant';
 import { normalizeFlags, validateFlags, flags2Options } from './flag';
 
@@ -34,8 +35,9 @@ Options
   -c, --copies           Size of duplications with odd numbers required: ${DEFAULT_COPIES} (default).
   -g, --grayscale        Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
   -f, --transform        Specify transform algorithm: 'FFT1D' (default), 'FFT2D', 'DCT'.
-      --noExhaustPixels  Do not encode extra pixels.
-      --noCropEdgePixels Do not crop edge pixels.
+      --exhaustPixels    Encode pixels in rest of image (default is ${DEFAULT_EXHAUST_PIXELS}).
+      --fakeMaskPixels   Encode fake pixels into mask area (default is ${DEFAULT_FAKE_MASK_PIXELS})
+      --cropEdgePixels   Crop edge pixels (default is ${DEFAULT_CROP_EDGE_PIXELS}).
 
 Examples
   $ cat ./input.png | ${CLI_NAME} -e -m 'hello world' > output.png
@@ -108,13 +110,17 @@ Examples
         default: TransformAlgorithm.FFT1D,
         alias: 'f',
       },
-      noExhaustPixels: {
+      fakeMaskPixels: {
         type: 'boolean',
-        default: DEFAULT_NO_EXHAUST_PIXELS,
+        default: DEFAULT_FAKE_MASK_PIXELS,
       },
-      noCropEdgePixels: {
+      exhaustPixels: {
         type: 'boolean',
-        default: DEFAULT_NO_EDGE_PIXELS,
+        default: DEFAULT_EXHAUST_PIXELS,
+      },
+      cropEdgePixels: {
+        type: 'boolean',
+        default: DEFAULT_CROP_EDGE_PIXELS,
       },
     },
     inferType: true,

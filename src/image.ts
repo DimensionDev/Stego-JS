@@ -1,30 +1,8 @@
 import { clamp } from './helper';
 import { Options } from './stego';
+import { Locator, loc2idx, loc2coord } from './locator';
 
 export type Pixel = [number, number, number, number];
-
-export interface Locator {
-  /**
-   * channel
-   */
-  c: number;
-  /**
-   * top left pixel position
-   */
-  p: number;
-  /**
-   * bit position
-   */
-  b: number;
-  /**
-   * image width
-   */
-  w: number;
-  /**
-   * image height
-   */
-  h: number;
-}
 
 export function cropImg({ width, height }: ImageData, { size }: Options) {
   return [
@@ -65,7 +43,7 @@ export function visitImgByPixel(
   for (let i = 0; i < width * height; i += 1) {
     const p = i * 4;
 
-    visitor([data[p], data[p + 1], data[p + 2], data[p + 3]], i, imgData);
+    visitor([data[p], data[p + 1], data[p + 2], data[p + 3]], p, imgData);
   }
 }
 
@@ -98,16 +76,9 @@ export function updateImgByPixel(
   options: Options,
   updater: (pixel: Pixel, loc: number, imgData: ImageData) => Pixel
 ) {
-  visitImgByPixel(imgData, options, (pixel, loc) => {
-    const p = loc * 4;
-    const { data } = imgData;
-
-    [data[p], data[p + 1], data[p + 2], data[p + 3]] = updater(
-      pixel,
-      loc,
-      imgData
-    );
-  });
+  visitImgByPixel(imgData, options, (pixel, loc) =>
+    updateImgByPixelAt(imgData, options, updater(pixel, loc, imgData), loc)
+  );
 }
 
 export function updateImgByBlock(
@@ -119,20 +90,35 @@ export function updateImgByBlock(
     const bitConsumed = updater(block, loc, imgData);
 
     if (bitConsumed) {
-      const { p, c, w } = loc;
-      const { data } = imgData;
-      const { size } = options;
-      const h1 = Math.floor(p / Math.floor(w / size)) * size;
-      const w1 = (p % Math.floor(w / size)) * size;
-
-      for (let i = 0; i < size * size; i += 1) {
-        const h2 = Math.floor(i / size);
-        const w2 = i % size;
-
-        block[i] = Math.round(block[i]);
-        data[((h1 + h2) * w + w1 + w2) * 4 + c] = clamp(block[i], 0, 255);
-      }
+      updateImgByBlockAt(imgData, options, block, loc);
     }
     return bitConsumed;
   });
+}
+
+export function updateImgByPixelAt(
+  imgData: ImageData,
+  options: Options,
+  pixel: Pixel,
+  loc: number
+) {
+  const { data } = imgData;
+
+  [data[loc], data[loc + 1], data[loc + 2], data[loc + 3]] = pixel;
+}
+
+export function updateImgByBlockAt(
+  imgData: ImageData,
+  options: Options,
+  block: number[],
+  loc: Locator
+) {
+  const { data } = imgData;
+  const { size } = options;
+  const [x1, y1] = loc2coord(loc, options);
+
+  for (let i = 0; i < size * size; i += 1) {
+    block[i] = Math.round(block[i]);
+    data[loc2idx(loc, options, x1, y1, i)] = clamp(block[i], 0, 255);
+  }
 }
