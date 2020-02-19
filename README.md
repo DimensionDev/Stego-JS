@@ -1,6 +1,6 @@
 # Stego-JS
 
-[![npm module](https://img.shields.io/npm/v/stego-js)](https://www.npmjs.com/package/stego-js)
+[![npm module](https://img.shields.io/npm/v/@dimensiondev/stego-js)](https://www.npmjs.com/package/@dimensiondev/stego-js)
 
 ## Installation
 
@@ -21,10 +21,10 @@ stego -h
 
 ```javascript
 // node
-import { encode, decode } from 'stego-js/es/node';
+import { encode, decode } from '@dimensiondev/stego-js/es/node';
 
 // dom
-import { encode, decode } from 'stego-js/es/dom';
+import { encode, decode } from '@dimensiondev/stego-js/es/dom';
 ```
 
 ## Refs

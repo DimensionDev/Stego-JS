@@ -1,5 +1,5 @@
 {
-  "name": "stego-js",
+  "name": "@dimensiondev/stego-js",
   "version": "0.11.0",
   "description": "Steganography, based on frequency domain implemented in JavaScript.",
   "repository": "https://github.com/DimensionDev/Stego-JS",
