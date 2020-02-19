@@ -1,6 +1,5 @@
 # node-stego
 
-![node version](https://img.shields.io/node/v/node-stego)
 [![npm module](https://img.shields.io/npm/v/node-stego)](https://www.npmjs.com/package/node-stego)
 
 ## Installation
