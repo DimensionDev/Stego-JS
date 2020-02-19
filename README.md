@@ -1,15 +1,15 @@
-# node-stego
+# Stego-JS
 
-[![npm module](https://img.shields.io/npm/v/node-stego)](https://www.npmjs.com/package/node-stego)
+[![npm module](https://img.shields.io/npm/v/stego-js)](https://www.npmjs.com/package/stego-js)
 
 ## Installation
 
 ```bash
 # node
-npm i -g node-stego canvas@2.6.0
+npm i -g stego-js canvas@2.6.0
 
 # dom
-npm i node-stego
+npm i stego-js
 ```
 
 ## Usage
@@ -21,10 +21,10 @@ stego -h
 
 ```javascript
 // node
-import { encode, decode } from 'node-stego/es/node';
+import { encode, decode } from 'stego-js/es/node';
 
 // dom
-import { encode, decode } from 'node-stego/es/dom';
+import { encode, decode } from 'stego-js/es/dom';
 ```
 
 ## Refs
