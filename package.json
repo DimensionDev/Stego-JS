@@ -5,7 +5,8 @@
   "repository": "https://github.com/DimensionDev/Stego-JS",
   "license": "MIT",
   "author": "DimensionDev",
-  "main": "umd/node.js",
+  "main": "es/node.js",
+  "browser": "es/dom.js",
   "module": "es/node.js",
   "types": "es/node.d.ts",
   "bin": {
