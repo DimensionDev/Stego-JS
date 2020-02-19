@@ -1,17 +1,13 @@
 {
   "name": "node-stego",
   "version": "0.10.0",
-  "description": "",
-  "module": "es/node.js",
+  "description": "Steganography, based on frequency domain implemented in JavaScript.",
+  "repository": "https://github.com/DimensionDev/Stego-JS",
+  "license": "MIT",
+  "author": "DimensionDev",
   "main": "umd/node.js",
+  "module": "es/node.js",
   "types": "es/node.d.ts",
-  "scripts": {
-    "clean": "rm -rf umd es",
-    "build": "npm run build:umd && npm run build:es",
-    "build:es": "npx tsc -d",
-    "build:umd": "npx rollup -c",
-    "prebuild": "npm run clean"
-  },
   "bin": {
     "stego": "./bin/stego.js"
   },
@@ -20,22 +16,26 @@
     "es",
     "umd"
   ],
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/meow": "^5.0.0",
-    "@types/node": "^12.7.5",
-    "rollup": "^1.25.2",
-    "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-typescript": "^1.0.1",
-    "rollup-plugin-typescript2": "^0.24.3",
-    "ts-node": "^8.4.1",
-    "tslib": "^1.10.0",
-    "typescript": "^3.7.1-rc"
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "npm run build:umd && npm run build:es",
+    "build:es": "npx tsc -d",
+    "build:umd": "npx rollup -c",
+    "clean": "rm -rf umd es"
   },
   "dependencies": {
     "meow": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/meow": "^5.0.0",
+    "@types/node": "^12.12.27",
+    "rollup": "^1.31.1",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-typescript2": "^0.24.3",
+    "ts-node": "^8.6.2",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.5"
   },
   "peerDependencies": {
     "canvas": "^2.6.0"
