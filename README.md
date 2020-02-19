@@ -6,17 +6,21 @@
 
 ```bash
 # node
-npm i -g stego-js canvas@2.6.0
+npm install @dimensiondev/stego-js canvas@2.6.1 --global
 
 # dom
-npm i stego-js
+npm install @dimensiondev/stego-js
 ```
 
 ## Usage
 
 ```bash
 # cli
-stego -h
+npx @dimensiondev/stego-js -h
+
+# or
+npm install --global @dimensiondev/stego-js
+stego-js -h
 ```
 
 ```javascript

@@ -9,9 +9,7 @@
   "browser": "es/dom.js",
   "module": "es/node.js",
   "types": "es/node.d.ts",
-  "bin": {
-    "stego": "./bin/stego.js"
-  },
+  "bin": "./bin/stego.js",
   "files": [
     "bin",
     "es",
@@ -20,8 +18,8 @@
   "scripts": {
     "prebuild": "npm run clean",
     "build": "npm run build:umd && npm run build:es",
-    "build:es": "npx tsc -d",
-    "build:umd": "npx rollup -c",
+    "build:es": "tsc -d",
+    "build:umd": "rollup -c",
     "clean": "rm -rf umd es"
   },
   "dependencies": {
