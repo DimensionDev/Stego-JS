@@ -58,11 +58,17 @@ export function getPos(acc: Accumulator, loc: Locator, options: Options) {
 
   switch (transformAlgorithm) {
     case TransformAlgorithm.FFT1D:
-      return pass ? getPosFromAcc(acc, loc, options) : (size * size + size) / 2;
+      // return [1, (size * size + size) / 2];
+      return [4 * size + 2, 3 * size + 3];
+      // return pass ? getPosFromAcc(acc, loc, options) : (size * size + size) / 2;
     case TransformAlgorithm.FFT2D:
-      return 0;
+      // return [1, (size * size + size) / 2];
+      // return [4 * size + 2, 3 * size + 3];
+      return [4 * size + 2, 3 * size + 3];
+      // return [1, (size * size + size) / 2];
     case TransformAlgorithm.DCT:
-      return 0;
+      return [4 * size + 2, 3 * size + 3];
+      // return [1, (size * size + size) / 2];
     default:
       throw new Error(`unknown algortihm: ${transformAlgorithm}`);
   }

@@ -1,9 +1,12 @@
-export const CLI_NAME = 'stego';
+export const CLI_NAME = 'stego-js';
 
 export const DEFAULT_NARROW = 0;
 export const DEFAULT_COPIES = 3;
 export const DEFAULT_SIZE = 8;
-export const DEFAULT_TOLERANCE = 128;
+export const DEFAULT_DCT_TOLERANCE = 10;
+export const DEFAULT_FFT1D_TOLERANCE = 10;
+export const DEFAULT_FFT2D_TOLERANCE = 500;
+export const TOLERANCE_NOT_SET = null;
 export const DEFAULT_FAKE_MASK_PIXELS = false;
 export const DEFAULT_EXHAUST_PIXELS = true;
 export const DEFAULT_CROP_EDGE_PIXELS = true;

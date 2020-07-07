@@ -23,6 +23,8 @@
     "clean": "rm -rf umd es"
   },
   "dependencies": {
+    "@rollup-umd/build": "^1.1.1",
+    "canvas": "^2.6.1",
     "meow": "^5.0.0"
   },
   "devDependencies": {

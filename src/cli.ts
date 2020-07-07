@@ -7,7 +7,10 @@ import { encode, decode } from './node';
 import {
   CLI_NAME,
   DEFAULT_COPIES,
-  DEFAULT_TOLERANCE,
+  DEFAULT_DCT_TOLERANCE,
+  DEFAULT_FFT2D_TOLERANCE,
+  DEFAULT_FFT1D_TOLERANCE,
+  TOLERANCE_NOT_SET,
   DEFAULT_SIZE,
   DEFAULT_NARROW,
   DEFAULT_CROP_EDGE_PIXELS,
@@ -30,7 +33,7 @@ Options
 
   -m, --message          Specify the message to be encoded.
   -p, --pass             Specify the seed text for generating random encoding position when using 'FFT1D'.
-  -t, --tolerance        Specify the number to be added into wave amplitude: ${DEFAULT_TOLERANCE} (default).
+  -t, --tolerance        Specify the number to be added into wave amplitude: ${DEFAULT_FFT1D_TOLERANCE} (default for FFT1D), ${DEFAULT_FFT2D_TOLERANCE} (default for FFT2D), ${DEFAULT_DCT_TOLERANCE} (default for DCT).
   -s, --size             Size of encoding block with radix-2 required: ${DEFAULT_SIZE} (default).
   -c, --copies           Size of duplications with odd numbers required: ${DEFAULT_COPIES} (default).
   -g, --grayscale        Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
@@ -97,7 +100,7 @@ Examples
       },
       tolerance: {
         type: 'string',
-        default: DEFAULT_TOLERANCE,
+        default: TOLERANCE_NOT_SET,
         alias: 't',
       },
       grayscale: {

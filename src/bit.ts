@@ -70,6 +70,7 @@ export function bits2str(bits: Bit[], copies: number) {
   try {
     return decodeURI(chars.join(''));
   } catch (e) {
+    console.warn("Error when decoding:  " + e);
     return '';
   }
 }
@@ -102,10 +103,10 @@ export function getBit(
   loc: Locator,
   options: Options
 ) {
-  const pos = getPos(acc, loc, options);
+  const [pos1, pos2] = getPos(acc, loc, options);
   const { tolerance } = options;
 
-  return Math.abs(Math.round(block[pos] / tolerance) % 2) as Bit;
+  return ((block[pos1] > block[pos2]) ? 1 : 0) as Bit;
 }
 
 export function setBit(
@@ -115,13 +116,19 @@ export function setBit(
   loc: Locator,
   options: Options
 ) {
-  const pos = getPos(acc, loc, options);
+  const [pos1, pos2] = getPos(acc, loc, options);
   const { tolerance } = options;
-  const v = Math.floor(block[pos] / tolerance);
+  let v1 = block[pos1];
+  let v2 = block[pos2];
+  
+  // amplifier the difference between v1 and v2
+  // (v1 < v2) ? v1 -= tolerance : v2 -= tolerance;
+  [v1, v2] = v1 < v2? [v1 - tolerance, v2] : [v1, v2 - tolerance];
 
-  if (bits[loc.b]) {
-    block[pos] = v % 2 === 1 ? v * tolerance : (v + 1) * tolerance;
-  } else {
-    block[pos] = v % 2 === 1 ? (v - 1) * tolerance : v * tolerance;
+
+  if (bits[loc.b]) {//bit '1':  block[pos1] > block[pos2]
+    [block[pos1], block[pos2]] = (v1 < v2) ? [v2, v1] : [v1, v2];
+  } else {    // bit '0':  block[pos1] < block[pos2]
+    [block[pos1], block[pos2]] = (v1 < v2) ? [v1, v2] : [v2, v1];
   }
 }
