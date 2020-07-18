@@ -1,7 +1,7 @@
 *.png
 *.jpg
 *.jpeg
-/es
-/umd
-/scripts
 /node_modules
+/cjs
+/esm
+/umd
