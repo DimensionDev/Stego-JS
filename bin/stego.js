@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../dist-cjs/cli').run();
+require('../cjs/cli').run();
