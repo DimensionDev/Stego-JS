@@ -1,6 +1,6 @@
 {
   "name": "@dimensiondev/stego-js",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Steganography, based on frequency domain implemented in JavaScript.",
   "repository": "https://github.com/DimensionDev/Stego-JS",
   "license": "MIT",
