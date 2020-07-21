@@ -1,16 +1,19 @@
 {
   "compilerOptions": {
-    "jsx": "react",
     "lib": ["es2015", "esnext.array", "dom"],
-    "target": "es5",
-    "allowJs": true,
+    "target": "ES6",
+    "module": "CommonJS",
     "moduleResolution": "node",
+    "allowJs": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "noImplicitAny": true,
     "downlevelIteration": true,
     "strictNullChecks": true,
-    "outDir": "es/"
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "cjs",
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/fft/*"]
+  "include": ["src"]
 }

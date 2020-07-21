@@ -12,7 +12,11 @@ export default {
     typescript({
       tsconfigOverride: {
         compilerOptions: {
-          target: 'es6',
+          target: 'ES6',
+          module: 'ESNext',
+          declaration: true,
+          declarationMap: false,
+          sourceMap: false
         },
       },
     }),
