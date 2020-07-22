@@ -31,24 +31,14 @@ export interface Flags {
 
 export function normalizeFlags(flags: Result['flags']) {
   const { encode, decode, size, narrow, copies, tolerance, mask } = flags;
-  let t = tolerance;
-  
-  if (tolerance === TOLERANCE_NOT_SET)
-    switch(flags.transform) {
-      case TransformAlgorithm.FFT1D:
-        t = DEFAULT_FFT1D_TOLERANCE;
-        break;
-      case TransformAlgorithm.FFT2D:
-        t = DEFAULT_FFT2D_TOLERANCE;
-        break;
-      case TransformAlgorithm.DCT:
-        t = DEFAULT_DCT_TOLERANCE;
-        break;
-      default:
-        break;
-    }
-  else
-    t = parseInt(tolerance, 10);
+  const transform2tolerance = {
+    [TransformAlgorithm.FFT1D]: DEFAULT_FFT1D_TOLERANCE,
+    [TransformAlgorithm.FFT2D]: DEFAULT_FFT2D_TOLERANCE,
+    [TransformAlgorithm.DCT]: DEFAULT_DCT_TOLERANCE,
+  }
+  const tolerance = flags.tolerance === TOLERANCE_NOT_SET
+    ? transform2tolerance[flags.transform]
+    : parseInt(flags.tolerance, 10);
   return {
     ...flags,
     narrow: parseInt(narrow, 10),
