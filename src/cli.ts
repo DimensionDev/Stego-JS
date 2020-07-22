@@ -160,3 +160,7 @@ export async function run() {
     process.stdout.write(await decode(imgBuf, maskBuf, options));
   }
 }
+
+if (require.main?.filename === __dirname) {
+  run();
+}
