@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import meow from 'meow';
 import { createReadStream } from 'fs';
 import { GrayscaleAlgorithm } from './grayscale';
