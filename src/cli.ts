@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import meow from 'meow';
 import { createReadStream } from 'fs';
 import { GrayscaleAlgorithm } from './grayscale';
@@ -162,4 +163,8 @@ export async function run() {
   } else if (flags.decode && imgBuf) {
     process.stdout.write(await decode(imgBuf, maskBuf, options));
   }
+}
+
+if (require.main?.filename === __dirname) {
+  run();
 }

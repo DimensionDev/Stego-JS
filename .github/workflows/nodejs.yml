@@ -1,7 +1,10 @@
-name: CI
+name: Node.js CI
 
 on:
-  - push
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
   publish:
@@ -18,4 +21,5 @@ jobs:
       - name: Install
         run: npm ci
       - name: Publish to GitHub Package (unstable)
+        if: "!startswith(github.event, 'pull_request')"
         run: ./scripts/publish-to-github.sh
