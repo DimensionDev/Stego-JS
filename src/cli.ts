@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 import meow from 'meow';
 import { createReadStream } from 'fs';
-import { GrayscaleAlgorithm } from './grayscale';
-import { TransformAlgorithm } from './transform';
 import { rs2Buf } from './helper';
 import { encode, decode } from './node';
 import {
@@ -10,13 +8,12 @@ import {
   DEFAULT_COPIES,
   DEFAULT_TOLERANCE,
   DEFAULT_SIZE,
-  DEFAULT_NARROW,
   DEFAULT_CROP_EDGE_PIXELS,
   DEFAULT_MASK,
   DEFAULT_EXHAUST_PIXELS,
   DEFAULT_FAKE_MASK_PIXELS,
 } from './constant';
-import { normalizeFlags, validateFlags, flags2Options } from './flag';
+import { normalizeFlags, validateFlags, flags2Options, flags } from './flag';
 
 const cli = meow(
   `Usage
@@ -45,85 +42,7 @@ Examples
   $ cat ./output.png | ${CLI_NAME} -d
 `,
   {
-    flags: {
-      help: {
-        type: 'boolean',
-        default: false,
-        alias: 'h',
-      },
-      version: {
-        type: 'boolean',
-        default: false,
-        alias: 'v',
-      },
-      encode: {
-        type: 'boolean',
-        default: false,
-        alias: 'e',
-      },
-      decode: {
-        type: 'boolean',
-        default: false,
-        alias: 'd',
-      },
-      message: {
-        type: 'string',
-        default: '',
-        alias: 'm',
-      },
-      pass: {
-        type: 'string',
-        default: '',
-        alias: 'p',
-      },
-      mask: {
-        type: 'string',
-        default: '',
-        alias: 'k',
-      },
-      size: {
-        type: 'string',
-        default: DEFAULT_SIZE,
-        alias: 's',
-      },
-      narrow: {
-        type: 'string',
-        default: DEFAULT_NARROW,
-        alias: 'i',
-      },
-      copies: {
-        type: 'string',
-        default: DEFAULT_COPIES,
-        alias: 'c',
-      },
-      tolerance: {
-        type: 'string',
-        default: DEFAULT_TOLERANCE,
-        alias: 't',
-      },
-      grayscale: {
-        type: 'string',
-        default: GrayscaleAlgorithm.NONE,
-        alias: 'g',
-      },
-      transform: {
-        type: 'string',
-        default: TransformAlgorithm.FFT1D,
-        alias: 'f',
-      },
-      fakeMaskPixels: {
-        type: 'boolean',
-        default: DEFAULT_FAKE_MASK_PIXELS,
-      },
-      exhaustPixels: {
-        type: 'boolean',
-        default: DEFAULT_EXHAUST_PIXELS,
-      },
-      cropEdgePixels: {
-        type: 'boolean',
-        default: DEFAULT_CROP_EDGE_PIXELS,
-      },
-    },
+    flags,
     inferType: true,
   }
 );

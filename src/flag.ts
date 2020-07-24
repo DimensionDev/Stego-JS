@@ -1,8 +1,17 @@
-import { Result } from 'meow';
 import { resolve as resolvePath } from 'path';
 import { EncodeOptions, DecodeOptions } from './stego';
 import { GrayscaleAlgorithm } from './grayscale';
 import { TransformAlgorithm } from './transform';
+import {
+  DEFAULT_SIZE,
+  DEFAULT_NARROW,
+  DEFAULT_COPIES,
+  DEFAULT_TOLERANCE,
+  DEFAULT_FAKE_MASK_PIXELS,
+  DEFAULT_EXHAUST_PIXELS,
+  DEFAULT_CROP_EDGE_PIXELS,
+} from './constant';
+import { TypedFlags } from 'meow';
 
 export interface Flags {
   help: boolean;
@@ -23,15 +32,91 @@ export interface Flags {
   fakeMaskPixels: boolean;
 }
 
-export function normalizeFlags(flags: Result['flags']) {
-  const { encode, decode, size, narrow, copies, tolerance, mask } = flags;
+export const flags = {
+  help: {
+    type: 'boolean',
+    default: false,
+    alias: 'h',
+  },
+  version: {
+    type: 'boolean',
+    default: false,
+    alias: 'v',
+  },
+  encode: {
+    type: 'boolean',
+    default: false,
+    alias: 'e',
+  },
+  decode: {
+    type: 'boolean',
+    default: false,
+    alias: 'd',
+  },
+  message: {
+    type: 'string',
+    default: '',
+    alias: 'm',
+  },
+  mask: {
+    type: 'string',
+    default: '',
+    alias: 'k',
+  },
+  narrow: {
+    type: 'number',
+    default: DEFAULT_NARROW,
+    alias: 'i',
+  },
+  size: {
+    type: 'number',
+    default: DEFAULT_SIZE,
+    alias: 's',
+  },
+  copies: {
+    type: 'number',
+    default: DEFAULT_COPIES,
+    alias: 'c',
+  },
+  pass: {
+    type: 'string',
+    default: '',
+    alias: 'p',
+  },
+  tolerance: {
+    type: 'number',
+    default: DEFAULT_TOLERANCE,
+    alias: 't',
+  },
+  grayscale: {
+    type: 'string',
+    default: GrayscaleAlgorithm.NONE,
+    alias: 'g',
+  },
+  transform: {
+    type: 'string',
+    default: TransformAlgorithm.FFT1D,
+    alias: 'f',
+  },
+  exhaustPixels: {
+    type: 'boolean',
+    default: DEFAULT_EXHAUST_PIXELS,
+  },
+  cropEdgePixels: {
+    type: 'boolean',
+    default: DEFAULT_CROP_EDGE_PIXELS,
+  },
+  fakeMaskPixels: {
+    type: 'boolean',
+    default: DEFAULT_FAKE_MASK_PIXELS,
+  },
+} as const;
+
+export function normalizeFlags(rawFlags: TypedFlags<typeof flags>) {
+  const { encode, decode, mask } = rawFlags;
 
   return {
-    ...flags,
-    narrow: parseInt(narrow, 10),
-    size: parseInt(size, 10),
-    copies: parseInt(copies, 10),
-    tolerance: parseInt(tolerance, 10),
+    ...rawFlags,
     encode: encode && !decode,
     decode,
     mask: mask ? resolvePath(process.cwd(), mask) : '',
