@@ -1,6 +1,6 @@
-import { Options } from './stego';
+import { Options } from '../utils/stego-params';
 import { getPos, Accumulator } from './position';
-import { Locator } from './locator';
+import { Locator } from '../utils/locator';
 
 export type Bit = 0 | 1;
 
@@ -70,7 +70,6 @@ export function bits2str(bits: Bit[], copies: number) {
   try {
     return decodeURI(chars.join(''));
   } catch (e) {
-    console.warn("Error when decoding:  " + e);
     return '';
   }
 }
@@ -103,10 +102,10 @@ export function getBit(
   loc: Locator,
   options: Options
 ) {
-  const [pos1, pos2] = getPos(acc, loc, options);
+  const pos = getPos(acc, loc, options);
   const { tolerance } = options;
 
-  return ((block[pos1] > block[pos2]) ? 1 : 0) as Bit;
+  return Math.abs(Math.round(block[pos] / tolerance) % 2) as Bit;
 }
 
 export function setBit(
@@ -116,19 +115,13 @@ export function setBit(
   loc: Locator,
   options: Options
 ) {
-  const [pos1, pos2] = getPos(acc, loc, options);
+  const pos = getPos(acc, loc, options);
   const { tolerance } = options;
-  let v1 = block[pos1];
-  let v2 = block[pos2];
-  
-  // amplifier the difference between v1 and v2
-  // (v1 < v2) ? v1 -= tolerance : v2 -= tolerance;
-  [v1, v2] = v1 < v2? [v1 - tolerance, v2] : [v1, v2 - tolerance];
+  const v = Math.floor(block[pos] / tolerance);
 
-
-  if (bits[loc.b]) {//bit '1':  block[pos1] > block[pos2]
-    [block[pos1], block[pos2]] = (v1 < v2) ? [v2, v1] : [v1, v2];
-  } else {    // bit '0':  block[pos1] < block[pos2]
-    [block[pos1], block[pos2]] = (v1 < v2) ? [v1, v2] : [v2, v1];
+  if (bits[loc.b]) {
+    block[pos] = v % 2 === 1 ? v * tolerance : (v + 1) * tolerance;
+  } else {
+    block[pos] = v % 2 === 1 ? (v - 1) * tolerance : v * tolerance;
   }
 }

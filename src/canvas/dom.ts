@@ -1,4 +1,4 @@
-import { imgType } from '../helper';
+import { imgType } from '../utils/helper';
 
 export function createCanvas(width: number, height: number) {
   const canvas = document.createElement('canvas');

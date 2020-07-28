@@ -15,23 +15,26 @@
     "build:dist": "tsc && tsc -p tsconfig.esm.json",
     "build:umd": "rollup -c",
     "clean": "rimraf umd cjs esm",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "jest src --silent"
   },
   "dependencies": {
-    "@rollup-umd/build": "^1.1.1",
-    "canvas": "^2.6.1",
-    "meow": "^5.0.0"
+    "meow": "^7.0.1"
   },
   "devDependencies": {
     "@types/meow": "^5.0.0",
+    "@types/jest": "^26.0.4",
     "@types/node": "^12.12.27",
     "@types/rimraf": "^3.0.0",
     "canvas": "^2.6.1",
+    "gm": "^1.23.1",
+    "jest": "^26.1.0",
     "rimraf": "^3.0.2",
     "rollup": "^1.31.1",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-typescript": "^1.0.1",
     "rollup-plugin-typescript2": "^0.24.3",
+    "ts-jest": "^26.1.2",
     "ts-node": "^8.6.2",
     "tslib": "^1.10.0",
     "typescript": "^3.7.5"

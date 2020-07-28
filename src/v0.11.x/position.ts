@@ -1,7 +1,7 @@
-import { Options } from './stego';
-import { TransformAlgorithm } from './transform';
-import { hashCode, squareCircleIntersect } from './helper';
-import { Locator } from './locator';
+import { Options } from '../utils/stego-params';
+import { TransformAlgorithm } from '../utils/transform';
+import { hashCode, squareCircleIntersect } from '../utils/helper';
+import { Locator } from '../utils/locator';
 
 export interface Accumulator {
   /**
@@ -58,17 +58,11 @@ export function getPos(acc: Accumulator, loc: Locator, options: Options) {
 
   switch (transformAlgorithm) {
     case TransformAlgorithm.FFT1D:
-      // return [1, (size * size + size) / 2];
-      return [4 * size + 2, 3 * size + 3];
-      // return pass ? getPosFromAcc(acc, loc, options) : (size * size + size) / 2;
+      return pass ? getPosFromAcc(acc, loc, options) : (size * size + size) / 2;
     case TransformAlgorithm.FFT2D:
-      // return [1, (size * size + size) / 2];
-      // return [4 * size + 2, 3 * size + 3];
-      return [4 * size + 2, 3 * size + 3];
-      // return [1, (size * size + size) / 2];
+      return 0;
     case TransformAlgorithm.DCT:
-      return [4 * size + 2, 3 * size + 3];
-      // return [1, (size * size + size) / 2];
+      return 0;
     default:
       throw new Error(`unknown algortihm: ${transformAlgorithm}`);
   }

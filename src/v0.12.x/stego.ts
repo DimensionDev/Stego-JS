@@ -1,12 +1,14 @@
-import { GrayscaleAlgorithm, grayscale, narrow } from './grayscale';
-import { TransformAlgorithm, transform, inverseTransform } from './transform';
+import { GrayscaleAlgorithm, grayscale, narrow } from '../utils/grayscale';
+import { transform, inverseTransform } from '../utils/transform';
+import { EncodeOptions, DecodeOptions } from '../utils/stego-params';
 import {
   cropImg,
   updateImgByBlock,
   updateImgByPixel,
   visitImgByBlock,
   updateImgByPixelAt,
-} from './image';
+  updateImgByPixelChannelAt
+} from '../utils/image';
 import {
   mergeBits,
   createBits,
@@ -17,28 +19,10 @@ import {
   Bit,
 } from './bit';
 import { createAcc } from './position';
-import { isPixelVisibleAt, isBlockVisibleAt } from './mask';
-import { rand } from './helper';
-import { loc2idx, loc2coord } from './locator';
-
-export interface Options {
-  pass?: string;
-  size: number;
-  copies: number;
-  tolerance: number;
-  transformAlgorithm: TransformAlgorithm;
-}
-
-export interface EncodeOptions extends Options {
-  text: string;
-  narrow: number;
-  grayscaleAlgorithm: GrayscaleAlgorithm;
-  exhaustPixels: boolean;
-  cropEdgePixels: boolean;
-  fakeMaskPixels: boolean;
-}
-
-export interface DecodeOptions extends Options {}
+import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask';
+import { rand, shuffle, unshuffle } from '../utils/helper';
+import { loc2idx, loc2coord } from '../utils/locator';
+import { SEED } from '../constant';
 
 export async function encodeImg(
   imgData: ImageData,
@@ -55,15 +39,16 @@ export async function encodeImg(
     exhaustPixels,
   } = options;
   const [width, height] = cropImg(imgData, options);
-  const sizeOfBlocks = width * height * 3;
+  const sizeOfBlocks = width * height * 3 / (size * size);
   const textBits = str2bits(text, copies);
   const bits = mergeBits(
-    createBits(exhaustPixels ? sizeOfBlocks : textBits.length + 8 * copies),
+    createBits(sizeOfBlocks),
     textBits,
     createBits(8 * copies).fill(1) // the end of message
   );
-
-  if (textBits.length + 8 * copies > sizeOfBlocks) {
+  const encodeLen = textBits.length + 8 * copies;
+  
+  if (encodeLen > sizeOfBlocks) {
     process.stderr.write(
       'bits overflow! try to shrink text or reduce copies.\n'
     );
@@ -95,11 +80,30 @@ export async function encodeImg(
 
   const acc = createAcc(options);
   const im = new Array(size * size);
+  
+  let blockId = -1;
+
+  const shuffleArr = new Array(sizeOfBlocks).fill(0).map((v:number, i:number)=> i);
+
+  shuffle(shuffleArr, SEED);
+  const encodedId = shuffleArr.map((v:number, i:number) => { if (i < encodeLen) return v })
 
   updateImgByBlock(imgData, options, (block, loc) => {
-    if (!exhaustPixels && loc.b >= bits.length) {
+    // Remove transparency for PNG. Even though we do not encode alpha channel,
+    // the compression on transparant image can casue the information loss.
+    if (loc.c === 0) {
+      const [x, y] = loc2coord(loc, options);
+      for (let i = 0; i < size * size; i += 1) {
+        const idx = loc2idx(loc, options, x, y, i);
+        updateImgByPixelChannelAt(imgData, idx, 3, 255);
+      }
+    }
+
+    blockId += 1;
+    if (!exhaustPixels && !(blockId in encodedId)) {
       return false;
     }
+
     if (!isBlockVisibleAt(maskData, loc, options)) {
       if (options.fakeMaskPixels && loc.c === 0) {
         const [x, y] = loc2coord(loc, options);
@@ -115,7 +119,7 @@ export async function encodeImg(
       return false;
     }
     transform(block, im.fill(0), transformAlgorithm, options);
-    setBit(block, bits, acc, loc, options);
+    setBit(block, bits[shuffleArr[loc.b]], acc, options);
     inverseTransform(block, im, transformAlgorithm, options);
     return true;
   });
@@ -137,8 +141,11 @@ export async function decodeImg(
       return false;
     }
     transform(block, im.fill(0), transformAlgorithm, options);
-    bits.push(getBit(block, acc, loc, options));
+    bits.push(getBit(block, acc, options));
+    
     return true;
   });
+  
+  unshuffle(bits, SEED);
   return bits2str(bits, copies);
 }

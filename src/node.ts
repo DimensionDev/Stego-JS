@@ -1,25 +1,21 @@
-import { EncodeOptions, DecodeOptions, encodeImg, decodeImg } from './stego';
-import { buf2Img, img2Buf } from './canvas/node';
-import { cropImg } from './image';
+import { AlgorithmVersion, EncodeOptions, DecodeOptions } from './utils/stego-params';
+
+import { encode as encodev1 } from './v0.11.x/node'
+import { encode as encodev2 } from './v0.12.x/node'
+
+import { decode as decodev1 } from './v0.11.x/node'
+import { decode as decodev2 } from './v0.12.x/node'
 
 export async function encode(
   imgBuf: Buffer,
   maskBuf: Buffer,
   options: EncodeOptions
 ) {
-  const [imgData, maskData] = await Promise.all([
-    buf2Img(imgBuf),
-    buf2Img(maskBuf),
-  ]);
-  const { cropEdgePixels } = options;
-  const { width, height } = imgData;
-  const [cropWidth, cropHeight] = cropImg(imgData, options);
-
-  return img2Buf(
-    await encodeImg(imgData, maskData, options),
-    cropEdgePixels ? cropWidth : width,
-    cropEdgePixels ? cropHeight : height
-  );
+  const encodeVersion: { [index: string]: Function } = {
+    [AlgorithmVersion.V1]: encodev1,
+    [AlgorithmVersion.V2]: encodev2,
+  }
+  return await encodeVersion[options.version](imgBuf, maskBuf, options);
 }
 
 export async function decode(
@@ -27,10 +23,9 @@ export async function decode(
   maskBuf: Buffer,
   options: DecodeOptions
 ) {
-  const [imgData, maskData] = await Promise.all([
-    buf2Img(imgBuf),
-    buf2Img(maskBuf),
-  ]);
-
-  return decodeImg(imgData, maskData, options);
+  const encodeVersion: { [index: string]: Function } = {
+    [AlgorithmVersion.V1]: decodev1,
+    [AlgorithmVersion.V2]: decodev2,
+  }
+  return encodeVersion[options.version](imgBuf, maskBuf, options);
 }

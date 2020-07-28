@@ -1,4 +1,4 @@
-import { Options } from './stego';
+import { Options } from './stego-params';
 import { Locator, loc2idx, loc2coord } from './locator';
 
 export function isBlockVisibleAt(

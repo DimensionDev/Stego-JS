@@ -1,25 +1,20 @@
 #!/usr/bin/env node
 import meow from 'meow';
 import { createReadStream } from 'fs';
-import { GrayscaleAlgorithm } from './grayscale';
-import { TransformAlgorithm } from './transform';
-import { rs2Buf } from './helper';
-import { encode, decode } from './node';
+import { rs2Buf } from '../utils/helper';
+import { encode, decode } from '../node';
 import {
   CLI_NAME,
   DEFAULT_COPIES,
-  DEFAULT_DCT_TOLERANCE,
-  DEFAULT_FFT2D_TOLERANCE,
-  DEFAULT_FFT1D_TOLERANCE,
-  TOLERANCE_NOT_SET,
+  DEFAULT_TOLERANCE,
   DEFAULT_SIZE,
-  DEFAULT_NARROW,
   DEFAULT_CROP_EDGE_PIXELS,
   DEFAULT_MASK,
   DEFAULT_EXHAUST_PIXELS,
   DEFAULT_FAKE_MASK_PIXELS,
-} from './constant';
-import { normalizeFlags, validateFlags, flags2Options } from './flag';
+} from '../constant';
+import { normalizeFlags, validateFlags, flags2Options, flags } from './flag';
+export const version = process.env.npm_package_version;
 
 const cli = meow(
   `Usage
@@ -34,7 +29,7 @@ Options
 
   -m, --message          Specify the message to be encoded.
   -p, --pass             Specify the seed text for generating random encoding position when using 'FFT1D'.
-  -t, --tolerance        Specify the number to be added into wave amplitude: ${DEFAULT_FFT1D_TOLERANCE} (default for FFT1D), ${DEFAULT_FFT2D_TOLERANCE} (default for FFT2D), ${DEFAULT_DCT_TOLERANCE} (default for DCT).
+  -t, --tolerance        Specify the number to be added into wave amplitude: ${DEFAULT_TOLERANCE.FFT1D} (default for FFT1D), ${DEFAULT_TOLERANCE.FFT2D} (default for FFT2D), ${DEFAULT_TOLERANCE.DCT} (default for DCT).
   -s, --size             Size of encoding block with radix-2 required: ${DEFAULT_SIZE} (default).
   -c, --copies           Size of duplications with odd numbers required: ${DEFAULT_COPIES} (default).
   -g, --grayscale        Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
@@ -42,96 +37,18 @@ Options
       --exhaustPixels    Encode pixels in rest of image (default is ${DEFAULT_EXHAUST_PIXELS}).
       --fakeMaskPixels   Encode fake pixels into mask area (default is ${DEFAULT_FAKE_MASK_PIXELS})
       --cropEdgePixels   Crop edge pixels (default is ${DEFAULT_CROP_EDGE_PIXELS}).
+      --algorithmVersion Customized algorithm version, eg. 0.11.x (default is ${String(version).replace(/[0-9]+$/,'x')})
 
 Examples
   $ cat ./input.png | ${CLI_NAME} -e -m 'hello world' > output.png
   $ cat ./output.png | ${CLI_NAME} -d
 `,
   {
-    flags: {
-      help: {
-        type: 'boolean',
-        default: false,
-        alias: 'h',
-      },
-      version: {
-        type: 'boolean',
-        default: false,
-        alias: 'v',
-      },
-      encode: {
-        type: 'boolean',
-        default: false,
-        alias: 'e',
-      },
-      decode: {
-        type: 'boolean',
-        default: false,
-        alias: 'd',
-      },
-      message: {
-        type: 'string',
-        default: '',
-        alias: 'm',
-      },
-      pass: {
-        type: 'string',
-        default: '',
-        alias: 'p',
-      },
-      mask: {
-        type: 'string',
-        default: '',
-        alias: 'k',
-      },
-      size: {
-        type: 'string',
-        default: DEFAULT_SIZE,
-        alias: 's',
-      },
-      narrow: {
-        type: 'string',
-        default: DEFAULT_NARROW,
-        alias: 'i',
-      },
-      copies: {
-        type: 'string',
-        default: DEFAULT_COPIES,
-        alias: 'c',
-      },
-      tolerance: {
-        type: 'string',
-        default: TOLERANCE_NOT_SET,
-        alias: 't',
-      },
-      grayscale: {
-        type: 'string',
-        default: GrayscaleAlgorithm.NONE,
-        alias: 'g',
-      },
-      transform: {
-        type: 'string',
-        default: TransformAlgorithm.FFT1D,
-        alias: 'f',
-      },
-      fakeMaskPixels: {
-        type: 'boolean',
-        default: DEFAULT_FAKE_MASK_PIXELS,
-      },
-      exhaustPixels: {
-        type: 'boolean',
-        default: DEFAULT_EXHAUST_PIXELS,
-      },
-      cropEdgePixels: {
-        type: 'boolean',
-        default: DEFAULT_CROP_EDGE_PIXELS,
-      },
-    },
+    flags,
     inferType: true,
   }
 );
 
-export const version = process.env.npm_package_version;
 
 export async function run() {
   const flags = normalizeFlags(cli.flags);

@@ -1,4 +1,4 @@
-import { Options } from './stego';
+import { Options } from './stego-params';
 
 export interface Locator {
   /**

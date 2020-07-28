@@ -1,5 +1,5 @@
 import { clamp } from './helper';
-import { Options } from './stego';
+import { Options } from './stego-params';
 import { Locator, loc2idx, loc2coord } from './locator';
 
 export type Pixel = [number, number, number, number];
@@ -94,6 +94,16 @@ export function updateImgByBlock(
     }
     return bitConsumed;
   });
+}
+
+export function updateImgByPixelChannelAt(
+  imgData: ImageData,
+  loc: number,
+  channel: number,
+  value: number
+) {
+  const { data } = imgData;
+  data[loc + channel] = value;
 }
 
 export function updateImgByPixelAt(
