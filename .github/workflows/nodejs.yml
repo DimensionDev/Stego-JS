@@ -15,7 +15,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - uses: NiceLabs/automatic-github-token@v1
+      - uses: NiceLabs/automatic-github-token@v2
+        with:
+          registry: true
       - name: Install
         run: npm ci
       - name: Publish to GitHub Package (unstable)
