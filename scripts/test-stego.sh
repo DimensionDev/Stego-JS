@@ -15,9 +15,9 @@ do
 
 str1=$(< /dev/urandom tr -dc ' (\n\&\_a-zA-X0-9\^\*\@' | head -c$str_size)
 #cat /tmp/testStego/input-test.png | bin/stego.js -e --exhaustPixels false -f "$alg" -m "$str1" > output-test.png 2>/dev/null
-cat /tmp/testStego/input-test.png | bin/stego.js -e -f "$alg" -m "$str1" > /tmp/testStego/output-test.png 2>/dev/null
+cat /tmp/testStego/input-test.png | bin/stego.js -e -f "$alg" -m "$str1" --algorithmVersion "0.12.x" > /tmp/testStego/output-test.png 2>/dev/null
 
-str2=$(cat /tmp/testStego/output-test.png | bin/stego.js -d -f "$alg")
+str2=$(cat /tmp/testStego/output-test.png | bin/stego.js -d -f "$alg" --algorithmVersion "0.12.x")
 
 if [[ "$str1" != "$str2" ]]
 then

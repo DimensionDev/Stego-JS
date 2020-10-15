@@ -1,5 +1,5 @@
-import replace from 'rollup-plugin-replace';
-import typescript from 'rollup-plugin-typescript2';
+import replace from 'rollup-plugin-replace'
+import typescript from 'rollup-plugin-typescript2'
 
 export default {
   input: 'src/dom.ts',
@@ -7,6 +7,9 @@ export default {
     file: 'umd/dom.js',
     format: 'umd',
     name: 'stego',
+    globals: {
+      '@rgba-image/lanczos': 'lanczos',
+    },
   },
   plugins: [
     typescript({
@@ -16,7 +19,7 @@ export default {
           module: 'ESNext',
           declaration: true,
           declarationMap: false,
-          sourceMap: false
+          sourceMap: false,
         },
       },
     }),
@@ -27,4 +30,5 @@ export default {
   treeshake: {
     pureExternalModules: true,
   },
-};
+  external: ['@rgba-image/lanczos'],
+}

@@ -1,45 +1,46 @@
-import { resolve as resolvePath } from 'path';
-import { EncodeOptions, DecodeOptions, AlgorithmVersion } from '../utils/stego-params';
-import { GrayscaleAlgorithm } from '../utils/grayscale';
-import { TransformAlgorithm } from '../utils/transform';
+import { resolve as resolvePath } from 'path'
+import { EncodeOptions, DecodeOptions, AlgorithmVersion } from '../utils/stego-params'
+import { GrayscaleAlgorithm } from '../utils/grayscale'
+import { TransformAlgorithm } from '../utils/transform'
 import {
+  DEFAULT_ALGORITHM_VERSION,
+  DEFAULT_COPIES,
+  DEFAULT_CROP_EDGE_PIXELS,
   DEFAULT_SIZE,
   DEFAULT_NARROW,
-  DEFAULT_COPIES,
   DEFAULT_FAKE_MASK_PIXELS,
   DEFAULT_EXHAUST_PIXELS,
-  DEFAULT_CROP_EDGE_PIXELS,
   TOLERANCE_NOT_SET,
   DEFAULT_TOLERANCE,
   MAX_TOLERANCE,
-} from '../constant';
-import { TypedFlags } from 'meow';
-const version = process.env.npm_package_version;
+} from '../constant'
+import { TypedFlags } from 'meow'
 
 export interface Flags {
-  algorithmVersion: AlgorithmVersion;
-  help: boolean;
-  version: boolean;
-  encode: boolean;
-  decode: boolean;
-  message: string;
-  mask: string;
-  narrow: number;
-  size: number;
-  copies: number;
-  pass?: string;
-  tolerance: number;
-  grayscale: GrayscaleAlgorithm;
-  transform: TransformAlgorithm;
-  exhaustPixels: boolean;
-  cropEdgePixels: boolean;
-  fakeMaskPixels: boolean;
+  algorithmVersion: AlgorithmVersion
+  help: boolean
+  version: boolean
+  encode: boolean
+  decode: boolean
+  message: string
+  mask: string
+  narrow: number
+  size: number
+  copies: number
+  pass?: string
+  tolerance: number
+  grayscale: GrayscaleAlgorithm
+  transform: TransformAlgorithm
+  exhaustPixels: boolean
+  cropEdgePixels: boolean
+  fakeMaskPixels: boolean
+  verbose: boolean
 }
 
 export const flags = {
   algorithmVersion: {
     type: 'string',
-    default: String(version).replace(/[0-9]+$/,'x'),
+    default: DEFAULT_ALGORITHM_VERSION,
   },
   help: {
     type: 'boolean',
@@ -118,18 +119,21 @@ export const flags = {
     type: 'boolean',
     default: DEFAULT_FAKE_MASK_PIXELS,
   },
-} as const;
+  verbose: {
+    type: 'boolean',
+    default: false,
+  },
+} as const
 
 export function normalizeFlags(rawFlags: TypedFlags<typeof flags>) {
-  const { encode, decode, mask, tolerance } = rawFlags;
-
+  const { encode, decode, mask, tolerance } = rawFlags
   return {
     ...rawFlags,
-    tolerance: tolerance == TOLERANCE_NOT_SET ? DEFAULT_TOLERANCE[rawFlags.transform] : tolerance,
+    tolerance: tolerance === TOLERANCE_NOT_SET ? DEFAULT_TOLERANCE[rawFlags.algorithmVersion].transform : tolerance,
     encode: encode && !decode,
     decode,
     mask: mask ? resolvePath(process.cwd(), mask) : '',
-  } as Flags;
+  } as Flags
 }
 
 export function validateFlags({
@@ -142,32 +146,33 @@ export function validateFlags({
   grayscale,
   transform,
 }: Flags) {
-  const radix = Math.log(size) / Math.log(2);
+  const radix = Math.log(size) / Math.log(2)
   if (!Object.values(AlgorithmVersion).includes(algorithmVersion)) {
-    return 'unsupported algorithm version';
+    return 'unsupported algorithm version: ' + algorithmVersion
   }
   if (!message && encode) {
-    return '-m, --message is required';
+    return '-m, --message is required'
   }
-  if (isNaN(size) || size <= 0 || radix !== Math.floor(radix)) {
-    return '-s, --size should be a postive radix-2 number';
+  if (isNaN(size) || size <= 0 || radix !== Math.floor(radix) || radix > 15) {
+    return '-s, --size should be a postive radix-2 number'
   }
-  if (isNaN(copies) || copies <= 0 || copies % 2 === 0) {
-    return '-c, --copies should be a postive odd number';
+  if (isNaN(copies) || copies <= 0 || copies % 2 === 0 || copies > 31) {
+    return '-c, --copies should be a postive odd number and less than 31'
   }
   // the valiadation for transform algorithm should prior to tolerance,
   // becasue tolerance validation depends on transform algorithm
   if (!Object.values(TransformAlgorithm).includes(transform)) {
-    return 'unknown transform algorithm';
+    return 'unknown transform algorithm'
   }
-  if (isNaN(tolerance) || tolerance <= 0 || tolerance > MAX_TOLERANCE[transform]) { //Is it okay?
-    return `-t, --tolerance should be a positive number between [0- ${MAX_TOLERANCE[transform]}] for algorithm ${transform}`;
+  if (isNaN(tolerance) || tolerance <= 0 || tolerance > MAX_TOLERANCE[transform]) {
+    //Is it okay?
+    return `-t, --tolerance should be a positive number between [0- ${MAX_TOLERANCE[transform]}] for algorithm ${transform}`
   }
   if (!Object.values(GrayscaleAlgorithm).includes(grayscale)) {
-    return 'unknown grayscale algorithm';
+    return 'unknown grayscale algorithm'
   }
-  
-  return '';
+
+  return ''
 }
 
 export function flags2Options({
@@ -183,6 +188,7 @@ export function flags2Options({
   exhaustPixels,
   cropEdgePixels,
   fakeMaskPixels,
+  verbose,
 }: Flags) {
   return {
     version: algorithmVersion,
@@ -198,5 +204,6 @@ export function flags2Options({
     exhaustPixels,
     cropEdgePixels,
     fakeMaskPixels,
-  } as EncodeOptions & DecodeOptions;
+    verbose,
+  } as EncodeOptions & DecodeOptions
 }
