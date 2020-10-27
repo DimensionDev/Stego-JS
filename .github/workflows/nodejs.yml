@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - uses: NiceLabs/automatic-github-token@v2
+      - uses: DimensionDev/github-token-action@latest
         with:
           registry: true
       - name: Install
