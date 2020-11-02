@@ -28,7 +28,7 @@ export default {
     }),
   ],
   treeshake: {
-    pureExternalModules: true,
+    moduleSideEffects: true,
   },
   external: ['@rgba-image/lanczos'],
 }
