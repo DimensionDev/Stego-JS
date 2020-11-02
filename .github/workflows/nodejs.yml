@@ -23,5 +23,7 @@ jobs:
       - name: Linter
         run: npm run lint
       - name: Publish to GitHub Package (unstable)
-        if: "!startswith(github.event, 'pull_request')"
-        run: ./scripts/publish-to-github.sh
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          npm --no-git-tag-version version "$VERSION-$BUILD_VERSION"
+          npm publish
