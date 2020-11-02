@@ -18,8 +18,10 @@ jobs:
       - uses: DimensionDev/github-token-action@latest
         with:
           registry: true
-      - name: Install
-        run: npm ci
+      - name: Install and Test
+        run: npm cit
+      - name: Linter
+        run: npm run lint
       - name: Publish to GitHub Package (unstable)
         if: "!startswith(github.event, 'pull_request')"
         run: ./scripts/publish-to-github.sh
