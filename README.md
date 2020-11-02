@@ -25,14 +25,14 @@ stego-js -h
 
 ```javascript
 // node
-import { encode, decode } from '@dimensiondev/stego-js/cjs/node';
+import { encode, decode } from '@dimensiondev/stego-js/cjs/node'
 
 // dom
-import { encode, decode } from '@dimensiondev/stego-js/cjs/dom';
+import { encode, decode } from '@dimensiondev/stego-js/cjs/dom'
 
 // in native  (using ./cjs/node)
 // in browser (using ./cjs/dom)
-import { encode, decode } from '@dimensiondev/stego-js';
+import { encode, decode } from '@dimensiondev/stego-js'
 ```
 
 ## Refs
