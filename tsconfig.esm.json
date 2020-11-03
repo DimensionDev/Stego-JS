@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "ES6",
+    "esModuleInterop": false,
     "outDir": "esm"
   },
   "exclude": ["src/cli", "src/__tests__"]

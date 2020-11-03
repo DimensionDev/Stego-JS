@@ -7,7 +7,7 @@ import { decode as decodev1 } from './v0.11.x/node'
 import { decode as decodev2 } from './v0.12.x/node'
 
 export async function encode(imgBuf: Buffer, maskBuf: Buffer, options: EncodeOptions) {
-  const encodeVersion: { [index: string]: Function } = {
+  const encodeVersion: Record<string, typeof encodev1> = {
     [AlgorithmVersion.V1]: encodev1,
     [AlgorithmVersion.V2]: encodev2,
   }
@@ -15,7 +15,7 @@ export async function encode(imgBuf: Buffer, maskBuf: Buffer, options: EncodeOpt
 }
 
 export async function decode(imgBuf: Buffer, maskBuf: Buffer, options: DecodeOptions) {
-  const encodeVersion: { [index: string]: Function } = {
+  const encodeVersion: Record<string, typeof decodev1> = {
     [AlgorithmVersion.V1]: decodev1,
     [AlgorithmVersion.V2]: decodev2,
   }
