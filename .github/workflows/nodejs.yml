@@ -16,10 +16,21 @@ jobs:
       - uses: DimensionDev/github-token-action@latest
         with:
           registry: true
+<<<<<<< HEAD
       - name: Install and Test
         run: npm cit
       - name: Linter
         run: npm run lint
+=======
+      - name: Install
+        run: npm ci
+      - name: Type Checking
+        run: npx tsc --noEmit
+      - name: Linter
+        run: npm run lint
+      - name: Test
+        run: npm test
+>>>>>>> 65c9a73 (update ci)
       - name: Publish to GitHub Package (unstable)
         run: |
           VERSION=$(jq -r '.version' package.json)
