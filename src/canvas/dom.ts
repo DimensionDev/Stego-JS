@@ -1,62 +1,67 @@
 import { imgType } from '../utils/helper'
 import { preprocessImage } from '../utils/image'
 
-export function createCanvas(width: number, height: number) {
-  const canvas = document.createElement('canvas')
-
-  canvas.width = width
-  canvas.height = height
-  return canvas
-}
-
 export function buf2Img(imgBuf: ArrayBuffer) {
-  const url = URL.createObjectURL(new Blob([imgBuf], { type: imgType(new Uint8Array(imgBuf)) }))
-
-  return new Promise<ImageData>((resolve, reject) => {
-    const image = new Image()
-
-    image.onload = () => {
-      const { width, height } = image
-      const ctx = createCanvas(width, height).getContext('2d')!
-
-      ctx.drawImage(image, 0, 0, width, height)
-      resolve(ctx.getImageData(0, 0, width, height))
-    }
-    image.onerror = (err) => reject(err)
-    image.src = url
-  })
+  const type = imgType(new Uint8Array(imgBuf.slice(0, 8)))
+  const blob = new Blob([imgBuf], { type })
+  const url = URL.createObjectURL(blob)
+  try {
+    return new Promise((resolve, reject) => {
+      const image = new Image()
+      image.addEventListener('load', () => {
+        const { width, height } = image
+        const ctx = createCanvas(width, height).getContext('2d')!
+        ctx.drawImage(image, 0, 0, width, height)
+        resolve(ctx.getImageData(0, 0, width, height))
+      })
+      image.addEventListener('error', reject)
+      image.src = url
+    })
+  } finally {
+    URL.revokeObjectURL(url)
+  }
 }
 
-export function img2Buf(imgData: ImageData, width = imgData.width, height = imgData.height) {
+export async function img2Buf(imgData: ImageData, width = imgData.width, height = imgData.height) {
   const canvas = createCanvas(width, height)
-  const ctx = canvas.getContext('2d')!
-
-  ctx.putImageData(imgData, 0, 0, 0, 0, width, height)
-  return new Promise<ArrayBuffer>((resolve, reject) =>
-    canvas.toBlob((blob) => {
+  canvas.getContext('2d')!.putImageData(imgData, 0, 0, 0, 0, width, height)
+  if (canvas instanceof OffscreenCanvas) {
+    return toArrayBuffer(await canvas.convertToBlob({ type: 'image/png' }))
+  }
+  return new Promise<ArrayBuffer>((resolve, reject) => {
+    const callback: BlobCallback = (blob) => {
       if (blob) {
-        const fileReader = new FileReader()
-
-        fileReader.onload = ({ target }) => {
-          if (target) {
-            resolve(target.result as ArrayBuffer)
-          } else {
-            reject(new Error('fail to generate array buffer'))
-          }
-        }
-        fileReader.onerror = (err) => reject(err)
-        fileReader.readAsArrayBuffer(blob)
+        resolve(toArrayBuffer(blob))
       } else {
         reject(new Error('fail to generate array buffer'))
       }
-    }, 'image/png'),
-  )
+    }
+    canvas.toBlob(callback, 'image/png')
+  })
 }
 
 export function preprocessImg(imageData: ImageData): ImageData {
-  return preprocessImage(imageData, (w, h) => {
-    const ctx = createCanvas(w, h).getContext('2d')
-    if (ctx) return ctx.createImageData(w, h)
-    else return null
+  return preprocessImage(
+    imageData,
+    (width, height) => createCanvas(width, height).getContext('2d')?.createImageData(width, height) ?? null,
+  )
+}
+
+function toArrayBuffer(blob: Blob) {
+  return new Promise<ArrayBuffer>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.addEventListener('load', () => resolve(reader.result as ArrayBuffer))
+    reader.addEventListener('error', () => reject(new Error('fail to generate array buffer')))
+    reader.readAsArrayBuffer(blob)
   })
+}
+
+function createCanvas(width: number, height: number) {
+  if (typeof OffscreenCanvas !== 'undefined') {
+    return new OffscreenCanvas(width, height)
+  }
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  return canvas
 }
