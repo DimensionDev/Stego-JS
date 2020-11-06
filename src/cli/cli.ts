@@ -2,7 +2,7 @@
 import meow from 'meow'
 import { createReadStream } from 'fs'
 import { rs2Buf } from '../utils/helper'
-import { encode, decode } from '../node'
+import stego from '../node'
 import {
   CLI_NAME,
   DEFAULT_COPIES,
@@ -72,9 +72,9 @@ export async function run() {
   const maskBuf = flags.mask ? await rs2Buf(createReadStream(flags.mask)) : Buffer.from(DEFAULT_MASK)
 
   if (flags.encode && imgBuf) {
-    process.stdout.write(await encode(imgBuf, maskBuf, options))
+    process.stdout.write(new Uint8Array(await stego.encode(imgBuf, maskBuf, options)))
   } else if (flags.decode && imgBuf) {
-    process.stdout.write(await decode(imgBuf, maskBuf, options))
+    process.stdout.write(await stego.decode(imgBuf, maskBuf, options))
   }
 }
 
