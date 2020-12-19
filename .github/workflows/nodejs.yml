@@ -8,24 +8,19 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js (LTS)
-        uses: actions/setup-node@v2-beta
+      - uses: actions/setup-node@v2-beta
       - uses: DimensionDev/github-token-action@latest
         with:
           registry: true
       - run: sudo npm install --global npm@7
-      - name: Install
-        run: npm ci
-      - name: Type Checking
-        run: npx tsc --noEmit
-      - name: Linter
-        run: npm run lint
-      - name: Test
-        run: npm test
-      - name: Publish to GitHub Package (unstable)
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run lint
+      - run: npm test
+      - name: npm publish
         run: |
           VERSION=$(jq -r '.version' package.json)
           npm --no-git-tag-version version "$VERSION-$BUILD_VERSION"
