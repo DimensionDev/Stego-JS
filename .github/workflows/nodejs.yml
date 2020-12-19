@@ -16,7 +16,7 @@ jobs:
       - uses: DimensionDev/github-token-action@latest
         with:
           registry: true
-      - run: npm install --global npm@7
+      - run: sudo npm install --global npm@7
       - name: Install
         run: npm ci
       - name: Type Checking
