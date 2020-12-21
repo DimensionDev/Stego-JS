@@ -25,4 +25,4 @@ export interface EncodeOptions extends Options {
   fakeMaskPixels: boolean
 }
 
-export interface DecodeOptions extends Options {}
+export type DecodeOptions = Options

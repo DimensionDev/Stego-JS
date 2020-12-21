@@ -1,23 +1,40 @@
-import { AlgorithmVersion, EncodeOptions, DecodeOptions } from './utils/stego-params'
+import { createCanvas, Image } from 'canvas'
+import { proxy } from './utils/expose'
+import { imgType } from './utils/helper'
+import { preprocessImage } from './utils/image'
+import { AlgorithmVersion } from './utils/stego-params'
+import * as v1 from './v0.11.x'
+import * as v2 from './v0.12.x'
 
-import { encode as encodev1 } from './v0.11.x/node'
-import { encode as encodev2 } from './v0.12.x/node'
-
-import { decode as decodev1 } from './v0.11.x/node'
-import { decode as decodev2 } from './v0.12.x/node'
-
-export async function encode(imgBuf: Buffer, maskBuf: Buffer, options: EncodeOptions) {
-  const encodeVersion: { [index: string]: Function } = {
-    [AlgorithmVersion.V1]: encodev1,
-    [AlgorithmVersion.V2]: encodev2,
-  }
-  return encodeVersion[options.version](imgBuf, maskBuf, options)
-}
-
-export async function decode(imgBuf: Buffer, maskBuf: Buffer, options: DecodeOptions) {
-  const encodeVersion: { [index: string]: Function } = {
-    [AlgorithmVersion.V1]: decodev1,
-    [AlgorithmVersion.V2]: decodev2,
-  }
-  return encodeVersion[options.version](imgBuf, maskBuf, options)
-}
+export default proxy({
+  algoithms: { [AlgorithmVersion.V1]: v1, [AlgorithmVersion.V2]: v2 },
+  methods: {
+    toImageData(data) {
+      const type = imgType(new Uint8Array(data.slice(0, 8)))
+      const blob = new Blob([data], { type })
+      const url = URL.createObjectURL(blob)
+      return new Promise((resolve, reject) => {
+        const element = new Image()
+        element.onload = () => {
+          const { width, height } = element
+          const ctx = createCanvas(width, height).getContext('2d')!
+          ctx.drawImage(element, 0, 0, width, height)
+          resolve(ctx.getImageData(0, 0, width, height))
+        }
+        element.onerror = reject
+        element.src = url
+      })
+    },
+    async toBuffer(imgData, height = imgData.height, width = imgData.width) {
+      const canvas = createCanvas(width, height)
+      canvas.getContext('2d').putImageData(imgData, 0, 0, 0, 0, width, height)
+      return canvas.toBuffer('image/png')
+    },
+    preprocessImage(data) {
+      return preprocessImage(
+        data,
+        (width, height) => createCanvas(width, height).getContext('2d')?.createImageData(width, height) ?? null,
+      )
+    },
+  },
+})

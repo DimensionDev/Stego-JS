@@ -10,7 +10,7 @@ export const DEFAULT_COPIES = 3
 export const DEFAULT_PARAM_COPIES = 9
 export const DEFAULT_SIZE = 8
 export const TOLERANCE_NOT_SET = -1
-export const DEFAULT_TOLERANCE: { [index: string]: { [index: string]: number } } = {
+export const DEFAULT_TOLERANCE: Record<string, Record<string, number>> = {
   [AlgorithmVersion.V1]: {
     [TransformAlgorithm.DCT]: 100,
     [TransformAlgorithm.fastDCT]: 500,
@@ -24,7 +24,7 @@ export const DEFAULT_TOLERANCE: { [index: string]: { [index: string]: number } }
     [TransformAlgorithm.FFT2D]: 150,
   },
 }
-export const MAX_TOLERANCE: { [index: string]: number } = {
+export const MAX_TOLERANCE: Record<string, number> = {
   [TransformAlgorithm.DCT]: 5000,
   [TransformAlgorithm.fastDCT]: 5000,
   [TransformAlgorithm.FFT1D]: 5000,
