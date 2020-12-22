@@ -22,7 +22,7 @@ jobs:
       - run: npm test
       - name: npm publish
         run: |
-          cat .npmrc
+          mv .npmrc ~/.npmrc
           VERSION=$(jq -r '.version' package.json)
           npm --no-git-tag-version version "$VERSION-$BUILD_VERSION"
           npm publish
