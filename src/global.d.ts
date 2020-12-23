@@ -1,1 +1,0 @@
-// declarations for global variables

@@ -8,7 +8,7 @@
   "main": "./cjs/node.js",
   "module": "./esm/node.js",
   "browser": "./cjs/dom.js",
-  "bin": "./cjs/cli.js",
+  "bin": "./cjs/cli/cli.js",
   "scripts": {
     "prebuild": "npm run clean",
     "build": "npm run build:umd && npm run build:dist",
