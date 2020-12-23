@@ -161,8 +161,7 @@ export function isPNG(buf: Uint8Array) {
 export function imgType(buf: Uint8Array) {
   if (isJPEG(buf)) {
     return 'image/jpeg'
-  }
-  if (isPNG(buf)) {
+  } else if (isPNG(buf)) {
     return 'image/png'
   }
   return ''
