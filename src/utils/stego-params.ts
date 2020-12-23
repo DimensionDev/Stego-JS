@@ -2,8 +2,8 @@ import { GrayscaleAlgorithm } from './grayscale'
 import { TransformAlgorithm } from './transform'
 
 export enum AlgorithmVersion {
-  V1 = '0.11.x',
-  V2 = '0.12.x',
+  V1,
+  V2,
 }
 
 export interface Options {

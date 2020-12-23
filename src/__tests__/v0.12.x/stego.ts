@@ -1,9 +1,8 @@
+import { SEED } from '../../constant'
+import { rand, shuffleGroupBy3, unshuffleGroupBy3 } from '../../utils/helper'
 import { Options } from '../../utils/stego-params'
 import { TransformAlgorithm } from '../../utils/transform'
-import { rand, unshuffleGroupBy3, shuffleGroupBy3 } from '../../utils/helper'
-import { SEED } from '../../constant'
-import { Bit, param2bits, bits2param } from '../../v0.12.x/bit'
-
+import { Bit, bits2param, param2bits } from '../../v2/bit'
 import { createOptions, decodeBitbyBlock, encodeBitbyBlock, normalizeBlock } from './utils'
 
 const testAlgs = [
@@ -12,8 +11,8 @@ const testAlgs = [
   TransformAlgorithm.DCT,
   TransformAlgorithm.fastDCT,
 ]
-const bits = [0, 1] as Bit[]
-const testOptions = testAlgs.map((transformAlgorithm) => createOptions(transformAlgorithm))
+const bits: Bit[] = [0, 1]
+const testOptions = testAlgs.map(createOptions)
 
 // block level test
 test('block with all the same values', () => {
