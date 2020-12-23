@@ -6,7 +6,9 @@ import { AlgorithmVersion } from './utils/stego-params'
 import * as v1 from './v0.11.x'
 import * as v2 from './v0.12.x'
 
-export default proxy({
+export * from './utils/types'
+
+const { encode, decode } = proxy({
   algoithms: { [AlgorithmVersion.V1]: v1, [AlgorithmVersion.V2]: v2 },
   methods: {
     toImageData(data) {
@@ -38,3 +40,5 @@ export default proxy({
     },
   },
 })
+
+export { encode, decode }
