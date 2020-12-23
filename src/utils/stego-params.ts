@@ -2,8 +2,8 @@ import { GrayscaleAlgorithm } from './grayscale'
 import { TransformAlgorithm } from './transform'
 
 export enum AlgorithmVersion {
-  V1 = '0.11.x',
-  V2 = '0.12.x',
+  V1 = 'V1',
+  V2 = 'V2',
 }
 
 export interface Options {
@@ -13,7 +13,7 @@ export interface Options {
   copies: number
   tolerance: number
   transformAlgorithm: TransformAlgorithm
-  verbose: boolean
+  verbose?: boolean
 }
 
 export interface EncodeOptions extends Options {

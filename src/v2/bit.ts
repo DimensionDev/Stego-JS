@@ -143,7 +143,7 @@ export function str2bits(text: string, copies: number): Bit[] {
   return codes2bits(codes, copies)
 }
 
-function correctCharCode(rawCode: { bit: Bit; diff: number }[][], charCodes: number[], verbose: boolean): number {
+function correctCharCode(rawCode: { bit: Bit; diff: number }[][], charCodes: number[], verbose?: boolean): number {
   if (verbose) {
     const bits = rawCode.map((bits) => bits.map((richBits) => richBits.bit))
     const diffs = rawCode.map((bits) => bits.map((richBits) => richBits.diff))
@@ -261,7 +261,7 @@ function correctCharCode(rawCode: { bit: Bit; diff: number }[][], charCodes: num
   return code
 }
 
-export function bits2str(richBits: { bit: Bit; diff: number }[], copies: number, verbose: boolean) {
+export function bits2str(richBits: { bit: Bit; diff: number }[], copies: number, verbose?: boolean) {
   let k = 128
   let tempCharCode = 0
   const tempRawBits: { bit: Bit; diff: number }[][] = []

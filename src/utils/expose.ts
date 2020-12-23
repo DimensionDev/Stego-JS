@@ -1,6 +1,6 @@
 import { AlgorithmVersion, DecodeOptions, EncodeOptions } from './stego-params'
 
-interface EncodedImageData {
+export interface EncodedImageData {
   data: ImageData
   height: number
   width: number
