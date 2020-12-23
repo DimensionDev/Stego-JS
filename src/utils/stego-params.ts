@@ -13,7 +13,7 @@ export interface Options {
   copies: number
   tolerance: number
   transformAlgorithm: TransformAlgorithm
-  verbose: boolean
+  verbose?: boolean
 }
 
 export interface EncodeOptions extends Options {
