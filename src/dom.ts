@@ -2,8 +2,8 @@ import { proxy } from './utils/expose'
 import { imgType } from './utils/helper'
 import { preprocessImage } from './utils/image'
 import { AlgorithmVersion } from './utils/stego-params'
-import * as v1 from './v0.11.x'
-import * as v2 from './v0.12.x'
+import * as v1 from './v1'
+import * as v2 from './v2'
 
 export * from './utils/types'
 

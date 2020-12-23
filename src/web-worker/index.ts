@@ -1,7 +1,7 @@
 import { Decoder, Encoder } from '../utils/expose'
 import { AlgorithmVersion } from '../utils/stego-params'
-import * as v1 from '../v0.11.x'
-import * as v2 from '../v0.12.x'
+import * as v1 from '../v1'
+import * as v2 from '../v2'
 import { Payload } from './types'
 
 const algoithms: Record<AlgorithmVersion, { encode: Encoder; decode: Decoder }> = {
