@@ -1,5 +1,5 @@
 import { GrayscaleAlgorithm, grayscale, narrow } from '../utils/grayscale'
-import { transform, inverseTransform, TransformAlgorithm } from '../utils/transform'
+import { transform, inverseTransform } from '../utils/transform'
 import { EncodeOptions, DecodeOptions } from '../utils/stego-params'
 import {
   cropImg,
