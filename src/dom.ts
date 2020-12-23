@@ -5,7 +5,7 @@ import { AlgorithmVersion } from './utils/stego-params'
 import * as v1 from './v1'
 import * as v2 from './v2'
 
-export { imgType }
+export { imgType as getImageType }
 export * from './utils/types'
 
 const { encode, decode } = proxy({

@@ -164,5 +164,5 @@ export function imgType(buf: Uint8Array) {
   } else if (isPNG(buf)) {
     return 'image/png'
   }
-  return ''
+  return undefined
 }
