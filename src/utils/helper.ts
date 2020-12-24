@@ -158,7 +158,7 @@ export function isPNG(buf: Uint8Array) {
   )
 }
 
-export function imgType(buf: Uint8Array) {
+export function getImageType(buf: Uint8Array) {
   if (isJPEG(buf)) {
     return 'image/jpeg'
   } else if (isPNG(buf)) {
