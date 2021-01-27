@@ -66,7 +66,6 @@ export function bits2str(bits: Bit[], copies: number) {
       }
     }
   }
-  console.warn(chars.join(''))
   try {
     return decodeURI(chars.join(''))
   } catch (e) {
