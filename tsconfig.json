@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["ES2015", "ESNext.Array", "DOM"],
-    "target": "ES6",
+    "target": "ES2018",
     "module": "CommonJS",
     "moduleResolution": "node",
     "strict": true,
