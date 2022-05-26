@@ -47,29 +47,6 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
     textBits,
     createBits(8 * copies).fill(1), // the end of message
   )
-  if (options.verbose) {
-    console.warn(
-      '---------------------------\n' +
-        'Image data: width ' +
-        width +
-        ' height ' +
-        height +
-        '\nTransform algorithm: ' +
-        options.transformAlgorithm +
-        '\nAlgorithm version: v0.12.x\n' +
-        'Param copies: ' +
-        options.copies +
-        '\nParam bits: ' +
-        paramsBits +
-        '\nEncode text: ' +
-        text +
-        '\nText codes: ' +
-        str2codes(text) +
-        '\nText bits: ' +
-        textBits +
-        '\n---------------------------\n\n',
-    )
-  }
 
   const encodeLen = textBits.length + 8 * copies
 
@@ -179,13 +156,13 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
       if (options.verbose)
         console.warn(
           'After encode, the params diff is: ' +
-            newDiff +
-            ' (' +
-            imgBlock[pos1] +
-            '-' +
-            imgBlock[pos2] +
-            ') diff1: ' +
-            diff1,
+          newDiff +
+          ' (' +
+          imgBlock[pos1] +
+          '-' +
+          imgBlock[pos2] +
+          ') diff1: ' +
+          diff1,
         )
       if (Math.abs(newDiff) < Math.abs(diff1 * 0.8)) {
         if (options.verbose)
@@ -226,9 +203,9 @@ export async function decodeImg(imgData: ImageData, maskData: ImageData, options
       const i = blockId - 4 * DEFAULT_PARAM_COPIES
       console.warn(
         'charId: ' +
-          Math.floor(shuffleArr[i] / (8 * options.copies)) +
-          ', bitId: ' +
-          (shuffleArr[i] % (8 * options.copies)),
+        Math.floor(shuffleArr[i] / (8 * options.copies)) +
+        ', bitId: ' +
+        (shuffleArr[i] % (8 * options.copies)),
       )
       console.warn('bit: ' + getBit(block, acc, options).bit, block)
     }

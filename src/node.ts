@@ -8,6 +8,7 @@ import * as v2 from './v2'
 
 export { imgType as getImageType }
 export * from './utils/types'
+export * from './constant'
 
 const { encode, decode } = proxy({
   algoithms: { [AlgorithmVersion.V1]: v1, [AlgorithmVersion.V2]: v2 },
