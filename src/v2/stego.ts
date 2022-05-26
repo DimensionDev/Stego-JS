@@ -156,13 +156,13 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
       if (options.verbose)
         console.warn(
           'After encode, the params diff is: ' +
-          newDiff +
-          ' (' +
-          imgBlock[pos1] +
-          '-' +
-          imgBlock[pos2] +
-          ') diff1: ' +
-          diff1,
+            newDiff +
+            ' (' +
+            imgBlock[pos1] +
+            '-' +
+            imgBlock[pos2] +
+            ') diff1: ' +
+            diff1,
         )
       if (Math.abs(newDiff) < Math.abs(diff1 * 0.8)) {
         if (options.verbose)
@@ -203,9 +203,9 @@ export async function decodeImg(imgData: ImageData, maskData: ImageData, options
       const i = blockId - 4 * DEFAULT_PARAM_COPIES
       console.warn(
         'charId: ' +
-        Math.floor(shuffleArr[i] / (8 * options.copies)) +
-        ', bitId: ' +
-        (shuffleArr[i] % (8 * options.copies)),
+          Math.floor(shuffleArr[i] / (8 * options.copies)) +
+          ', bitId: ' +
+          (shuffleArr[i] % (8 * options.copies)),
       )
       console.warn('bit: ' + getBit(block, acc, options).bit, block)
     }

@@ -30,8 +30,16 @@ Options
   -m, --message          Specify the message to be encoded.
   -p, --pass             Specify the seed text for generating random encoding position when using 'FFT1D'.
   -t, --tolerance        Specify the number to be added into wave amplitude:
-                            For ${AlgorithmVersion.V1}: ${DEFAULT_TOLERANCE[AlgorithmVersion.V1].FFT1D} (default for FFT1D), ${DEFAULT_TOLERANCE[AlgorithmVersion.V1].FFT2D} (default for FFT2D), ${DEFAULT_TOLERANCE[AlgorithmVersion.V1].fastDCT} (default for fastDCT), ${DEFAULT_TOLERANCE[AlgorithmVersion.V1].DCT} (default for DCT).
-                            For ${AlgorithmVersion.V1}: ${DEFAULT_TOLERANCE[AlgorithmVersion.V2].FFT1D} (default for FFT1D), ${DEFAULT_TOLERANCE[AlgorithmVersion.V2].FFT2D} (default for FFT2D), ${DEFAULT_TOLERANCE[AlgorithmVersion.V2].fastDCT} (default for fastDCT), ${DEFAULT_TOLERANCE[AlgorithmVersion.V2].DCT} (default for DCT).
+                            For ${AlgorithmVersion.V1}: ${
+    DEFAULT_TOLERANCE[AlgorithmVersion.V1].FFT1D
+  } (default for FFT1D), ${DEFAULT_TOLERANCE[AlgorithmVersion.V1].FFT2D} (default for FFT2D), ${
+    DEFAULT_TOLERANCE[AlgorithmVersion.V1].fastDCT
+  } (default for fastDCT), ${DEFAULT_TOLERANCE[AlgorithmVersion.V1].DCT} (default for DCT).
+                            For ${AlgorithmVersion.V1}: ${
+    DEFAULT_TOLERANCE[AlgorithmVersion.V2].FFT1D
+  } (default for FFT1D), ${DEFAULT_TOLERANCE[AlgorithmVersion.V2].FFT2D} (default for FFT2D), ${
+    DEFAULT_TOLERANCE[AlgorithmVersion.V2].fastDCT
+  } (default for fastDCT), ${DEFAULT_TOLERANCE[AlgorithmVersion.V2].DCT} (default for DCT).
   -s, --size             Size of encoding block with radix-2 required: ${DEFAULT_SIZE} (default).
   -c, --copies           Size of duplications with odd numbers required: ${DEFAULT_COPIES} (default).
   -g, --grayscale        Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
