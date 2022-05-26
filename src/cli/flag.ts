@@ -165,8 +165,8 @@ export function validateFlags({
     return 'unknown transform algorithm'
   }
   if (isNaN(tolerance) || tolerance <= 0 || tolerance > MAX_TOLERANCE[transform]) {
-    //Is it okay?
-    return `-t, --tolerance should be a positive number between [0- ${MAX_TOLERANCE[transform]}] for algorithm ${transform}`
+    // Is it okay?
+    return `-t, --tolerance should be a positive number between [0-${MAX_TOLERANCE[transform]}] for algorithm ${transform}`
   }
   if (!Object.values(GrayscaleAlgorithm).includes(grayscale)) {
     return 'unknown grayscale algorithm'

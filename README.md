@@ -6,7 +6,7 @@
 
 ```bash
 # node
-npm install @dimensiondev/stego-js canvas@2.6.1 --global
+npm install @dimensiondev/stego-js canvas@2.9.1 --global
 
 # dom
 npm install @dimensiondev/stego-js

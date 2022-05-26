@@ -59,7 +59,7 @@ export function getPos(options: Options): Array<number> {
       return [3 * size + 1, 2 * size + 2]
     case TransformAlgorithm.DCT:
       return [3 * size + 1, 2 * size + 2]
-    case TransformAlgorithm.fastDCT:
+    case TransformAlgorithm.FastDCT:
       return [3 * size + 1, 2 * size + 2]
     default:
       throw new Error(`unknown algortihm in getPos: ${transformAlgorithm}`)

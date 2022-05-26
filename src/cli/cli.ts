@@ -2,7 +2,7 @@
 import meow from 'meow'
 import { createReadStream } from 'fs'
 import { rs2Buf } from '../utils/helper'
-import { encode, decode } from '../node'
+import { encode, decode, AlgorithmVersion } from '../node'
 import {
   CLI_NAME,
   DEFAULT_COPIES,
@@ -30,8 +30,8 @@ Options
   -m, --message          Specify the message to be encoded.
   -p, --pass             Specify the seed text for generating random encoding position when using 'FFT1D'.
   -t, --tolerance        Specify the number to be added into wave amplitude:
-                            For v0.11.x: ${DEFAULT_TOLERANCE['0.11.x'].FFT1D} (default for FFT1D), ${DEFAULT_TOLERANCE['0.11.x'].FFT2D} (default for FFT2D), ${DEFAULT_TOLERANCE['0.11.x'].fastDCT} (default for fastDCT), ${DEFAULT_TOLERANCE['0.11.x'].DCT} (default for DCT).
-                            For v0.12.x: ${DEFAULT_TOLERANCE['0.12.x'].FFT1D} (default for FFT1D), ${DEFAULT_TOLERANCE['0.12.x'].FFT2D} (default for FFT2D), ${DEFAULT_TOLERANCE['0.12.x'].fastDCT} (default for fastDCT), ${DEFAULT_TOLERANCE['0.12.x'].DCT} (default for DCT).
+                            For ${AlgorithmVersion.V1}: ${DEFAULT_TOLERANCE[AlgorithmVersion.V1].FFT1D} (default for FFT1D), ${DEFAULT_TOLERANCE[AlgorithmVersion.V1].FFT2D} (default for FFT2D), ${DEFAULT_TOLERANCE[AlgorithmVersion.V1].fastDCT} (default for fastDCT), ${DEFAULT_TOLERANCE[AlgorithmVersion.V1].DCT} (default for DCT).
+                            For ${AlgorithmVersion.V1}: ${DEFAULT_TOLERANCE[AlgorithmVersion.V2].FFT1D} (default for FFT1D), ${DEFAULT_TOLERANCE[AlgorithmVersion.V2].FFT2D} (default for FFT2D), ${DEFAULT_TOLERANCE[AlgorithmVersion.V2].fastDCT} (default for fastDCT), ${DEFAULT_TOLERANCE[AlgorithmVersion.V2].DCT} (default for DCT).
   -s, --size             Size of encoding block with radix-2 required: ${DEFAULT_SIZE} (default).
   -c, --copies           Size of duplications with odd numbers required: ${DEFAULT_COPIES} (default).
   -g, --grayscale        Specify grayscale algorithm: 'NONE' (default), 'AVG', 'LUMA', 'LUMA_II', 'DESATURATION', 'MAX_DE', 'MIN_DE', 'MID_DE', 'R', 'G', 'B'.
@@ -78,6 +78,4 @@ export async function run() {
   }
 }
 
-if (require.main?.filename === __dirname) {
-  run()
-}
+run()

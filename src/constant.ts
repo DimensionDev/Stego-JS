@@ -13,27 +13,27 @@ export const TOLERANCE_NOT_SET = -1
 export const DEFAULT_TOLERANCE: Record<string, Record<string, number>> = {
   [AlgorithmVersion.V1]: {
     [TransformAlgorithm.DCT]: 100,
-    [TransformAlgorithm.fastDCT]: 500,
+    [TransformAlgorithm.FastDCT]: 500,
     [TransformAlgorithm.FFT1D]: 128,
     [TransformAlgorithm.FFT2D]: 500,
   },
   [AlgorithmVersion.V2]: {
     [TransformAlgorithm.DCT]: 10,
-    [TransformAlgorithm.fastDCT]: 100,
+    [TransformAlgorithm.FastDCT]: 100,
     [TransformAlgorithm.FFT1D]: 30,
     [TransformAlgorithm.FFT2D]: 150,
   },
 }
 export const MAX_TOLERANCE: Record<string, number> = {
   [TransformAlgorithm.DCT]: 5000,
-  [TransformAlgorithm.fastDCT]: 5000,
+  [TransformAlgorithm.FastDCT]: 5000,
   [TransformAlgorithm.FFT1D]: 5000,
   [TransformAlgorithm.FFT2D]: 50000,
 }
 export const DEFAULT_FAKE_MASK_PIXELS = false
 export const DEFAULT_EXHAUST_PIXELS = true
 export const DEFAULT_CROP_EDGE_PIXELS = true
-export const DEFAULT_ALGORITHM_VERSION = '0.12.x'
+export const DEFAULT_ALGORITHM_VERSION = AlgorithmVersion.V2
 
 export const DEFAULT_MASK = [
   0x89,
