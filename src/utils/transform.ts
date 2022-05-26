@@ -7,7 +7,7 @@ export enum TransformAlgorithm {
   FFT1D = 'FFT1D',
   FFT2D = 'FFT2D',
   DCT = 'DCT',
-  fastDCT = 'fastDCT',
+  FastDCT = 'fastDCT',
 }
 
 export function transform(re: number[], im: number[], algorithm: TransformAlgorithm, { size }: Options) {
@@ -23,7 +23,7 @@ export function transform(re: number[], im: number[], algorithm: TransformAlgori
     case TransformAlgorithm.DCT:
       DCT.dct(re, size)
       break
-    case TransformAlgorithm.fastDCT:
+    case TransformAlgorithm.FastDCT:
       fastDctLee.transform(re)
       break
     default:
@@ -44,7 +44,7 @@ export function inverseTransform(re: number[], im: number[], algorithm: Transfor
     case TransformAlgorithm.DCT:
       DCT.idct(re, size)
       break
-    case TransformAlgorithm.fastDCT:
+    case TransformAlgorithm.FastDCT:
       fastDctLee.inverseTransform(re)
       break
     default:

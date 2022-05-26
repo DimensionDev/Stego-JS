@@ -1,6 +1,6 @@
 import { Options } from '../utils/stego-params'
 import { getPos, Accumulator } from './position'
-import { transform, TransformAlgorithm } from '../utils/transform'
+import { TransformAlgorithm } from '../utils/transform'
 import { DEFAULT_PARAM_COPIES } from '../constant'
 
 export type Bit = 0 | 1
@@ -109,7 +109,7 @@ export function str2codes(text: string): number[] {
   return codes
 }
 
-function codes2bits(codes: number[], copies: number): Bit[] {
+export function codes2bits(codes: number[], copies: number): Bit[] {
   const bits: Bit[] = []
   const pushByte = (byte: Bit[], n: number) => {
     for (let i = 0; i < 8; i += 1) {
@@ -225,15 +225,15 @@ function correctCharCode(rawCode: { bit: Bit; diff: number }[][], charCodes: num
         if (verbose) {
           console.warn(
             comp +
-              ' ' +
-              code2char(comp) +
-              ' ' +
-              compBits +
-              ' bit difference: ' +
-              bitDiff +
-              ' param difference: ' +
-              paramDiff +
-              '\n',
+            ' ' +
+            code2char(comp) +
+            ' ' +
+            compBits +
+            ' bit difference: ' +
+            bitDiff +
+            ' param difference: ' +
+            paramDiff +
+            '\n',
           )
         }
         return [bitDiff, paramDiff]
@@ -388,27 +388,19 @@ export function setBit(block: number[], bit: Bit, options: Options, tolerance: n
   let v1 = block[pos1]
   let v2 = block[pos2]
 
-  // amplify the difference between v1 and v2
-  // [v1, v2] = v1 < v2? [v1, v2 + tolerance] : [v1 + tolerance, v2];
-
-  // const t = rand(0, tolerance);
   const t0 = Math.abs(v1 - v2)
-  // const t0 = tolerance / 2;
-  // const [t1, t2] = [t, (tolerance - t0 - t)];
-  // const [t1, t2] = (t0 > tolerance) ? [0, 0] : [t, (tolerance - t0 - t)];
+
   const t =
     t0 > 1.5 * tolerance
       ? 0.5 * tolerance
       : t0 < 0.3 * tolerance
-      ? 1.5 * tolerance
-      : t0 < 0.5 * tolerance
-      ? 1.2 * tolerance
-      : tolerance
-  // const [t1, t2] = [0, 0];
+        ? 1.5 * tolerance
+        : t0 < 0.5 * tolerance
+          ? 1.2 * tolerance
+          : tolerance
 
-  ;[v1, v2] = v1 < v2 ? [v1 - t / 2, v2 + t / 2] : [v1 + t / 2, v2 - t / 2]
-  // [v1, v2] = v1 < v2? [v1, v2 + t] : [v1 + t, v2]; //black?
-  // [v1, v2] = v1 < v2? [v1 - t, v2] : [v1, v2 - t]; //white?
+    ;[v1, v2] = v1 < v2 ? [v1 - t / 2, v2 + t / 2] : [v1 + t / 2, v2 - t / 2]
+
 
   if (options.verbose) console.warn('encoded value: ', v1, v2)
 

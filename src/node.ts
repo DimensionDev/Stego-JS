@@ -13,9 +13,6 @@ const { encode, decode } = proxy({
   algoithms: { [AlgorithmVersion.V1]: v1, [AlgorithmVersion.V2]: v2 },
   methods: {
     toImageData(data) {
-      const type = imgType(new Uint8Array(data.slice(0, 8)))
-      const blob = new Blob([data], { type })
-      const url = URL.createObjectURL(blob)
       return new Promise((resolve, reject) => {
         const element = new Image()
         element.onload = () => {
@@ -25,7 +22,7 @@ const { encode, decode } = proxy({
           resolve(ctx.getImageData(0, 0, width, height))
         }
         element.onerror = reject
-        element.src = url
+        element.src = Buffer.from(data)
       })
     },
     async toBuffer(imgData, height = imgData.height, width = imgData.width) {

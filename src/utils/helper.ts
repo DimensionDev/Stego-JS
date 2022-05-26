@@ -15,14 +15,8 @@ export function rand(min: number, max: number) {
 }
 
 export function clamp(v: number, min: number, max: number) {
-  if (v < min) {
-    console.warn(`clamp min: ${v}`)
-    return min
-  }
-  if (v > max) {
-    console.warn(`clamp max: ${v}`)
-    return max
-  }
+  if (v < min) return min
+  if (v > max) return max
   return v
 }
 

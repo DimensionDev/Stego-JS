@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["ES2015", "ESNext.Array", "DOM"],
+    "lib": [
+      "ES2015",
+      "ESNext.Array",
+      "DOM"
+    ],
     "target": "ES6",
     "module": "CommonJS",
     "moduleResolution": "node",
@@ -16,6 +20,10 @@
     "sourceMap": true,
     "outDir": "cjs"
   },
-  "include": ["src"],
-  "exclude": ["src/__tests__"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/__tests__"
+  ]
 }
