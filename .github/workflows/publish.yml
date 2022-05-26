@@ -1,0 +1,24 @@
+name: Publish
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  publish:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+      - uses: DimensionDev/github-token-action@latest
+        with:
+          registry: true
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run lint
+      - run: npm test
+      - name: npm publish
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          npm --no-git-tag-version version "$VERSION-$BUILD_VERSION"
+          npm publish

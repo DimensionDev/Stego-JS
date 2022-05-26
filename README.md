@@ -2,6 +2,8 @@
 
 [![npm module](https://img.shields.io/npm/v/@dimensiondev/stego-js)](https://www.npmjs.com/package/@dimensiondev/stego-js)
 
+[Example](https://dimensiondev.github.io/Stego-JS/example/index.html)
+
 ## Installation
 
 ```bash

@@ -9,7 +9,7 @@ const testAlgs = [
   TransformAlgorithm.FFT1D,
   TransformAlgorithm.FFT2D,
   TransformAlgorithm.DCT,
-  TransformAlgorithm.fastDCT,
+  TransformAlgorithm.FastDCT,
 ]
 const bits: Bit[] = [0, 1]
 const testOptions = testAlgs.map(createOptions)

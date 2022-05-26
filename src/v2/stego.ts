@@ -47,29 +47,6 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
     textBits,
     createBits(8 * copies).fill(1), // the end of message
   )
-  if (options.verbose) {
-    console.warn(
-      '---------------------------\n' +
-        'Image data: width ' +
-        width +
-        ' height ' +
-        height +
-        '\nTransform algorithm: ' +
-        options.transformAlgorithm +
-        '\nAlgorithm version: v0.12.x\n' +
-        'Param copies: ' +
-        options.copies +
-        '\nParam bits: ' +
-        paramsBits +
-        '\nEncode text: ' +
-        text +
-        '\nText codes: ' +
-        str2codes(text) +
-        '\nText bits: ' +
-        textBits +
-        '\n---------------------------\n\n',
-    )
-  }
 
   const encodeLen = textBits.length + 8 * copies
 
