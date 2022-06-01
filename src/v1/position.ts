@@ -60,6 +60,6 @@ export function getPos(acc: Accumulator, loc: Locator, options: Options) {
     case TransformAlgorithm.FastDCT:
       return 0
     default:
-      throw new Error(`unknown algortihm: ${transformAlgorithm}`)
+      throw new Error(`unknown algorithm: ${transformAlgorithm}`)
   }
 }
