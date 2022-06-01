@@ -799,7 +799,7 @@
             case exports.TransformAlgorithm.FastDCT:
                 return 0;
             default:
-                throw new Error(`unknown algortihm: ${transformAlgorithm}`);
+                throw new Error(`unknown algorithm: ${transformAlgorithm}`);
         }
     }
 
@@ -1033,7 +1033,7 @@
             case exports.TransformAlgorithm.FastDCT:
                 return [3 * size + 1, 2 * size + 2];
             default:
-                throw new Error(`unknown algortihm in getPos: ${transformAlgorithm}`);
+                throw new Error(`unknown algorithm in getPos: ${transformAlgorithm}`);
         }
     }
 

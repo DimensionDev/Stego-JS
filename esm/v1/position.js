@@ -36,7 +36,7 @@ export function getPos(acc, loc, options) {
         case TransformAlgorithm.FastDCT:
             return 0;
         default:
-            throw new Error(`unknown algortihm: ${transformAlgorithm}`);
+            throw new Error(`unknown algorithm: ${transformAlgorithm}`);
     }
 }
 //# sourceMappingURL=position.js.map

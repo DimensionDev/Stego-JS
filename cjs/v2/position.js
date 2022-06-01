@@ -43,7 +43,7 @@ function getPos(options) {
         case transform_1.TransformAlgorithm.FastDCT:
             return [3 * size + 1, 2 * size + 2];
         default:
-            throw new Error(`unknown algortihm in getPos: ${transformAlgorithm}`);
+            throw new Error(`unknown algorithm in getPos: ${transformAlgorithm}`);
     }
 }
 exports.getPos = getPos;
