@@ -9,21 +9,10 @@ import {
   updateImgByPixelAt,
   updateImgByPixelChannelAt,
 } from '../utils/image'
-import {
-  mergeBits,
-  createBits,
-  str2bits,
-  str2codes,
-  setBit,
-  getBit,
-  bits2str,
-  param2bits,
-  Bit,
-  bits2param,
-} from './bit'
+import { mergeBits, str2bits, setBit, getBit, bits2str, param2bits, Bit, bits2param } from './bit'
 import { createAcc, getPos } from './position'
 import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask'
-import { rand, shuffleGroupBy3, unshuffleGroupBy3 } from '../utils/helper'
+import { rand, randomBits, shuffleGroupBy3, unshuffleGroupBy3 } from '../utils/helper'
 import { loc2idx, loc2coord } from '../utils/locator'
 import { DEFAULT_PARAM_COPIES, SEED } from '../constant'
 
@@ -42,10 +31,10 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
   const textBits = str2bits(text, copies)
   const paramsBits = param2bits(options)
   const bits = mergeBits(
-    createBits(sizeOfBlocks),
+    randomBits(options.randomSource, sizeOfBlocks),
     paramsBits,
     textBits,
-    createBits(8 * copies).fill(1), // the end of message
+    Array(8 * copies).fill(1), // the end of message
   )
 
   const encodeLen = textBits.length + 8 * copies

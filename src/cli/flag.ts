@@ -15,6 +15,8 @@ import {
   MAX_TOLERANCE,
 } from '../constant'
 import { TypedFlags } from 'meow'
+// @ts-expect-error
+import { webcrypto as crypto } from 'crypto'
 
 export interface Flags {
   algorithmVersion: AlgorithmVersion
@@ -205,5 +207,6 @@ export function flags2Options({
     cropEdgePixels,
     fakeMaskPixels,
     verbose,
+    randomSource: crypto.getRandomValues.bind(crypto),
   } as EncodeOptions & DecodeOptions
 }

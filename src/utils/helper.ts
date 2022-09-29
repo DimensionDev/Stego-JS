@@ -14,6 +14,36 @@ export function rand(min: number, max: number) {
   return Math.round(Math.random() * max + min)
 }
 
+export type Bit = 0 | 1
+export function randomBits(generator: (array: Uint8Array) => Uint8Array, size: number): Bit[] {
+  // Old:
+  // const bits: Bit[] = new Array(size).fill(0)
+
+  // for (let i = 0; i < size; i += 1) {
+  //   bits[i] = Math.floor(Math.random() * 2) as Bit
+  // }
+  // return bits
+
+  const arr: (0 | 1)[] = []
+  const alignedSize = Math.min(Math.ceil(size / 8), 65536)
+
+  for (const number of generator(new Uint8Array(alignedSize))) {
+    ;(arr as number[]).push(
+      (number >> 0) & 1,
+      (number >> 1) & 1,
+      (number >> 2) & 1,
+      (number >> 3) & 1,
+      (number >> 4) & 1,
+      (number >> 5) & 1,
+      (number >> 6) & 1,
+      (number >> 7) & 1,
+    )
+  }
+  if (arr.length > size) arr.length = size
+  if (alignedSize * 8 < size) return arr.concat(randomBits(generator, size - alignedSize * 8))
+  return arr
+}
+
 export function clamp(v: number, min: number, max: number) {
   if (v < min) return min
   if (v > max) return max

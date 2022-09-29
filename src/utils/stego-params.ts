@@ -23,6 +23,8 @@ export interface EncodeOptions extends Options {
   exhaustPixels: boolean
   cropEdgePixels: boolean
   fakeMaskPixels: boolean
+  /** crypto.getRandomValues.bind(crypto) is OK */
+  randomSource(array: Uint8Array): Uint8Array
 }
 
 export type DecodeOptions = Options

@@ -1,10 +1,10 @@
 import { GrayscaleAlgorithm, grayscale, narrow } from '../utils/grayscale'
 import { transform, inverseTransform } from '../utils/transform'
 import { cropImg, updateImgByBlock, updateImgByPixel, visitImgByBlock, updateImgByPixelAt } from '../utils/image'
-import { mergeBits, createBits, str2bits, setBit, getBit, bits2str, Bit } from './bit'
+import { mergeBits, str2bits, setBit, getBit, bits2str, Bit } from './bit'
 import { createAcc } from './position'
 import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask'
-import { rand } from '../utils/helper'
+import { rand, randomBits } from '../utils/helper'
 import { loc2idx, loc2coord } from '../utils/locator'
 import { EncodeOptions, DecodeOptions } from '../utils/stego-params'
 
@@ -14,9 +14,9 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
   const sizeOfBlocks = width * height * 3
   const textBits = str2bits(text, copies)
   const bits = mergeBits(
-    createBits(exhaustPixels ? sizeOfBlocks : textBits.length + 8 * copies),
+    randomBits(options.randomSource, exhaustPixels ? sizeOfBlocks : textBits.length + 8 * copies),
     textBits,
-    createBits(8 * copies).fill(1), // the end of message
+    Array(8 * copies).fill(1), // the end of message
   )
 
   if (textBits.length + 8 * copies > sizeOfBlocks) {

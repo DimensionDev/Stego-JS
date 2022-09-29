@@ -66,7 +66,6 @@ export function bits2str(bits: Bit[], copies: number) {
       }
     }
   }
-  console.warn(chars.join(''))
   try {
     return decodeURI(chars.join(''))
   } catch (e) {
@@ -85,15 +84,6 @@ export function mergeBits(dest: Bit[], ...src: Bit[][]) {
     }
   }
   return dest
-}
-
-export function createBits(size: number) {
-  const bits: Bit[] = new Array(size).fill(0)
-
-  for (let i = 0; i < size; i += 1) {
-    bits[i] = Math.floor(Math.random() * 2) as Bit
-  }
-  return bits
 }
 
 export function getBit(block: number[], acc: Accumulator, loc: Locator, options: Options) {
