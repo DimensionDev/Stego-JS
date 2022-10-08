@@ -1,18 +1,18 @@
 import { readFile } from 'fs/promises'
 import { toMatchFile } from 'jest-file-snapshot'
 import { join } from 'path'
-import { encode, decode, TransformAlgorithm, GrayscaleAlgorithm, AlgorithmVersion } from '../../node'
+import { encode, decode, TransformAlgorithm, GrayscaleAlgorithm, AlgorithmVersion, DEFAULT_MASK } from '../../node'
 expect.extend({ toMatchFile })
 
 const original = readFile(join(__dirname, './original.png'))
-const mask = readFile(join(__dirname, './mask.png'))
+const mask = new Uint8Array(DEFAULT_MASK).buffer
 const snapshot1 = join(__dirname, './__file__snapshot__/v1-snapshot-0.png')
 const snapshot2 = join(__dirname, './__file__snapshot__/v2-snapshot-0.png')
 const text =
   'Ethereum is the community-run technology powering the cryptocurrency ether (ETH) and thousands of decentralized applications.'
 
 test('v1', async () => {
-  const outImage = await encode(await original, await mask, {
+  const outImage = await encode(await original, mask, {
     size: 8,
     narrow: 0,
     copies: 3,
@@ -30,7 +30,7 @@ test('v1', async () => {
   // TODO: refactor to move random source out.
   // expect(outImage).toMatchFile(snapshot1)
 
-  const decodedText = await decode(outImage, await mask, {
+  const decodedText = await decode(outImage, mask, {
     size: 8,
     copies: 3,
     tolerance: 128,
@@ -42,11 +42,11 @@ test('v1', async () => {
 })
 
 test('v2', async () => {
-  const outImage = await encode(await original, await mask, {
+  const outImage = await encode(await original, mask, {
     size: 8,
     narrow: 0,
     copies: 3,
-    tolerance: 3,
+    tolerance: 400,
     exhaustPixels: false,
     cropEdgePixels: false,
     fakeMaskPixels: false,
@@ -60,11 +60,11 @@ test('v2', async () => {
   // TODO: refactor to move random source out.
   // expect(outImage).toMatchFile(snapshot2)
 
-  const decodedText = await decode(outImage, await mask, {
+  const decodedText = await decode(outImage, mask, {
     size: 8,
     copies: 3,
-    tolerance: 128,
-    transformAlgorithm: TransformAlgorithm.FFT1D,
+    tolerance: 400,
+    transformAlgorithm: TransformAlgorithm.FFT2D,
     pass: 'Hello World',
     version: AlgorithmVersion.V2,
   })
