@@ -82,5 +82,5 @@ export var fastDctLee;
             vector[off + len - 1 - i] = x - y;
         }
     }
-})(fastDctLee || (fastDctLee = {}));
+})(fastDctLee = fastDctLee || (fastDctLee = {}));
 //# sourceMappingURL=fastdct.js.map

@@ -1,5 +1,5 @@
-/// <reference types="node" />
-/// <reference types="node" />
+/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" resolution-mode="require"/>
 import { Readable } from 'stream';
 export declare function rs2Buf(rs: Readable): Promise<Buffer>;
 export declare function rand(min: number, max: number): number;

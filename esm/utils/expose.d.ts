@@ -1,4 +1,4 @@
-import { AlgorithmVersion, DecodeOptions, EncodeOptions } from './stego-params';
+import { AlgorithmVersion, DecodeOptions, EncodeOptions } from './stego-params.js';
 export interface EncodedImageData {
     data: ImageData;
     height: number;

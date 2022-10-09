@@ -1,5 +1,5 @@
-import { TransformAlgorithm } from '../utils/transform';
-import { hashCode, squareCircleIntersect } from '../utils/helper';
+import { TransformAlgorithm } from '../utils/transform.js';
+import { hashCode, squareCircleIntersect } from '../utils/helper.js';
 export function createAcc({ size, transformAlgorithm }) {
     switch (transformAlgorithm) {
         case TransformAlgorithm.FFT1D:

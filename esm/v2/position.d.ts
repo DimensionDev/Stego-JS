@@ -1,5 +1,5 @@
-import { Options } from '../utils/stego-params';
-import { Locator } from '../utils/locator';
+import { Options } from '../utils/stego-params.js';
+import { Locator } from '../utils/locator.js';
 export interface Accumulator {
     /**
      * previous bit position

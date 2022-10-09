@@ -1,4 +1,4 @@
-import { Options } from './stego-params';
+import { Options } from './stego-params.js';
 export declare enum TransformAlgorithm {
     FFT1D = "FFT1D",
     FFT2D = "FFT2D",

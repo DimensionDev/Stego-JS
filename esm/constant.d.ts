@@ -1,4 +1,4 @@
-import { AlgorithmVersion } from './utils/stego-params';
+import { AlgorithmVersion } from './utils/stego-params.js';
 export declare const CLI_NAME = "stego-js";
 export declare const MAX_WIDTH = 1960;
 export declare const DEFAULT_NARROW = 0;

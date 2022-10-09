@@ -1,8 +1,8 @@
-import { clamp } from './helper';
-import { loc2idx, loc2coord } from './locator';
+import { clamp } from './helper.js';
+import { loc2idx, loc2coord } from './locator.js';
 import { lanczos } from '@rgba-image/lanczos';
-import { MAX_WIDTH } from '../constant';
-import { transform } from '../utils/transform';
+import { MAX_WIDTH } from '../constant.js';
+import { transform } from '../utils/transform.js';
 export function preprocessImage(imageData, getScaled) {
     if (imageData.width <= MAX_WIDTH && imageData.height <= MAX_WIDTH)
         return imageData;

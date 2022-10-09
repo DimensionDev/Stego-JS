@@ -1,12 +1,21 @@
-import { proxy } from './utils/expose';
-import { imgType } from './utils/helper';
-import { preprocessImage } from './utils/image';
-import { AlgorithmVersion } from './utils/stego-params';
-import * as v1 from './v1';
-import * as v2 from './v2';
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+import { proxy } from './utils/expose.js';
+import { imgType } from './utils/helper.js';
+import { preprocessImage } from './utils/image.js';
+import { AlgorithmVersion } from './utils/stego-params.js';
+import * as v1 from './v1/index.js';
+import * as v2 from './v2/index.js';
 export { imgType as getImageType };
-export * from './utils/types';
-export * from './constant';
+export * from './utils/types.js';
+export * from './constant.js';
 const { encode, decode } = proxy({
     algoithms: { [AlgorithmVersion.V1]: v1, [AlgorithmVersion.V2]: v2 },
     methods: {
@@ -26,22 +35,24 @@ const { encode, decode } = proxy({
                 element.src = url;
             });
         },
-        async toBuffer(imgData, height = imgData.height, width = imgData.width) {
-            const canvas = createCanvas(width, height);
-            canvas.getContext('2d').putImageData(imgData, 0, 0, 0, 0, width, height);
-            if (isOffscreenCanvas(canvas)) {
-                return toArrayBuffer(await canvas.convertToBlob({ type: 'image/png' }));
-            }
-            return new Promise((resolve, reject) => {
-                const callback = (blob) => {
-                    if (blob) {
-                        resolve(toArrayBuffer(blob));
-                    }
-                    else {
-                        reject(new Error('fail to generate array buffer'));
-                    }
-                };
-                canvas.toBlob(callback, 'image/png');
+        toBuffer(imgData, height = imgData.height, width = imgData.width) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const canvas = createCanvas(width, height);
+                canvas.getContext('2d').putImageData(imgData, 0, 0, 0, 0, width, height);
+                if (isOffscreenCanvas(canvas)) {
+                    return toArrayBuffer(yield canvas.convertToBlob({ type: 'image/png' }));
+                }
+                return new Promise((resolve, reject) => {
+                    const callback = (blob) => {
+                        if (blob) {
+                            resolve(toArrayBuffer(blob));
+                        }
+                        else {
+                            reject(new Error('fail to generate array buffer'));
+                        }
+                    };
+                    canvas.toBlob(callback, 'image/png');
+                });
             });
         },
         preprocessImage(data) {

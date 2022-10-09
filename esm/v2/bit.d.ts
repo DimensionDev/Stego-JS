@@ -1,5 +1,5 @@
-import { Options } from '../utils/stego-params';
-import { Accumulator } from './position';
+import { Options } from '../utils/stego-params.js';
+import { Accumulator } from './position.js';
 export declare type Bit = 0 | 1;
 export declare function str2codes(text: string): number[];
 export declare function codes2bits(codes: number[], copies: number): Bit[];

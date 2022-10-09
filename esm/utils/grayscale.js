@@ -1,4 +1,4 @@
-import { clamp } from './helper';
+import { clamp } from './helper.js';
 // more grayscale algorithm:
 // http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
 export var GrayscaleAlgorithm;
@@ -14,7 +14,7 @@ export var GrayscaleAlgorithm;
     GrayscaleAlgorithm["SIGNLE_R"] = "R";
     GrayscaleAlgorithm["SIGNLE_G"] = "G";
     GrayscaleAlgorithm["SIGNLE_B"] = "B";
-})(GrayscaleAlgorithm || (GrayscaleAlgorithm = {}));
+})(GrayscaleAlgorithm = GrayscaleAlgorithm || (GrayscaleAlgorithm = {}));
 export function grayscale(r, g, b, algorithm) {
     switch (algorithm) {
         case GrayscaleAlgorithm.AVERAGE:

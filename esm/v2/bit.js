@@ -1,6 +1,6 @@
-import { getPos } from './position';
-import { TransformAlgorithm } from '../utils/transform';
-import { DEFAULT_PARAM_COPIES } from '../constant';
+import { getPos } from './position.js';
+import { TransformAlgorithm } from '../utils/transform.js';
+import { DEFAULT_PARAM_COPIES } from '../constant.js';
 function gray_code(n) {
     return n ^ (n >> 1);
 }

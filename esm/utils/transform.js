@@ -1,13 +1,13 @@
 import FFT from '../fft/index.js';
-import * as DCT from '../dct';
-import { fastDctLee } from '../dct/fastdct';
+import * as DCT from '../dct/index.js';
+import { fastDctLee } from '../dct/fastdct.js';
 export var TransformAlgorithm;
 (function (TransformAlgorithm) {
     TransformAlgorithm["FFT1D"] = "FFT1D";
     TransformAlgorithm["FFT2D"] = "FFT2D";
     TransformAlgorithm["DCT"] = "DCT";
     TransformAlgorithm["FastDCT"] = "fastDCT";
-})(TransformAlgorithm || (TransformAlgorithm = {}));
+})(TransformAlgorithm = TransformAlgorithm || (TransformAlgorithm = {}));
 export function transform(re, im, algorithm, { size }) {
     switch (algorithm) {
         case TransformAlgorithm.FFT1D:

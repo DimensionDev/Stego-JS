@@ -1,5 +1,5 @@
-import { Options } from './stego-params';
-import { Locator } from './locator';
+import { Options } from './stego-params.js';
+import { Locator } from './locator.js';
 export declare type Pixel = [number, number, number, number];
 export declare function preprocessImage(imageData: ImageData, getScaled: (w: number, h: number) => ImageData | null): ImageData;
 export declare function cropImg({ width, height }: ImageData, { size }: Options): readonly [number, number];

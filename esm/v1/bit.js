@@ -1,4 +1,4 @@
-import { getPos } from './position';
+import { getPos } from './position.js';
 export function str2bits(text, copies) {
     const chars = Array.from(text);
     const bits = [];
