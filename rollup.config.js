@@ -1,5 +1,5 @@
 import replace from 'rollup-plugin-replace'
-import typescript from 'rollup-plugin-typescript2'
+import swc from 'rollup-plugin-swc3'
 
 export default {
   input: 'src/dom.ts',
@@ -12,17 +12,7 @@ export default {
     },
   },
   plugins: [
-    typescript({
-      tsconfigOverride: {
-        compilerOptions: {
-          target: 'ES6',
-          module: 'ESNext',
-          declaration: true,
-          declarationMap: false,
-          sourceMap: false,
-        },
-      },
-    }),
+    swc({}),
     replace({
       'process.env.PLATFORM': JSON.stringify('dom'),
     }),
