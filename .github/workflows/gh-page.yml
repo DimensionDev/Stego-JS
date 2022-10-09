@@ -10,15 +10,17 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2-beta
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+          cache: 'pnpm'
       - uses: DimensionDev/github-token-action@latest
         with:
           registry: true
-      - run: npm ci
+      - run: pnpm install
       - run: npx tsc --noEmit
-      - run: npm run lint
-      - run: npm test
-      - run: npm run build
+      - run: pnpm run build
 
       - run: mkdir dist
       - run: cp -r example ./dist
