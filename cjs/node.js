@@ -36,11 +36,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decode = exports.encode = exports.getImageType = void 0;
-const canvas_1 = require("canvas");
+const image_1 = require("@napi-rs/image");
 const expose_1 = require("./utils/expose");
 const helper_1 = require("./utils/helper");
 Object.defineProperty(exports, "getImageType", { enumerable: true, get: function () { return helper_1.imgType; } });
-const image_1 = require("./utils/image");
+const image_2 = require("./utils/image");
 const stego_params_1 = require("./utils/stego-params");
 const v1 = __importStar(require("./v1"));
 const v2 = __importStar(require("./v2"));
@@ -50,30 +50,55 @@ const { encode, decode } = (0, expose_1.proxy)({
     algoithms: { [stego_params_1.AlgorithmVersion.V1]: v1, [stego_params_1.AlgorithmVersion.V2]: v2 },
     methods: {
         toImageData(data) {
-            return new Promise((resolve, reject) => {
-                const element = new canvas_1.Image();
-                element.onload = () => {
-                    const { width, height } = element;
-                    const ctx = (0, canvas_1.createCanvas)(width, height).getContext('2d');
-                    ctx.drawImage(element, 0, 0, width, height);
-                    resolve(ctx.getImageData(0, 0, width, height));
+            return __awaiter(this, void 0, void 0, function* () {
+                let transformer = new image_1.Transformer(Buffer.from(data));
+                let { width, height, colorType } = yield transformer.metadata();
+                if (colorType !== 3 /* JsColorType.Rgba8 */ && colorType !== 2 /* JsColorType.Rgb8 */) {
+                    transformer = new image_1.Transformer(yield transformer.png());
+                    ({ width, height, colorType } = yield transformer.metadata());
+                }
+                if (colorType !== 3 /* JsColorType.Rgba8 */ && colorType !== 2 /* JsColorType.Rgb8 */) {
+                    throw new TypeError('Cannot convert the given image to rgba8 format.');
+                }
+                let rgb = new Uint8ClampedArray(yield transformer.rawPixels());
+                if (colorType === 2 /* JsColorType.Rgb8 */)
+                    rgb = rgb_to_rgba(rgb);
+                const imageData = {
+                    width,
+                    height,
+                    colorSpace: 'srgb',
+                    data: rgb,
                 };
-                element.onerror = reject;
-                element.src = Buffer.from(data);
+                return imageData;
             });
         },
         toBuffer(imgData, height = imgData.height, width = imgData.width) {
             return __awaiter(this, void 0, void 0, function* () {
-                const canvas = (0, canvas_1.createCanvas)(width, height);
-                canvas.getContext('2d').putImageData(imgData, 0, 0, 0, 0, width, height);
-                return canvas.toBuffer('image/png');
+                return (yield image_1.Transformer.fromRgbaPixels(imgData.data, width, height).crop(0, 0, width, height).png()).buffer;
             });
         },
         preprocessImage(data) {
-            return (0, image_1.preprocessImage)(data, (width, height) => { var _a, _b; return (_b = (_a = (0, canvas_1.createCanvas)(width, height).getContext('2d')) === null || _a === void 0 ? void 0 : _a.createImageData(width, height)) !== null && _b !== void 0 ? _b : null; });
+            return (0, image_2.preprocessImage)(data, (width, height) => ({
+                height,
+                width,
+                colorSpace: 'srgb',
+                data: new Uint8ClampedArray(width * height * 4),
+            }));
         },
     },
 });
 exports.encode = encode;
 exports.decode = decode;
+function rgb_to_rgba(array) {
+    const next = new Uint8ClampedArray((array.length / 3) * 4);
+    for (var old_index = 0, new_index = 0; old_index < array.length; old_index += 3, new_index += 4) {
+        next[new_index] = array[old_index];
+        next[new_index + 1] = array[old_index + 1];
+        next[new_index + 2] = array[old_index + 2];
+        next[new_index + 3] = 255;
+    }
+    if (new_index !== next.length)
+        throw new Error('rgb_to_rgba error');
+    return next;
+}
 //# sourceMappingURL=node.js.map

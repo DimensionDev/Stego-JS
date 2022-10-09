@@ -58,7 +58,6 @@ function bits2str(bits, copies) {
             }
         }
     }
-    console.warn(chars.join(''));
     try {
         return decodeURI(chars.join(''));
     }
