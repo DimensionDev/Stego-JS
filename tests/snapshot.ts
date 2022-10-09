@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises'
 import { toMatchFile } from 'jest-file-snapshot'
 import { join } from 'path'
-import { encode, decode, TransformAlgorithm, GrayscaleAlgorithm, AlgorithmVersion, DEFAULT_MASK } from '../src/node'
+import { encode, decode, TransformAlgorithm, GrayscaleAlgorithm, AlgorithmVersion, DEFAULT_MASK } from '../src/node.js'
 import { expect, test } from 'vitest'
 expect.extend({ toMatchFile })
 

@@ -13,7 +13,7 @@
   "bin": "./esm/cli/cli.js",
   "scripts": {
     "build": "pnpm run build:umd && pnpm run build:dist",
-    "build:dist": "tsc",
+    "build:dist": "tsc -b ./tsconfig.json ./tests/tsconfig.json",
     "build:umd": "rollup -c",
     "ci-build": "pnpm run lint && pnpm test && pnpm run build",
     "lint": "eslint . --ext .ts,.tsx",
@@ -49,5 +49,10 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": []
-  }
+  },
+  "files": [
+    "esm",
+    "!esm/.tsbuildinfo",
+    "umd"
+  ]
 }

@@ -1,5 +1,5 @@
 import replace from '@rollup/plugin-replace'
-import swc from 'rollup-plugin-swc3'
+import { swc, minify } from 'rollup-plugin-swc3'
 
 export default {
   input: 'src/dom.ts',
@@ -12,7 +12,8 @@ export default {
     },
   },
   plugins: [
-    swc({}),
+    swc(),
+    minify(),
     replace({
       'process.env.PLATFORM': JSON.stringify('dom'),
     }),

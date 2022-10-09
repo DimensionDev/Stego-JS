@@ -1,55 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stego JS Example</title>
-  <script src="../umd/dom.js"></script>
-  <style>
-    section {
-      margin: 8px 0
-    }
-
-    input[type="text"],
-    textarea {
-      width: 500px;
-    }
-
-    input[type="radio"] {
-      margin-right: 8px;
-    }
-  </style>
-
-  <script>
-    // the global fr
-    const fr = new FileReader()
-  </script>
-  
-  <script>
-    const openFile = (event) => {
-      const input = event.target
-      const fr2 = new FileReader()
-      fr2.onload = () => {
-        const preview = document.getElementById('imagePreviewer')
-        preview.src = fr2.result
-        preview.style.display = "block"
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stego JS Example</title>
+    <script src="../umd/dom.js"></script>
+    <style>
+      section {
+        margin: 8px 0;
       }
-      fr.readAsArrayBuffer(input.files[0])
-      fr2.readAsDataURL(input.files[0])
-    }
-  </script>
-  <script>
-    const scrollRange = (event) => {
-      document.getElementById('tolerancePreviewer').textContent = event.target.value
-    }
-  </script>
-</head>
-<body>
+
+      input[type='text'],
+      textarea {
+        width: 500px;
+      }
+
+      input[type='radio'] {
+        margin-right: 8px;
+      }
+    </style>
+
+    <script>
+      // the global fr
+      const fr = new FileReader()
+    </script>
+
+    <script>
+      const openFile = (event) => {
+        const input = event.target
+        const fr2 = new FileReader()
+        fr2.onload = () => {
+          const preview = document.getElementById('imagePreviewer')
+          preview.src = fr2.result
+          preview.style.display = 'block'
+        }
+        fr.readAsArrayBuffer(input.files[0])
+        fr2.readAsDataURL(input.files[0])
+      }
+    </script>
+    <script>
+      const scrollRange = (event) => {
+        document.getElementById('tolerancePreviewer').textContent = event.target.value
+      }
+    </script>
+  </head>
+  <body>
     <content>
       <section>
         <input type="file" accept="image/*" onchange="openFile(event)" />
-        <img id="imagePreviewer" alt="A image previewer." style="display: none; max-width: 100px">
+        <img id="imagePreviewer" alt="A image previewer." style="display: none; max-width: 100px" />
       </section>
       <section>
         <span>Alogrithm Version:</span>
@@ -143,35 +143,41 @@
         <span id="tolerancePreviewer"></span>
       </section>
       <section>
-        <input id="password" type="text" placeholder="Specify the seed text for generating random encoding position when using 'FFT1D'." value="Hello World" />
+        <input
+          id="password"
+          type="text"
+          placeholder="Specify the seed text for generating random encoding position when using 'FFT1D'."
+          value="Hello World"
+        />
       </section>
       <section>
-        <textarea id="message" placeholder="Specify the message to be encoded." rows="10" cols="60">Ethereum is the community-run technology powering the cryptocurrency ether (ETH) and thousands of decentralized applications.</textarea>
+        <textarea id="message" placeholder="Specify the message to be encoded." rows="10" cols="60">
+Ethereum is the community-run technology powering the cryptocurrency ether (ETH) and thousands of decentralized applications.</textarea
+        >
       </section>
       <section>
         <button id="encode">Encode</button>
         <button id="decode">Decode</button>
       </section>
       <section>
-        <img id="resultPreviewer" alt="The result image." style="display: none;" />
-        <textarea id="messagePreviewer" style="display: none;"></textarea>
+        <img id="resultPreviewer" alt="The result image." style="display: none" />
+        <textarea id="messagePreviewer" style="display: none"></textarea>
       </section>
     </content>
 
     <script>
       function getOptions() {
-          return {
-            version: Array.from(document.getElementsByName('algorithm')).find(x => x.checked).value,
-            transformAlgorithm: Array.from(document.getElementsByName('transformation')).find(x => x.checked).value,
-            grayscaleAlgorithm: Array.from(document.getElementsByName('grayscale')).find(x => x.checked).value,
-            size: Number.parseInt(document.getElementById('block').value, 10),
-            copies: Number.parseInt(document.getElementById('copies').value, 10),
-            tolerance: Number.parseInt(document.getElementById('tolerance').value, 10),
-            pass: document.getElementById('password').value,
-            text: document.getElementById('message').value
-          }
+        return {
+          version: Array.from(document.getElementsByName('algorithm')).find((x) => x.checked).value,
+          transformAlgorithm: Array.from(document.getElementsByName('transformation')).find((x) => x.checked).value,
+          grayscaleAlgorithm: Array.from(document.getElementsByName('grayscale')).find((x) => x.checked).value,
+          size: Number.parseInt(document.getElementById('block').value, 10),
+          copies: Number.parseInt(document.getElementById('copies').value, 10),
+          tolerance: Number.parseInt(document.getElementById('tolerance').value, 10),
+          pass: document.getElementById('password').value,
+          text: document.getElementById('message').value,
+        }
       }
-
     </script>
 
     <script>
@@ -182,40 +188,40 @@
 
         const result = await stego.encode(fr.result, new Uint8Array(stego.DEFAULT_MASK).buffer, {
           text: message,
-          ...options
+          ...options,
         })
 
         const blob = new Blob([result], {
-          type: 'image/png'
+          type: 'image/png',
         })
-        
+
         const preview = document.getElementById('resultPreviewer')
         preview.src = URL.createObjectURL(blob)
-        preview.style.display = "block"
+        preview.style.display = 'block'
       })
     </script>
 
-<script>
-  document.getElementById('decode').addEventListener('click', async () => {
-    const options = getOptions()
+    <script>
+      document.getElementById('decode').addEventListener('click', async () => {
+        const options = getOptions()
 
-    console.log(options)
+        console.log(options)
 
-    const result = await stego.decode(fr.result, new Uint8Array(stego.DEFAULT_MASK).buffer, {
-      text: message,
-      ...options
-    })
+        const result = await stego.decode(fr.result, new Uint8Array(stego.DEFAULT_MASK).buffer, {
+          text: message,
+          ...options,
+        })
 
-    console.log(result)
+        console.log(result)
 
-    const blob = new Blob([result], {
-      type: 'image/png'
-    })
-    
-    const preview = document.getElementById('messagePreviewer')
-    preview.textContent = result
-    preview.style.display = "block"
-  })
-</script>
-</body>
+        const blob = new Blob([result], {
+          type: 'image/png',
+        })
+
+        const preview = document.getElementById('messagePreviewer')
+        preview.textContent = result
+        preview.style.display = 'block'
+      })
+    </script>
+  </body>
 </html>
