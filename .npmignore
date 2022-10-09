@@ -1,7 +1,5 @@
-!/cjs
 !/esm
 !/umd
 /src/__test__
-/cjs/__test__
 /esm/__test__
 /.*

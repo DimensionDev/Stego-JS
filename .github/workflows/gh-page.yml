@@ -24,7 +24,6 @@ jobs:
 
       - run: mkdir dist
       - run: cp -r example ./dist
-      - run: cp -r cjs ./dist
       - run: cp -r esm ./dist
       - run: cp -r umd ./dist
 
