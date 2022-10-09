@@ -2,8 +2,8 @@
   "compilerOptions": {
     "lib": ["ES2015", "ESNext.Array", "DOM"],
     "target": "ES2015",
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "allowJs": true,
     "esModuleInterop": true,
@@ -14,7 +14,8 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "cjs"
+    "outDir": "esm",
+    "skipLibCheck": true
   },
   "include": ["src"]
 }

@@ -1,5 +1,5 @@
-import { Options } from './stego-params'
-import { Locator, loc2idx, loc2coord } from './locator'
+import { Options } from './stego-params.js'
+import { Locator, loc2idx, loc2coord } from './locator.js'
 
 export function isBlockVisibleAt({ data }: ImageData, loc: Locator, options: Options) {
   const { size } = options

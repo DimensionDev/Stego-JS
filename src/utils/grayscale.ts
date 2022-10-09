@@ -1,4 +1,4 @@
-import { clamp } from './helper'
+import { clamp } from './helper.js'
 
 // more grayscale algorithm:
 // http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/

@@ -1,10 +1,16 @@
-import { Decoder, Encoder } from '../utils/expose'
-import { AlgorithmVersion } from '../utils/stego-params'
-import * as v1 from '../v1'
-import * as v2 from '../v2'
-import { Payload } from './types'
+import { Decoder, Encoder } from '../utils/expose.js'
+import { AlgorithmVersion } from '../utils/stego-params.js'
+import * as v1 from '../v1/index.js'
+import * as v2 from '../v2/index.js'
+import { Payload } from './types.js'
 
-const algoithms: Record<AlgorithmVersion, { encode: Encoder; decode: Decoder }> = {
+const algoithms: Record<
+  AlgorithmVersion,
+  {
+    encode: Encoder
+    decode: Decoder
+  }
+> = {
   [AlgorithmVersion.V1]: v1,
   [AlgorithmVersion.V2]: v2,
 }

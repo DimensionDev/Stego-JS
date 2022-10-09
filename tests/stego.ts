@@ -3,7 +3,7 @@ import { rand, shuffleGroupBy3, unshuffleGroupBy3 } from '../src/utils/helper'
 import { Options } from '../src/utils/stego-params'
 import { TransformAlgorithm } from '../src/utils/transform'
 import { Bit, bits2param, param2bits } from '../src/v2/bit'
-import { createOptions, decodeBitbyBlock, encodeBitbyBlock, normalizeBlock } from './utils'
+import { createOptions, decodeBitbyBlock, encodeBitbyBlock, normalizeBlock } from './utils.js'
 import { expect, test } from 'vitest'
 
 const testAlgs = [

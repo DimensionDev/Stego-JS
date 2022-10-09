@@ -1,4 +1,4 @@
-import { AlgorithmVersion, DecodeOptions, EncodeOptions } from './stego-params'
+import { AlgorithmVersion, DecodeOptions, EncodeOptions } from './stego-params.js'
 
 export interface EncodedImageData {
   data: ImageData
@@ -16,7 +16,13 @@ export interface Methods {
 }
 
 interface ProxyOptions {
-  algoithms: Record<AlgorithmVersion, { encode: Encoder; decode: Decoder }>
+  algoithms: Record<
+    AlgorithmVersion,
+    {
+      encode: Encoder
+      decode: Decoder
+    }
+  >
   methods: Methods
 }
 

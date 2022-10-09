@@ -1,6 +1,6 @@
-import { Options } from '../utils/stego-params'
-import { getPos, Accumulator } from './position'
-import { Locator } from '../utils/locator'
+import { Options } from '../utils/stego-params.js'
+import { getPos, Accumulator } from './position.js'
+import { Locator } from '../utils/locator.js'
 
 export type Bit = 0 | 1
 

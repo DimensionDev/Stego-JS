@@ -1,10 +1,10 @@
-import { clamp } from './helper'
-import { Options } from './stego-params'
-import { Locator, loc2idx, loc2coord } from './locator'
+import { clamp } from './helper.js'
+import { Options } from './stego-params.js'
+import { Locator, loc2idx, loc2coord } from './locator.js'
 import { lanczos } from '@rgba-image/lanczos'
-import { MAX_WIDTH } from '../constant'
+import { MAX_WIDTH } from '../constant.js'
 
-import { transform } from '../utils/transform'
+import { transform } from '../utils/transform.js'
 
 export type Pixel = [number, number, number, number]
 
@@ -121,7 +121,6 @@ export function updateImgByPixelChannelAt(imgData: ImageData, loc: number, chann
 
 export function updateImgByPixelAt(imgData: ImageData, options: Options, pixel: Pixel, loc: number) {
   const { data } = imgData
-
   ;[data[loc], data[loc + 1], data[loc + 2], data[loc + 3]] = pixel
 }
 

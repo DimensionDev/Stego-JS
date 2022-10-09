@@ -1,4 +1,4 @@
-import { DecodeOptions, EncodeOptions } from '../utils/stego-params'
+import { DecodeOptions, EncodeOptions } from '../utils/stego-params.js'
 
 export type Payload = EncodePayload | DecodePayload
 

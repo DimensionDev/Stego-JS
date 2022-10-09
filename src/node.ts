@@ -1,14 +1,14 @@
 import { JsColorType, Transformer } from '@napi-rs/image'
-import { proxy } from './utils/expose'
-import { imgType } from './utils/helper'
-import { preprocessImage } from './utils/image'
-import { AlgorithmVersion } from './utils/stego-params'
-import * as v1 from './v1'
-import * as v2 from './v2'
+import { proxy } from './utils/expose.js'
+import { imgType } from './utils/helper.js'
+import { preprocessImage } from './utils/image.js'
+import { AlgorithmVersion } from './utils/stego-params.js'
+import * as v1 from './v1/index.js'
+import * as v2 from './v2/index.js'
 
 export { imgType as getImageType }
-export * from './utils/types'
-export * from './constant'
+export * from './utils/types.js'
+export * from './constant.js'
 
 const { encode, decode } = proxy({
   algoithms: { [AlgorithmVersion.V1]: v1, [AlgorithmVersion.V2]: v2 },

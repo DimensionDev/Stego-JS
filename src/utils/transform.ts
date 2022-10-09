@@ -1,7 +1,7 @@
 import FFT from '../fft/index.js'
-import * as DCT from '../dct'
-import { fastDctLee } from '../dct/fastdct'
-import { Options } from './stego-params'
+import * as DCT from '../dct/index.js'
+import { fastDctLee } from '../dct/fastdct.js'
+import { Options } from './stego-params.js'
 
 export enum TransformAlgorithm {
   FFT1D = 'FFT1D',

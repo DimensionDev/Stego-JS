@@ -1,5 +1,5 @@
-import { GrayscaleAlgorithm } from './grayscale'
-import { TransformAlgorithm } from './transform'
+import { GrayscaleAlgorithm } from './grayscale.js'
+import { TransformAlgorithm } from './transform.js'
 
 export enum AlgorithmVersion {
   V1 = 'V1',

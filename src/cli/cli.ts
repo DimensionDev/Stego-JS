@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import meow from 'meow'
 import { createReadStream } from 'fs'
-import { rs2Buf } from '../utils/helper'
-import { encode, decode, AlgorithmVersion } from '../node'
+import { rs2Buf } from '../utils/helper.js'
+import { encode, decode, AlgorithmVersion } from '../node.js'
 import {
   CLI_NAME,
   DEFAULT_COPIES,
@@ -13,8 +13,8 @@ import {
   DEFAULT_EXHAUST_PIXELS,
   DEFAULT_FAKE_MASK_PIXELS,
   DEFAULT_ALGORITHM_VERSION,
-} from '../constant'
-import { normalizeFlags, validateFlags, flags2Options, flags } from './flag'
+} from '../constant.js'
+import { normalizeFlags, validateFlags, flags2Options, flags } from './flag.js'
 
 const cli = meow(
   `Usage
@@ -23,7 +23,7 @@ const cli = meow(
 Options
   -h, --help             Print help message.
   -v, --version          Print version message.
-  
+
   -e, --encode           Encode message into given image.
   -d, --decode           Decode message from given image.
 
@@ -57,6 +57,7 @@ Examples
   {
     flags,
     inferType: true,
+    importMeta: import.meta,
   },
 )
 

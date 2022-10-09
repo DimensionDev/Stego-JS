@@ -1,8 +1,8 @@
-import { EncodeOptions } from '../utils/stego-params'
-import { encodeImg } from './stego'
-import { cropImg } from '../utils/image'
+import { EncodeOptions } from '../utils/stego-params.js'
+import { encodeImg } from './stego.js'
+import { cropImg } from '../utils/image.js'
 
-export { decodeImg as decode } from './stego'
+export { decodeImg as decode } from './stego.js'
 
 export async function encode(imgData: ImageData, maskData: ImageData, options: EncodeOptions) {
   const { width, height } = imgData

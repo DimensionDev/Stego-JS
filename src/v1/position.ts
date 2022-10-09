@@ -1,7 +1,7 @@
-import { Options } from '../utils/stego-params'
-import { TransformAlgorithm } from '../utils/transform'
-import { hashCode, squareCircleIntersect } from '../utils/helper'
-import { Locator } from '../utils/locator'
+import { Options } from '../utils/stego-params.js'
+import { TransformAlgorithm } from '../utils/transform.js'
+import { hashCode, squareCircleIntersect } from '../utils/helper.js'
+import { Locator } from '../utils/locator.js'
 
 export interface Accumulator {
   /**

@@ -1,6 +1,6 @@
-import { GrayscaleAlgorithm, grayscale, narrow } from '../utils/grayscale'
-import { transform, inverseTransform } from '../utils/transform'
-import { EncodeOptions, DecodeOptions } from '../utils/stego-params'
+import { GrayscaleAlgorithm, grayscale, narrow } from '../utils/grayscale.js'
+import { transform, inverseTransform } from '../utils/transform.js'
+import { EncodeOptions, DecodeOptions } from '../utils/stego-params.js'
 import {
   cropImg,
   updateImgByBlock,
@@ -8,7 +8,7 @@ import {
   visitImgByBlock,
   updateImgByPixelAt,
   updateImgByPixelChannelAt,
-} from '../utils/image'
+} from '../utils/image.js'
 import {
   mergeBits,
   createBits,
@@ -20,12 +20,12 @@ import {
   param2bits,
   Bit,
   bits2param,
-} from './bit'
-import { createAcc, getPos } from './position'
-import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask'
-import { rand, shuffleGroupBy3, unshuffleGroupBy3 } from '../utils/helper'
-import { loc2idx, loc2coord } from '../utils/locator'
-import { DEFAULT_PARAM_COPIES, SEED } from '../constant'
+} from './bit.js'
+import { createAcc, getPos } from './position.js'
+import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask.js'
+import { rand, shuffleGroupBy3, unshuffleGroupBy3 } from '../utils/helper.js'
+import { loc2idx, loc2coord } from '../utils/locator.js'
+import { DEFAULT_PARAM_COPIES, SEED } from '../constant.js'
 
 function getCharfromIdx(idx: number, copies: number, text: string): string {
   const charId = Math.floor(idx / (8 * copies))
@@ -41,12 +41,7 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
   const sizeOfBlocks = (width * height * 3) / (size * size)
   const textBits = str2bits(text, copies)
   const paramsBits = param2bits(options)
-  const bits = mergeBits(
-    createBits(sizeOfBlocks),
-    paramsBits,
-    textBits,
-    createBits(8 * copies).fill(1), // the end of message
-  )
+  const bits = mergeBits(createBits(sizeOfBlocks), paramsBits, textBits, createBits(8 * copies).fill(1))
 
   const encodeLen = textBits.length + 8 * copies
 
@@ -184,7 +179,10 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
 
 export async function decodeImg(imgData: ImageData, maskData: ImageData, options: DecodeOptions) {
   const { size, transformAlgorithm } = options
-  const richBits: { bit: Bit; diff: number }[] = []
+  const richBits: {
+    bit: Bit
+    diff: number
+  }[] = []
   const acc = createAcc(options)
   const im = new Array(size * size)
 

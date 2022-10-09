@@ -1,7 +1,7 @@
 import { resolve as resolvePath } from 'path'
-import { EncodeOptions, DecodeOptions, AlgorithmVersion } from '../utils/stego-params'
-import { GrayscaleAlgorithm } from '../utils/grayscale'
-import { TransformAlgorithm } from '../utils/transform'
+import { EncodeOptions, DecodeOptions, AlgorithmVersion } from '../utils/stego-params.js'
+import { GrayscaleAlgorithm } from '../utils/grayscale.js'
+import { TransformAlgorithm } from '../utils/transform.js'
 import {
   DEFAULT_ALGORITHM_VERSION,
   DEFAULT_COPIES,
@@ -13,7 +13,7 @@ import {
   TOLERANCE_NOT_SET,
   DEFAULT_TOLERANCE,
   MAX_TOLERANCE,
-} from '../constant'
+} from '../constant.js'
 import { TypedFlags } from 'meow'
 
 export interface Flags {

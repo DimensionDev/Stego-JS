@@ -1,7 +1,7 @@
-import { Options } from '../utils/stego-params'
-import { getPos, Accumulator } from './position'
-import { TransformAlgorithm } from '../utils/transform'
-import { DEFAULT_PARAM_COPIES } from '../constant'
+import { Options } from '../utils/stego-params.js'
+import { getPos, Accumulator } from './position.js'
+import { TransformAlgorithm } from '../utils/transform.js'
+import { DEFAULT_PARAM_COPIES } from '../constant.js'
 
 export type Bit = 0 | 1
 
@@ -143,7 +143,14 @@ export function str2bits(text: string, copies: number): Bit[] {
   return codes2bits(codes, copies)
 }
 
-function correctCharCode(rawCode: { bit: Bit; diff: number }[][], charCodes: number[], verbose?: boolean): number {
+function correctCharCode(
+  rawCode: {
+    bit: Bit
+    diff: number
+  }[][],
+  charCodes: number[],
+  verbose?: boolean,
+): number {
   if (verbose) {
     const bits = rawCode.map((bits) => bits.map((richBits) => richBits.bit))
     const diffs = rawCode.map((bits) => bits.map((richBits) => richBits.diff))
@@ -159,8 +166,13 @@ function correctCharCode(rawCode: { bit: Bit; diff: number }[][], charCodes: num
 
       if (nBit1 === 0) return res
       if (nBit1 !== copies) {
-        const conditionalSum = (richBits: { bit: Bit; diff: number }[], v: Bit) =>
-          richBits.reduce((res, e) => (e.bit === v ? res + e.diff : res), 0)
+        const conditionalSum = (
+          richBits: {
+            bit: Bit
+            diff: number
+          }[],
+          v: Bit,
+        ) => richBits.reduce((res, e) => (e.bit === v ? res + e.diff : res), 0)
         const diff1 = Math.abs(conditionalSum(richBits, 1)) / nBit1
         const diff0 = Math.abs(conditionalSum(richBits, 0)) / (copies - nBit1)
         if (verbose) {
@@ -207,7 +219,13 @@ function correctCharCode(rawCode: { bit: Bit; diff: number }[][], charCodes: num
         return byte.map((n) => Number(n))
       }
 
-      const diff = (rawCode: { bit: Bit; diff: number }[][], comp: number) => {
+      const diff = (
+        rawCode: {
+          bit: Bit
+          diff: number
+        }[][],
+        comp: number,
+      ) => {
         const compBits = dec2byte(comp)
         let bitDiff = 0
         let paramDiff = 0
@@ -261,12 +279,25 @@ function correctCharCode(rawCode: { bit: Bit; diff: number }[][], charCodes: num
   return code
 }
 
-export function bits2str(richBits: { bit: Bit; diff: number }[], copies: number, verbose?: boolean) {
+export function bits2str(
+  richBits: {
+    bit: Bit
+    diff: number
+  }[],
+  copies: number,
+  verbose?: boolean,
+) {
   let k = 128
   let tempCharCode = 0
-  const tempRawBits: { bit: Bit; diff: number }[][] = []
+  const tempRawBits: {
+    bit: Bit
+    diff: number
+  }[][] = []
   const charCodes: number[] = []
-  const candidates: { bit: Bit; diff: number }[] = []
+  const candidates: {
+    bit: Bit
+    diff: number
+  }[] = []
 
   for (let i = 0; i < richBits.length; i += 1) {
     candidates.push(richBits[i])
@@ -398,7 +429,6 @@ export function setBit(block: number[], bit: Bit, options: Options, tolerance: n
       : t0 < 0.5 * tolerance
       ? 1.2 * tolerance
       : tolerance
-
   ;[v1, v2] = v1 < v2 ? [v1 - t / 2, v2 + t / 2] : [v1 + t / 2, v2 - t / 2]
 
   if (options.verbose) console.warn('encoded value: ', v1, v2)
