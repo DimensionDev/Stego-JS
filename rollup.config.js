@@ -1,4 +1,4 @@
-import replace from 'rollup-plugin-replace'
+import replace from '@rollup/plugin-replace'
 import swc from 'rollup-plugin-swc3'
 
 export default {
