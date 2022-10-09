@@ -11,6 +11,42 @@ const snapshot2 = join(__dirname, './__file__snapshot__/v2-snapshot-0.png')
 const text =
   'Ethereum is the community-run technology powering the cryptocurrency ether (ETH) and thousands of decentralized applications.'
 
+test('old version', async () => {
+  const decodedText = await decode(
+    await readFile(join(__dirname, './__file__snapshot__/old-58b44e37-baaa-477a-bb10-0cb0102adc7d.png')),
+    mask,
+    {
+      size: 8,
+      copies: 3,
+      tolerance: 241,
+      transformAlgorithm: TransformAlgorithm.FFT1D,
+      pass: 'Hello World',
+      version: AlgorithmVersion.V1,
+    },
+  )
+  expect(decodedText).toMatchInlineSnapshot(
+    `"Ethereum is the community-run technology powering the cryptocurrency ether (ETH) and thousands of decentralized applications."`,
+  )
+})
+
+test('old version', async () => {
+  const decodedText = await decode(
+    await readFile(join(__dirname, './__file__snapshot__/old-b04e0423-5ced-4d77-8275-a56a870c1b81.png')),
+    mask,
+    {
+      size: 8,
+      copies: 3,
+      tolerance: 241,
+      transformAlgorithm: TransformAlgorithm.FFT2D,
+      pass: 'Hello World',
+      version: AlgorithmVersion.V2,
+    },
+  )
+  expect(decodedText).toMatchInlineSnapshot(
+    `"Ethereum is the community-run technology powering the cryptocurrency ether (ETH) and thousands of decentralized applications."`,
+  )
+})
+
 test('v1', async () => {
   const outImage = await encode(await original, mask, {
     size: 8,
@@ -28,7 +64,7 @@ test('v1', async () => {
   })
   // Note: the algorithm currently is non-deterministic.
   // TODO: refactor to move random source out.
-  // expect(outImage).toMatchFile(snapshot1)
+  // expect(new Uint8Array(outImage)).toMatchFile(snapshot1)
 
   const decodedText = await decode(outImage, mask, {
     size: 8,
@@ -58,7 +94,7 @@ test('v2', async () => {
   })
   // Note: the algorithm currently is non-deterministic.
   // TODO: refactor to move random source out.
-  // expect(outImage).toMatchFile(snapshot2)
+  // expect(new Uint8Array(outImage)).toMatchFile(snapshot2)
 
   const decodedText = await decode(outImage, mask, {
     size: 8,
