@@ -1,6 +1,7 @@
 {
   "name": "@dimensiondev/stego-js",
   "version": "0.13.0",
+  "packageManager": "pnpm@7.13.2",
   "description": "Steganography, based on frequency domain implemented in JavaScript.",
   "repository": "https://github.com/DimensionDev/Stego-JS",
   "license": "MIT",
@@ -10,13 +11,13 @@
   "browser": "./cjs/dom.js",
   "bin": "./cjs/cli/cli.js",
   "scripts": {
-    "prebuild": "npm run clean",
-    "build": "npm run build:umd && npm run build:dist",
+    "prebuild": "pnpm run clean",
+    "build": "pnpm run build:umd && pnpm run build:dist",
     "build:dist": "tsc && tsc -p tsconfig.esm.json",
     "build:umd": "rollup -c",
     "clean": "rimraf umd cjs esm",
     "lint": "eslint . --ext .ts,.tsx",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm run build",
     "test": "jest src --silent"
   },
   "dependencies": {

@@ -8,17 +8,21 @@ jobs:
   publish:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2-beta
+       - uses: actions/checkout@v2
+       - uses: pnpm/action-setup@v2
+       - uses: actions/setup-node@v2
+         with:
+           node-version: '18'
+           cache: 'pnpm'
       - uses: DimensionDev/github-token-action@latest
         with:
           registry: true
-      - run: npm ci
-      - run: npx tsc --noEmit
-      - run: npm run lint
-      - run: npm test
-      - name: npm publish
+      - run: pnpm install
+      - run: pnpx tsc --noEmit
+      - run: pnpm run lint
+      - run: pnpm test
+      - name: pnpm publish
         run: |
           VERSION=$(jq -r '.version' package.json)
-          npm --no-git-tag-version version "$VERSION-$BUILD_VERSION"
-          npm publish
+          pnpm --no-git-tag-version version "$VERSION-$BUILD_VERSION"
+          pnpm publish
