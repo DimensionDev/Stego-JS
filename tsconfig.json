@@ -16,10 +16,5 @@
     "sourceMap": true,
     "outDir": "cjs"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/__tests__"
-  ]
+  "include": ["src"]
 }

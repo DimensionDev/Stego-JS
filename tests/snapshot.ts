@@ -1,7 +1,8 @@
 import { readFile } from 'fs/promises'
 import { toMatchFile } from 'jest-file-snapshot'
 import { join } from 'path'
-import { encode, decode, TransformAlgorithm, GrayscaleAlgorithm, AlgorithmVersion, DEFAULT_MASK } from '../../node'
+import { encode, decode, TransformAlgorithm, GrayscaleAlgorithm, AlgorithmVersion, DEFAULT_MASK } from '../src/node'
+import { expect, test } from 'vitest'
 expect.extend({ toMatchFile })
 
 const original = readFile(join(__dirname, './original.png'))

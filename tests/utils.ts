@@ -1,9 +1,9 @@
-import { DEFAULT_COPIES, DEFAULT_SIZE, DEFAULT_TOLERANCE } from '../../constant'
-import { clamp } from '../../utils/helper'
-import { AlgorithmVersion, Options } from '../../utils/stego-params'
-import { inverseTransform, transform, TransformAlgorithm } from '../../utils/transform'
-import { Bit, getBit as getBitV2, setBit as setBitV2 } from '../../v2/bit'
-import { createAcc } from '../../v2/position'
+import { DEFAULT_COPIES, DEFAULT_SIZE, DEFAULT_TOLERANCE } from '../src/constant'
+import { clamp } from '../src/utils/helper'
+import { AlgorithmVersion, Options } from '../src/utils/stego-params'
+import { inverseTransform, transform, TransformAlgorithm } from '../src/utils/transform'
+import { Bit, getBit as getBitV2, setBit as setBitV2 } from '../src/v2/bit'
+import { createAcc } from '../src/v2/position'
 
 export function createOptions(transformAlgorithm: TransformAlgorithm) {
   return {

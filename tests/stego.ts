@@ -1,9 +1,10 @@
-import { SEED } from '../../constant'
-import { rand, shuffleGroupBy3, unshuffleGroupBy3 } from '../../utils/helper'
-import { Options } from '../../utils/stego-params'
-import { TransformAlgorithm } from '../../utils/transform'
-import { Bit, bits2param, param2bits } from '../../v2/bit'
+import { SEED } from '../src/constant'
+import { rand, shuffleGroupBy3, unshuffleGroupBy3 } from '../src/utils/helper'
+import { Options } from '../src/utils/stego-params'
+import { TransformAlgorithm } from '../src/utils/transform'
+import { Bit, bits2param, param2bits } from '../src/v2/bit'
 import { createOptions, decodeBitbyBlock, encodeBitbyBlock, normalizeBlock } from './utils'
+import { expect, test } from 'vitest'
 
 const testAlgs = [
   TransformAlgorithm.FFT1D,
