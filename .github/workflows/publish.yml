@@ -6,23 +6,23 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
         with:
-          node-version: '18'
-          cache: 'pnpm'
+          fetch-depth: 0
       - uses: DimensionDev/github-token-action@latest
         with:
           registry: true
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
       - run: pnpm install
-      - run: npx tsc --noEmit
-      - run: pnpm run lint
-      - run: pnpm test
-      - name: pnpm publish
-        run: |
-          VERSION=$(jq -r '.version' package.json)
-          npm --no-git-tag-version version "$VERSION-$BUILD_VERSION"
-          npm publish
+      - run: npx tsc
+      - uses: changesets/action@v1
+        with:
+          publish: pnpm run publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
