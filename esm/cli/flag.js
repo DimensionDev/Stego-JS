@@ -92,7 +92,13 @@ export const flags = {
 };
 export function normalizeFlags(rawFlags) {
     const { encode, decode, mask, tolerance } = rawFlags;
-    return Object.assign(Object.assign({}, rawFlags), { tolerance: tolerance === TOLERANCE_NOT_SET ? DEFAULT_TOLERANCE[rawFlags.algorithmVersion].transform : tolerance, encode: encode && !decode, decode, mask: mask ? resolvePath(process.cwd(), mask) : '' });
+    return {
+        ...rawFlags,
+        tolerance: tolerance === TOLERANCE_NOT_SET ? DEFAULT_TOLERANCE[rawFlags.algorithmVersion].transform : tolerance,
+        encode: encode && !decode,
+        decode,
+        mask: mask ? resolvePath(process.cwd(), mask) : '',
+    };
 }
 export function validateFlags({ algorithmVersion, encode, message, size, copies, tolerance, grayscale, transform, }) {
     const radix = Math.log(size) / Math.log(2);

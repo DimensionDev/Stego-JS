@@ -1,6 +1,6 @@
-import FFT from '../fft/index.js';
+import * as FFT from '../fft/index.js';
 import * as DCT from '../dct/index.js';
-import { fastDctLee } from '../dct/fastdct.js';
+import * as fastDctLee from '../dct/fastdct.js';
 export var TransformAlgorithm;
 (function (TransformAlgorithm) {
     TransformAlgorithm["FFT1D"] = "FFT1D";
