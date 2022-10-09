@@ -19,7 +19,7 @@ jobs:
         with:
           registry: true
       - run: pnpm install
-      - run: pnpx tsc --noEmit
+      - run: npx tsc --noEmit
       - run: pnpm run build
 
       - run: mkdir dist
