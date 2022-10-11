@@ -1,11 +1,3 @@
-export function rs2Buf(rs) {
-    return new Promise((resolve, reject) => {
-        const bufs = [];
-        rs.on('data', (c) => bufs.push(c));
-        rs.on('end', () => resolve(Buffer.concat(bufs)));
-        rs.on('error', (err) => reject(err));
-    });
-}
 export function rand(min, max) {
     return Math.round(Math.random() * max + min);
 }
@@ -38,37 +30,27 @@ export function hashCode(input, mod, inArray) {
     inArray[index] = 1;
     return [index, String(code)];
 }
-export function shuffleGroupBy3(nums, seed, unshuffle = false) {
-    const shuffleHelper = new Array(nums.length / 3).fill(0).map((v, i) => i);
+export function shuffleGroupBy3(numbers, seed, unshuffle = false) {
+    const shuffleHelper = new Array(numbers.length / 3).fill(0).map((v, i) => i);
     shuffle(shuffleHelper, seed, unshuffle);
-    const shuffleRes = new Array(nums.length)
+    const shuffleRes = new Array(numbers.length)
         .fill(0)
-        .map((v, i) => nums[3 * shuffleHelper[Math.floor(i / 3)] + (i % 3)]);
-    nums.forEach((v, i) => {
-        nums[i] = shuffleRes[i];
+        .map((v, i) => numbers[3 * shuffleHelper[Math.floor(i / 3)] + (i % 3)]);
+    numbers.forEach((v, i) => {
+        numbers[i] = shuffleRes[i];
     });
 }
-export function unshuffleGroupBy3(nums, seed) {
-    return shuffleGroupBy3(nums, seed, true);
+export function unshuffleGroupBy3(numbers, seed) {
+    return shuffleGroupBy3(numbers, seed, true);
 }
-export function shuffle(nums, seed, unshuffle = false) {
-    const swap = (a, b) => ([nums[a], nums[b]] = [nums[b], nums[a]]);
-    for (let i = unshuffle ? nums.length - 1 : 0; (unshuffle && i >= 0) || (!unshuffle && i < nums.length); i += unshuffle ? -1 : 1) {
-        swap(seed[i % seed.length] % nums.length, i);
+export function shuffle(numbers, seed, unshuffle = false) {
+    const swap = (a, b) => {
+        ;
+        [numbers[a], numbers[b]] = [numbers[b], numbers[a]];
+    };
+    for (let i = unshuffle ? numbers.length - 1 : 0; (unshuffle && i >= 0) || (!unshuffle && i < numbers.length); i += unshuffle ? -1 : 1) {
+        swap(seed[i % seed.length] % numbers.length, i);
     }
-}
-export function unshuffle(nums, seed) {
-    return shuffle(nums, seed, true);
-}
-export function rgb2yuv(r, g, b) {
-    return [
-        (77 / 256) * r + (150 / 256) * g + (29 / 256) * b,
-        -(44 / 256) * r - (87 / 256) * g + (131 / 256) * b + 128,
-        (131 / 256) * r - (110 / 256) * g - (21 / 256) * b + 128,
-    ];
-}
-export function yuv2rgb(y, cb, cr) {
-    return [y + 1.4075 * (cr - 128), y - 0.3455 * (cb - 128) - 0.7169 * (cr - 128), y + 1.779 * (cb - 128)];
 }
 export function filterIndices(size, predicator) {
     const indices = [];
@@ -79,20 +61,6 @@ export function filterIndices(size, predicator) {
     }
     return indices;
 }
-export function squareTopLeftCircleExclude(size, radius) {
-    return filterIndices(size, (i) => {
-        const x = Math.floor(i / size);
-        const y = i % size;
-        return Math.sqrt(y * y + x * x) > radius;
-    });
-}
-export function squareBottomRightCircleExclude(size, radius) {
-    return filterIndices(size, (i) => {
-        const x = Math.floor(i / size);
-        const y = i % size;
-        return Math.sqrt(Math.pow(size - y - 1, 2) + Math.pow(size - x - 1, 2)) > radius;
-    });
-}
 export function squareCircleIntersect(size, radius) {
     const mid = (size + 1) / 2 - 1;
     return filterIndices(size, (i) => {
@@ -101,13 +69,13 @@ export function squareCircleIntersect(size, radius) {
         return Math.sqrt(Math.pow(mid - x, 2) + Math.pow(mid - y, 2)) <= radius;
     });
 }
-export function isJPEG(buf) {
+function isJPEG(buf) {
     if (!buf || buf.length < 3) {
         return false;
     }
     return buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
 }
-export function isPNG(buf) {
+function isPNG(buf) {
     if (!buf || buf.length < 8) {
         return false;
     }
@@ -120,7 +88,7 @@ export function isPNG(buf) {
         buf[6] === 0x1a &&
         buf[7] === 0x0a);
 }
-export function imgType(buf) {
+export function getImageType(buf) {
     if (isJPEG(buf)) {
         return 'image/jpeg';
     }

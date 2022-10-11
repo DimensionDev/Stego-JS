@@ -1,26 +1,18 @@
-import { AlgorithmVersion, DecodeOptions, EncodeOptions } from './stego-params.js';
+import { DecodeOptions, EncodeOptions } from './stego-params.js';
 export interface EncodedImageData {
-    data: ImageData;
-    height: number;
-    width: number;
+    readonly data: ImageData;
+    readonly height: number;
+    readonly width: number;
 }
-export declare type Encoder = (imgData: ImageData, maskData: ImageData, options: EncodeOptions) => Promise<EncodedImageData>;
-export declare type Decoder = (imgData: ImageData, maskData: ImageData, options: DecodeOptions) => Promise<string>;
-export interface Methods {
-    toImageData(data: ArrayBuffer): Promise<ImageData>;
-    toBuffer(imgData: ImageData, height?: number, width?: number): Promise<ArrayBuffer>;
+export declare type Encoder = (imgData: ImageData, maskData: Uint8ClampedArray, options: EncodeOptions) => Promise<EncodedImageData>;
+export declare type Decoder = (imgData: ImageData, maskData: Uint8ClampedArray, options: DecodeOptions) => Promise<string>;
+export interface IO {
+    toImageData(data: ArrayBufferLike | ArrayLike<number>): Promise<ImageData>;
+    toPNG(imgData: ImageData, height?: number, width?: number): Promise<Uint8Array>;
     preprocessImage(data: ImageData): ImageData;
 }
-interface ProxyOptions {
-    algoithms: Record<AlgorithmVersion, {
-        encode: Encoder;
-        decode: Decoder;
-    }>;
-    methods: Methods;
-}
-export declare function proxy({ algoithms, methods }: ProxyOptions): {
-    encode(image: ArrayBuffer, mask: ArrayBuffer, options: EncodeOptions): Promise<ArrayBuffer>;
+export declare function createAPI({ preprocessImage, toPNG: toBuffer, toImageData }: IO): {
+    encode(image: ArrayBuffer, mask: ArrayBuffer, options: EncodeOptions): Promise<Uint8Array>;
     decode(image: ArrayBuffer, mask: ArrayBuffer, options: DecodeOptions): Promise<string>;
 };
-export {};
 //# sourceMappingURL=expose.d.ts.map

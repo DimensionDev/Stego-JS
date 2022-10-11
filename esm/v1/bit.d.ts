@@ -6,6 +6,6 @@ export declare function str2bits(text: string, copies: number): Bit[];
 export declare function bits2str(bits: Bit[], copies: number): string;
 export declare function mergeBits(dest: Bit[], ...src: Bit[][]): Bit[];
 export declare function createBits(size: number): Bit[];
-export declare function getBit(block: number[], acc: Accumulator, loc: Locator, options: Options): Bit;
-export declare function setBit(block: number[], bits: Bit[], acc: Accumulator, loc: Locator, options: Options): void;
+export declare function getBit(block: readonly number[], acc: Accumulator, loc: Locator, options: Options): Bit;
+export declare function setBit(block: number[], bits: readonly Bit[], acc: Accumulator, loc: Locator, options: Options): void;
 //# sourceMappingURL=bit.d.ts.map

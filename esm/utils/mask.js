@@ -1,5 +1,5 @@
 import { loc2idx, loc2coord } from './locator.js';
-export function isBlockVisibleAt({ data }, loc, options) {
+export function isBlockVisibleAt(data, loc, options) {
     const { size } = options;
     const _loc = {
         ...loc,
@@ -14,7 +14,7 @@ export function isBlockVisibleAt({ data }, loc, options) {
     }
     return true;
 }
-export function isPixelVisibleAt({ data }, loc, options) {
+export function isPixelVisibleAt(data, loc) {
     return typeof data[loc] === 'undefined' || data[loc] > 127;
 }
 //# sourceMappingURL=mask.js.map

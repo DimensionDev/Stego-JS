@@ -1,73 +1,87 @@
-import { proxy } from './utils/expose.js';
-import { imgType } from './utils/helper.js';
+import { createAPI } from './utils/expose.js';
+import { getImageType } from './utils/helper.js';
 import { preprocessImage } from './utils/image.js';
-import { AlgorithmVersion } from './utils/stego-params.js';
-import * as v1 from './v1/index.js';
-import * as v2 from './v2/index.js';
-export { imgType as getImageType };
+export { getImageType };
 export * from './utils/types.js';
 export * from './constant.js';
-const { encode, decode } = proxy({
-    algoithms: { [AlgorithmVersion.V1]: v1, [AlgorithmVersion.V2]: v2 },
-    methods: {
-        toImageData(data) {
-            const type = imgType(new Uint8Array(data.slice(0, 8)));
+export const { encode, decode } = createAPI({
+    toImageData(_data) {
+        return new Promise((resolve) => {
+            const data = new Uint8Array(_data);
+            const type = getImageType(data);
             const blob = new Blob([data], { type });
-            const url = URL.createObjectURL(blob);
+            resolve(getImageData(blob));
+        });
+    },
+    async toPNG(imgData, height = imgData.height, width = imgData.width) {
+        const canvas = createCanvas(width, height);
+        const context = canvas.getContext('2d');
+        context.putImageData(imgData, 0, 0, 0, 0, width, height);
+        if (isOffscreenCanvas(canvas)) {
+            return canvas.convertToBlob({ type: 'image/png' }).then(toUint8Array);
+        }
+        else {
             return new Promise((resolve, reject) => {
-                const element = new Image();
-                element.addEventListener('load', () => {
-                    const { width, height } = element;
-                    const ctx = createCanvas(width, height).getContext('2d');
-                    ctx.drawImage(element, 0, 0, width, height);
-                    resolve(ctx.getImageData(0, 0, width, height));
-                });
-                element.addEventListener('error', reject);
-                element.src = url;
+                canvas.toBlob((blob) => {
+                    if (blob)
+                        resolve(toUint8Array(blob));
+                    else
+                        reject(new Error('fail to convert to png'));
+                }, 'image/png');
             });
-        },
-        async toBuffer(imgData, height = imgData.height, width = imgData.width) {
-            const canvas = createCanvas(width, height);
-            canvas.getContext('2d').putImageData(imgData, 0, 0, 0, 0, width, height);
-            if (isOffscreenCanvas(canvas)) {
-                return toArrayBuffer(await canvas.convertToBlob({ type: 'image/png' }));
-            }
-            return new Promise((resolve, reject) => {
-                const callback = (blob) => {
-                    if (blob) {
-                        resolve(toArrayBuffer(blob));
-                    }
-                    else {
-                        reject(new Error('fail to generate array buffer'));
-                    }
-                };
-                canvas.toBlob(callback, 'image/png');
-            });
-        },
-        preprocessImage(data) {
-            return preprocessImage(data, (w, h) => createCanvas(w, h).getContext('2d')?.createImageData(w, h) ?? null);
-        },
+        }
+    },
+    preprocessImage(data) {
+        return preprocessImage(data, (w, h) => createCanvas(w, h).getContext('2d')?.createImageData(w, h) ?? null);
     },
 });
-export { encode, decode };
-function toArrayBuffer(blob) {
+function toUint8Array(blob) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.addEventListener('load', () => resolve(reader.result));
+        reader.addEventListener('load', () => resolve(new Uint8Array(reader.result)));
         reader.addEventListener('error', () => reject(new Error('fail to generate array buffer')));
         reader.readAsArrayBuffer(blob);
     });
 }
 function createCanvas(width, height) {
-    if (typeof OffscreenCanvas !== 'undefined') {
-        return new OffscreenCanvas(width, height);
+    let canvas;
+    if (typeof OffscreenCanvas === 'function') {
+        canvas = new OffscreenCanvas(width, height);
     }
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
+    else {
+        canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+    }
     return canvas;
 }
+async function getImageData(imageBlob) {
+    let width, height;
+    let image;
+    if (typeof createImageBitmap === 'function') {
+        image = await createImageBitmap(imageBlob);
+        width = image.width;
+        height = image.height;
+    }
+    else {
+        const url = URL.createObjectURL(imageBlob);
+        image = await new Promise((resolve, reject) => {
+            const element = new Image();
+            element.addEventListener('load', () => {
+                width = element.width;
+                height = element.height;
+                resolve(element);
+            });
+            element.addEventListener('error', reject);
+            element.src = url;
+        }).finally(() => URL.revokeObjectURL(url));
+    }
+    const canvas = createCanvas(width, height);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, 0, 0);
+    return ctx.getImageData(0, 0, width, height);
+}
 function isOffscreenCanvas(value) {
-    return value?.[Symbol.toStringTag] === 'OffscreenCanvas';
+    return typeof OffscreenCanvas === 'function' && value instanceof OffscreenCanvas;
 }
 //# sourceMappingURL=dom.js.map

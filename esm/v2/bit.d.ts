@@ -4,9 +4,9 @@ export declare type Bit = 0 | 1;
 export declare function str2codes(text: string): number[];
 export declare function codes2bits(codes: number[], copies: number): Bit[];
 export declare function str2bits(text: string, copies: number): Bit[];
-export declare function bits2str(richBits: {
-    bit: Bit;
-    diff: number;
+export declare function bits2str(richBits: readonly {
+    readonly bit: Bit;
+    readonly diff: number;
 }[], copies: number, verbose?: boolean): string;
 export declare function param2bits(options: Options): Bit[];
 export declare function bits2param(bits: Bit[]): number;

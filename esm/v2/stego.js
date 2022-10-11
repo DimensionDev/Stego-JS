@@ -1,7 +1,7 @@
 import { GrayscaleAlgorithm, grayscale, narrow } from '../utils/grayscale.js';
 import { transform, inverseTransform } from '../utils/transform.js';
 import { cropImg, updateImgByBlock, updateImgByPixel, visitImgByBlock, updateImgByPixelAt, updateImgByPixelChannelAt, } from '../utils/image.js';
-import { mergeBits, createBits, str2bits, setBit, getBit, bits2str, param2bits, bits2param, } from './bit.js';
+import { mergeBits, createBits, str2bits, setBit, getBit, bits2str, param2bits, bits2param } from './bit.js';
 import { createAcc, getPos } from './position.js';
 import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask.js';
 import { rand, shuffleGroupBy3, unshuffleGroupBy3 } from '../utils/helper.js';
@@ -28,8 +28,8 @@ export async function encodeImg(imgData, maskData, options) {
         process.stderr.write('bits overflow! try to shrink text or reduce copies.\n');
     }
     if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE || narrowSize > 0) {
-        updateImgByPixel(imgData, options, ([r, g, b, a], loc) => {
-            if (!isPixelVisibleAt(maskData, loc, options)) {
+        updateImgByPixel(imgData, ([r, g, b, a], loc) => {
+            if (!isPixelVisibleAt(maskData, loc)) {
                 return [r, g, b, a];
             }
             // decolor
@@ -74,7 +74,7 @@ export async function encodeImg(imgData, maskData, options) {
             if (options.fakeMaskPixels && loc.c === 0) {
                 const [x, y] = loc2coord(loc, options);
                 const g = rand(10, 127);
-                updateImgByPixelAt(imgData, options, [g, g, g, 255], loc2idx(loc, options, x, y, rand(0, 64)));
+                updateImgByPixelAt(imgData.data, [g, g, g, 255], loc2idx(loc, options, x, y, rand(0, 64)));
             }
             return false;
         }

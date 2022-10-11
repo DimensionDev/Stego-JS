@@ -89,8 +89,12 @@ const URIchars = [
     '%',
 ];
 const URIcharCode = URIchars.map((c, i) => gray_code(2 * i));
-const char2code = (c) => (URIchars.indexOf(c) !== -1 ? URIcharCode[URIchars.indexOf(c)] : 255);
-const code2char = (c) => (URIcharCode.indexOf(c) !== -1 ? URIchars[URIcharCode.indexOf(c)] : '');
+function char2code(c) {
+    return URIchars.indexOf(c) !== -1 ? URIcharCode[URIchars.indexOf(c)] : 255;
+}
+function code2char(c) {
+    return URIcharCode.indexOf(c) !== -1 ? URIchars[URIcharCode.indexOf(c)] : '';
+}
 export function str2codes(text) {
     const codes = [];
     Array.from(text).map((char) => {

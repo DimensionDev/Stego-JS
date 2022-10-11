@@ -16,8 +16,8 @@ export async function encodeImg(imgData, maskData, options) {
         process.stderr.write('bits overflow! try to shrink text or reduce copies.\n');
     }
     if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE || narrowSize > 0) {
-        updateImgByPixel(imgData, options, ([r, g, b, a], loc) => {
-            if (!isPixelVisibleAt(maskData, loc, options)) {
+        updateImgByPixel(imgData, ([r, g, b, a], loc) => {
+            if (!isPixelVisibleAt(maskData, loc)) {
                 return [r, g, b, a];
             }
             // decolor
@@ -46,7 +46,7 @@ export async function encodeImg(imgData, maskData, options) {
             if (options.fakeMaskPixels && loc.c === 0) {
                 const [x, y] = loc2coord(loc, options);
                 const g = rand(10, 127);
-                updateImgByPixelAt(imgData, options, [g, g, g, 255], loc2idx(loc, options, x, y, rand(0, 64)));
+                updateImgByPixelAt(imgData.data, [g, g, g, 255], loc2idx(loc, options, x, y, rand(0, 64)));
             }
             return false;
         }

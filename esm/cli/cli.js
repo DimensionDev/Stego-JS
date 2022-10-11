@@ -1,10 +1,17 @@
 #!/usr/bin/env node
 import meow from 'meow';
 import { createReadStream } from 'fs';
-import { rs2Buf } from '../utils/helper.js';
 import { encode, decode, AlgorithmVersion } from '../node.js';
 import { CLI_NAME, DEFAULT_COPIES, DEFAULT_TOLERANCE, DEFAULT_SIZE, DEFAULT_CROP_EDGE_PIXELS, DEFAULT_MASK, DEFAULT_EXHAUST_PIXELS, DEFAULT_FAKE_MASK_PIXELS, DEFAULT_ALGORITHM_VERSION, } from '../constant.js';
 import { normalizeFlags, validateFlags, flags2Options, flags } from './flag.js';
+function rs2Buf(rs) {
+    return new Promise((resolve, reject) => {
+        const buffers = [];
+        rs.on('data', (c) => buffers.push(c));
+        rs.on('end', () => resolve(Buffer.concat(buffers)));
+        rs.on('error', (err) => reject(err));
+    });
+}
 const cli = meow(`Usage
   $ cat <input> | ${CLI_NAME} [options...] > <output>
 

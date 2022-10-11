@@ -12,7 +12,7 @@ export interface Accumulator {
     /**
      * available indices
      */
-    indices: number[];
+    readonly indices: number[];
 }
 export declare function createAcc({ size, transformAlgorithm }: Options): {
     prevPos: number;

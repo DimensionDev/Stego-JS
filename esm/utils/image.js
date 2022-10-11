@@ -38,7 +38,7 @@ export function* divideImg({ width, height, data }, { size, verbose }) {
         }
     }
 }
-export function visitImgByPixel(imgData, options, visitor) {
+export function visitImgByPixel(imgData, visitor) {
     const { width, height, data } = imgData;
     for (let i = 0; i < width * height; i += 1) {
         const p = i * 4;
@@ -62,14 +62,14 @@ export function visitImgByBlock(imgData, options, visitor) {
         }
     }
 }
-export function updateImgByPixel(imgData, options, updater) {
-    visitImgByPixel(imgData, options, (pixel, loc) => updateImgByPixelAt(imgData, options, updater(pixel, loc, imgData), loc));
+export function updateImgByPixel(imgData, updater) {
+    visitImgByPixel(imgData, (pixel, loc) => updateImgByPixelAt(imgData.data, updater(pixel, loc), loc));
 }
 export function updateImgByBlock(imgData, options, updater) {
     visitImgByBlock(imgData, options, (block, loc) => {
         const bitConsumed = updater(block, loc, imgData);
         if (bitConsumed) {
-            updateImgByBlockAt(imgData, options, block, loc);
+            updateImgByBlockAt(imgData.data, options, block, loc);
             if (options.verbose) {
                 console.warn('inversed block: ' + block);
                 const im = new Array(options.size * options.size);
@@ -84,12 +84,13 @@ export function updateImgByPixelChannelAt(imgData, loc, channel, value) {
     const { data } = imgData;
     data[loc + channel] = value;
 }
-export function updateImgByPixelAt(imgData, options, pixel, loc) {
-    const { data } = imgData;
-    [data[loc], data[loc + 1], data[loc + 2], data[loc + 3]] = pixel;
+export function updateImgByPixelAt(data, pixel, loc) {
+    data[loc + 0] = pixel[0];
+    data[loc + 1] = pixel[1];
+    data[loc + 2] = pixel[2];
+    data[loc + 3] = pixel[3];
 }
-export function updateImgByBlockAt(imgData, options, block, loc) {
-    const { data } = imgData;
+export function updateImgByBlockAt(data, options, block, loc) {
     const { size } = options;
     const [x1, y1] = loc2coord(loc, options);
     for (let i = 0; i < size * size; i += 1) {

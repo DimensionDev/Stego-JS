@@ -1,7 +1,6 @@
-import { imgType } from './utils/helper.js';
-export { imgType as getImageType };
+import { getImageType } from './utils/helper.js';
+export { getImageType };
 export * from './utils/types.js';
 export * from './constant.js';
-declare const encode: (image: ArrayBuffer, mask: ArrayBuffer, options: import("./utils/stego-params.js").EncodeOptions) => Promise<ArrayBuffer>, decode: (image: ArrayBuffer, mask: ArrayBuffer, options: import("./utils/stego-params.js").Options) => Promise<string>;
-export { encode, decode };
+export declare const encode: (image: ArrayBuffer, mask: ArrayBuffer, options: import("./utils/stego-params.js").EncodeOptions) => Promise<Uint8Array>, decode: (image: ArrayBuffer, mask: ArrayBuffer, options: import("./utils/stego-params.js").Options) => Promise<string>;
 //# sourceMappingURL=node.d.ts.map

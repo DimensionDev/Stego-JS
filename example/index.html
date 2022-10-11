@@ -22,11 +22,7 @@
     </style>
 
     <script>
-      // the global fr
       const fr = new FileReader()
-    </script>
-
-    <script>
       const openFile = (event) => {
         const input = event.target
         const fr2 = new FileReader()
@@ -38,8 +34,6 @@
         fr.readAsArrayBuffer(input.files[0])
         fr2.readAsDataURL(input.files[0])
       }
-    </script>
-    <script>
       const scrollRange = (event) => {
         document.getElementById('tolerancePreviewer').textContent = event.target.value
       }
@@ -139,8 +133,13 @@
       <section>
         <span>Tolerance:</span>
         <span>1-5000</span>
-        <input id="tolerance" type="range" min="1" max="5000" step="10" value="100" onchange="scrollRange(event)" />
+        <input id="tolerance" type="number" min="1" max="5000" value="100" onchange="scrollRange(event)" />
         <span id="tolerancePreviewer"></span>
+      </section>
+      <section>
+        <span>Web Compatibility:</span>
+        <label>Uses OffscreenCanvas <input type="checkbox" id="offscreenCanvas" /></label>
+        <label>Uses createImageBitmap <input type="checkbox" id="imageBitmap" /></label>
       </section>
       <section>
         <input
@@ -164,6 +163,38 @@ Ethereum is the community-run technology powering the cryptocurrency ether (ETH)
         <textarea id="messagePreviewer" style="display: none"></textarea>
       </section>
     </content>
+
+    <script>
+      const _offscreenCanvas = self.OffscreenCanvas
+      const _imageBitMap = self.ImageBitmap
+      const _createImageBitMap = self.createImageBitmap
+      const canvasCheckbox = document.getElementById('offscreenCanvas')
+      const bitmapCheckbox = document.getElementById('imageBitmap')
+      if (_offscreenCanvas) {
+        canvasCheckbox.checked = true
+        canvasCheckbox.onchange = () => {
+          if (self.OffscreenCanvas) delete self.OffscreenCanvas
+          else self.OffscreenCanvas = _offscreenCanvas
+        }
+      } else {
+        canvasCheckbox.disabled = true
+      }
+
+      if (_createImageBitMap) {
+        bitmapCheckbox.checked = true
+        bitmapCheckbox.onchange = () => {
+          if (self.ImageBitmap) {
+            delete self.ImageBitmap
+            delete self.createImageBitmap
+          } else {
+            self.ImageBitmap = _imageBitMap
+            self.createImageBitmap = _createImageBitMap
+          }
+        }
+      } else {
+        bitmapCheckbox.disabled = true
+      }
+    </script>
 
     <script>
       function getOptions() {
