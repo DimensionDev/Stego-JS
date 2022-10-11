@@ -17,7 +17,7 @@ export type Decoder = (imgData: ImageData, maskData: Uint8ClampedArray, options:
 
 export interface IO {
   toImageData(data: ArrayBufferLike | ArrayLike<number>): Promise<ImageData>
-  toBuffer(imgData: ImageData, height?: number, width?: number): Promise<Uint8ClampedArray>
+  toPNG(imgData: ImageData, height?: number, width?: number): Promise<Uint8Array>
   preprocessImage(data: ImageData): ImageData
 }
 
@@ -25,7 +25,7 @@ const algorithms = {
   [AlgorithmVersion.V1]: v1,
   [AlgorithmVersion.V2]: v2,
 }
-export function createAPI({ preprocessImage, toBuffer, toImageData }: IO) {
+export function createAPI({ preprocessImage, toPNG: toBuffer, toImageData }: IO) {
   return {
     async encode(image: ArrayBuffer, mask: ArrayBuffer, options: EncodeOptions) {
       const { data, height, width } = await algorithms[options.version].encode(

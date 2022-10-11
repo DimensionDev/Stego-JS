@@ -31,8 +31,8 @@ export const { encode, decode } = createAPI({
     }
     return imageData
   },
-  async toBuffer(imgData, height = imgData.height, width = imgData.width) {
-    return new Uint8ClampedArray(
+  async toPNG(imgData, height = imgData.height, width = imgData.width) {
+    return new Uint8Array(
       (await Transformer.fromRgbaPixels(imgData.data, width, height).crop(0, 0, width, height).png()).buffer,
     )
   },
