@@ -6,7 +6,7 @@ import { MAX_WIDTH } from '../constant.js'
 
 import { transform } from '../utils/transform.js'
 
-export type Pixel = [number, number, number, number]
+export type Pixel = [r: number, g: number, b: number, a: number]
 
 export function preprocessImage(
   imageData: ImageData,
@@ -45,11 +45,7 @@ export function* divideImg({ width, height, data }: ImageData, { size, verbose }
   }
 }
 
-export function visitImgByPixel(
-  imgData: ImageData,
-  options: Options,
-  visitor: (pixel: Pixel, loc: number, imgData: ImageData) => void,
-) {
+export function visitImgByPixel(imgData: ImageData, visitor: (pixel: Pixel, loc: number, imgData: ImageData) => void) {
   const { width, height, data } = imgData
 
   for (let i = 0; i < width * height; i += 1) {
@@ -83,14 +79,8 @@ export function visitImgByBlock(
   }
 }
 
-export function updateImgByPixel(
-  imgData: ImageData,
-  options: Options,
-  updater: (pixel: Pixel, loc: number, imgData: ImageData) => Pixel,
-) {
-  visitImgByPixel(imgData, options, (pixel, loc) =>
-    updateImgByPixelAt(imgData, options, updater(pixel, loc, imgData), loc),
-  )
+export function updateImgByPixel(imgData: ImageData, updater: (pixel: Pixel, loc: number) => Pixel) {
+  visitImgByPixel(imgData, (pixel, loc) => updateImgByPixelAt(imgData.data, updater(pixel, loc), loc))
 }
 
 export function updateImgByBlock(
@@ -102,7 +92,7 @@ export function updateImgByBlock(
     const bitConsumed = updater(block, loc, imgData)
 
     if (bitConsumed) {
-      updateImgByBlockAt(imgData, options, block, loc)
+      updateImgByBlockAt(imgData.data, options, block, loc)
       if (options.verbose) {
         console.warn('inversed block: ' + block)
         const im = new Array(options.size * options.size)
@@ -119,13 +109,14 @@ export function updateImgByPixelChannelAt(imgData: ImageData, loc: number, chann
   data[loc + channel] = value
 }
 
-export function updateImgByPixelAt(imgData: ImageData, options: Options, pixel: Pixel, loc: number) {
-  const { data } = imgData
-  ;[data[loc], data[loc + 1], data[loc + 2], data[loc + 3]] = pixel
+export function updateImgByPixelAt(data: Uint8ClampedArray, pixel: Pixel, loc: number) {
+  data[loc + 0] = pixel[0]
+  data[loc + 1] = pixel[1]
+  data[loc + 2] = pixel[2]
+  data[loc + 3] = pixel[3]
 }
 
-export function updateImgByBlockAt(imgData: ImageData, options: Options, block: number[], loc: Locator) {
-  const { data } = imgData
+export function updateImgByBlockAt(data: Uint8ClampedArray, options: Options, block: number[], loc: Locator) {
   const { size } = options
   const [x1, y1] = loc2coord(loc, options)
 

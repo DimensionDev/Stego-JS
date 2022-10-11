@@ -1,7 +1,7 @@
 import { Options } from './stego-params.js'
 import { Locator, loc2idx, loc2coord } from './locator.js'
 
-export function isBlockVisibleAt({ data }: ImageData, loc: Locator, options: Options) {
+export function isBlockVisibleAt(data: Uint8ClampedArray, loc: Locator, options: Options) {
   const { size } = options
   const _loc = {
     ...loc,
@@ -18,6 +18,6 @@ export function isBlockVisibleAt({ data }: ImageData, loc: Locator, options: Opt
   return true
 }
 
-export function isPixelVisibleAt({ data }: ImageData, loc: number, options: Options) {
+export function isPixelVisibleAt(data: Uint8ClampedArray, loc: number) {
   return typeof data[loc] === 'undefined' || data[loc] > 127
 }

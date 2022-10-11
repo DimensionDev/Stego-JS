@@ -4,23 +4,23 @@ export interface Locator {
   /**
    * channel
    */
-  c: number
+  readonly c: number
   /**
    * block position
    */
-  p: number
+  readonly p: number
   /**
    * bit position
    */
-  b: number
+  readonly b: number
   /**
    * image width
    */
-  w: number
+  readonly w: number
   /**
    * image height
    */
-  h: number
+  readonly h: number
 }
 
 /**

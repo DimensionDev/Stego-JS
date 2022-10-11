@@ -1,47 +1,42 @@
 import { AlgorithmVersion, DecodeOptions, EncodeOptions } from './stego-params.js'
+import * as v1 from '../v1/index.js'
+import * as v2 from '../v2/index.js'
 
 export interface EncodedImageData {
-  data: ImageData
-  height: number
-  width: number
+  readonly data: ImageData
+  readonly height: number
+  readonly width: number
 }
 
-export type Encoder = (imgData: ImageData, maskData: ImageData, options: EncodeOptions) => Promise<EncodedImageData>
-export type Decoder = (imgData: ImageData, maskData: ImageData, options: DecodeOptions) => Promise<string>
+export type Encoder = (
+  imgData: ImageData,
+  maskData: Uint8ClampedArray,
+  options: EncodeOptions,
+) => Promise<EncodedImageData>
+export type Decoder = (imgData: ImageData, maskData: Uint8ClampedArray, options: DecodeOptions) => Promise<string>
 
-export interface Methods {
+export interface IO {
   toImageData(data: ArrayBuffer): Promise<ImageData>
   toBuffer(imgData: ImageData, height?: number, width?: number): Promise<ArrayBuffer>
   preprocessImage(data: ImageData): ImageData
 }
 
-interface ProxyOptions {
-  algoithms: Record<
-    AlgorithmVersion,
-    {
-      encode: Encoder
-      decode: Decoder
-    }
-  >
-  methods: Methods
+const algorithms = {
+  [AlgorithmVersion.V1]: v1,
+  [AlgorithmVersion.V2]: v2,
 }
-
-export function proxy({ algoithms, methods }: ProxyOptions) {
+export function createAPI({ preprocessImage, toBuffer, toImageData }: IO) {
   return {
     async encode(image: ArrayBuffer, mask: ArrayBuffer, options: EncodeOptions) {
-      const { data, height, width } = await algoithms[options.version].encode(
-        methods.preprocessImage(await methods.toImageData(image)),
-        methods.preprocessImage(await methods.toImageData(mask)),
+      const { data, height, width } = await algorithms[options.version].encode(
+        preprocessImage(await toImageData(image)),
+        preprocessImage(await toImageData(mask)).data,
         options,
       )
-      return methods.toBuffer(data, height, width)
+      return toBuffer(data, height, width)
     },
     async decode(image: ArrayBuffer, mask: ArrayBuffer, options: DecodeOptions) {
-      return algoithms[options.version].decode(
-        await methods.toImageData(image),
-        await methods.toImageData(mask),
-        options,
-      )
+      return algorithms[options.version].decode(await toImageData(image), (await toImageData(mask)).data, options)
     },
   }
 }

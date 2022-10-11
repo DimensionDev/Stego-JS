@@ -9,18 +9,7 @@ import {
   updateImgByPixelAt,
   updateImgByPixelChannelAt,
 } from '../utils/image.js'
-import {
-  mergeBits,
-  createBits,
-  str2bits,
-  str2codes,
-  setBit,
-  getBit,
-  bits2str,
-  param2bits,
-  Bit,
-  bits2param,
-} from './bit.js'
+import { mergeBits, createBits, str2bits, setBit, getBit, bits2str, param2bits, Bit, bits2param } from './bit.js'
 import { createAcc, getPos } from './position.js'
 import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask.js'
 import { rand, shuffleGroupBy3, unshuffleGroupBy3 } from '../utils/helper.js'
@@ -35,7 +24,7 @@ function getCharfromIdx(idx: number, copies: number, text: string): string {
   else return codes[charId] + '(charId: ' + charId + ', bitId: ' + bitId + ')'
 }
 
-export async function encodeImg(imgData: ImageData, maskData: ImageData, options: EncodeOptions) {
+export async function encodeImg(imgData: ImageData, maskData: Uint8ClampedArray, options: EncodeOptions) {
   const { text, size, narrow: narrowSize, copies, grayscaleAlgorithm, transformAlgorithm, exhaustPixels } = options
   const [width, height] = cropImg(imgData, options)
   const sizeOfBlocks = (width * height * 3) / (size * size)
@@ -49,8 +38,8 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
     process.stderr.write('bits overflow! try to shrink text or reduce copies.\n')
   }
   if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE || narrowSize > 0) {
-    updateImgByPixel(imgData, options, ([r, g, b, a], loc) => {
-      if (!isPixelVisibleAt(maskData, loc, options)) {
+    updateImgByPixel(imgData, ([r, g, b, a], loc) => {
+      if (!isPixelVisibleAt(maskData, loc)) {
         return [r, g, b, a]
       }
 
@@ -105,7 +94,7 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
         const [x, y] = loc2coord(loc, options)
         const g = rand(10, 127)
 
-        updateImgByPixelAt(imgData, options, [g, g, g, 255], loc2idx(loc, options, x, y, rand(0, 64)))
+        updateImgByPixelAt(imgData.data, [g, g, g, 255], loc2idx(loc, options, x, y, rand(0, 64)))
       }
       return false
     }
@@ -177,7 +166,7 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
   return imgData
 }
 
-export async function decodeImg(imgData: ImageData, maskData: ImageData, options: DecodeOptions) {
+export async function decodeImg(imgData: ImageData, maskData: Uint8ClampedArray, options: DecodeOptions) {
   const { size, transformAlgorithm } = options
   const richBits: {
     bit: Bit

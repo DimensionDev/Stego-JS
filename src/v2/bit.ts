@@ -96,9 +96,13 @@ const URIchars = [
 
 const URIcharCode = URIchars.map((c: string, i: number) => gray_code(2 * i))
 
-const char2code = (c: string) => (URIchars.indexOf(c) !== -1 ? URIcharCode[URIchars.indexOf(c)] : 255)
+function char2code(c: string) {
+  return URIchars.indexOf(c) !== -1 ? URIcharCode[URIchars.indexOf(c)] : 255
+}
 
-const code2char = (c: number) => (URIcharCode.indexOf(c) !== -1 ? URIchars[URIcharCode.indexOf(c)] : '')
+function code2char(c: number) {
+  return URIcharCode.indexOf(c) !== -1 ? URIchars[URIcharCode.indexOf(c)] : ''
+}
 
 export function str2codes(text: string): number[] {
   const codes: number[] = []
@@ -145,8 +149,8 @@ export function str2bits(text: string, copies: number): Bit[] {
 
 function correctCharCode(
   rawCode: {
-    bit: Bit
-    diff: number
+    readonly bit: Bit
+    readonly diff: number
   }[][],
   charCodes: number[],
   verbose?: boolean,
@@ -280,9 +284,9 @@ function correctCharCode(
 }
 
 export function bits2str(
-  richBits: {
-    bit: Bit
-    diff: number
+  richBits: readonly {
+    readonly bit: Bit
+    readonly diff: number
   }[],
   copies: number,
   verbose?: boolean,

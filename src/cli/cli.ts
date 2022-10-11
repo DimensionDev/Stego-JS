@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import meow from 'meow'
 import { createReadStream } from 'fs'
-import { rs2Buf } from '../utils/helper.js'
 import { encode, decode, AlgorithmVersion } from '../node.js'
 import {
   CLI_NAME,
@@ -15,6 +14,17 @@ import {
   DEFAULT_ALGORITHM_VERSION,
 } from '../constant.js'
 import { normalizeFlags, validateFlags, flags2Options, flags } from './flag.js'
+import { Readable } from 'stream'
+
+function rs2Buf(rs: Readable) {
+  return new Promise<Buffer>((resolve, reject) => {
+    const buffers: Uint8Array[] = []
+
+    rs.on('data', (c) => buffers.push(c))
+    rs.on('end', () => resolve(Buffer.concat(buffers)))
+    rs.on('error', (err) => reject(err))
+  })
+}
 
 const cli = meow(
   `Usage

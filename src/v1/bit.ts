@@ -95,14 +95,14 @@ export function createBits(size: number) {
   return bits
 }
 
-export function getBit(block: number[], acc: Accumulator, loc: Locator, options: Options) {
+export function getBit(block: readonly number[], acc: Accumulator, loc: Locator, options: Options) {
   const pos = getPos(acc, loc, options)
   const { tolerance } = options
 
   return Math.abs(Math.round(block[pos] / tolerance) % 2) as Bit
 }
 
-export function setBit(block: number[], bits: Bit[], acc: Accumulator, loc: Locator, options: Options) {
+export function setBit(block: number[], bits: readonly Bit[], acc: Accumulator, loc: Locator, options: Options) {
   const pos = getPos(acc, loc, options)
   const { tolerance } = options
   const v = Math.floor(block[pos] / tolerance)

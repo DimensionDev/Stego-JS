@@ -23,8 +23,8 @@
 
 // DCT type II, unscaled. Algorithm by Byeong Gi Lee, 1984.
 // See: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
-export function transform(vector: Array<number>): void {
-  const n: number = vector.length
+export function transform(vector: number[]): void {
+  const n = vector.length
   if (n <= 0 || (n & (n - 1)) !== 0) throw 'Length must be power of 2'
   transformInternal(vector, 0, n, new Float64Array(n))
 }

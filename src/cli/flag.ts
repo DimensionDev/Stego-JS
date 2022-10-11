@@ -126,10 +126,13 @@ export const flags = {
 } as const
 
 export function normalizeFlags(rawFlags: TypedFlags<typeof flags>) {
-  const { encode, decode, mask, tolerance } = rawFlags
+  const { encode, decode, mask, tolerance, transform } = rawFlags
   return {
     ...rawFlags,
-    tolerance: tolerance === TOLERANCE_NOT_SET ? DEFAULT_TOLERANCE[rawFlags.algorithmVersion].transform : tolerance,
+    tolerance:
+      tolerance === TOLERANCE_NOT_SET
+        ? DEFAULT_TOLERANCE[rawFlags.algorithmVersion as AlgorithmVersion][transform as TransformAlgorithm]
+        : tolerance,
     encode: encode && !decode,
     decode,
     mask: mask ? resolvePath(process.cwd(), mask) : '',
@@ -159,8 +162,8 @@ export function validateFlags({
   if (isNaN(copies) || copies <= 0 || copies % 2 === 0 || copies > 31) {
     return '-c, --copies should be a postive odd number and less than 31'
   }
-  // the valiadation for transform algorithm should prior to tolerance,
-  // becasue tolerance validation depends on transform algorithm
+  // the validation for transform algorithm should prior to tolerance,
+  // because tolerance validation depends on transform algorithm
   if (!Object.values(TransformAlgorithm).includes(transform)) {
     return 'unknown transform algorithm'
   }

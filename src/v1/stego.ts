@@ -8,7 +8,7 @@ import { rand } from '../utils/helper.js'
 import { loc2idx, loc2coord } from '../utils/locator.js'
 import { EncodeOptions, DecodeOptions } from '../utils/stego-params.js'
 
-export async function encodeImg(imgData: ImageData, maskData: ImageData, options: EncodeOptions) {
+export async function encodeImg(imgData: ImageData, maskData: Uint8ClampedArray, options: EncodeOptions) {
   const { text, size, narrow: narrowSize, copies, grayscaleAlgorithm, transformAlgorithm, exhaustPixels } = options
   const [width, height] = cropImg(imgData, options)
   const sizeOfBlocks = width * height * 3
@@ -23,8 +23,8 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
     process.stderr.write('bits overflow! try to shrink text or reduce copies.\n')
   }
   if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE || narrowSize > 0) {
-    updateImgByPixel(imgData, options, ([r, g, b, a], loc) => {
-      if (!isPixelVisibleAt(maskData, loc, options)) {
+    updateImgByPixel(imgData, ([r, g, b, a], loc) => {
+      if (!isPixelVisibleAt(maskData, loc)) {
         return [r, g, b, a]
       }
 
@@ -59,7 +59,7 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
         const [x, y] = loc2coord(loc, options)
         const g = rand(10, 127)
 
-        updateImgByPixelAt(imgData, options, [g, g, g, 255], loc2idx(loc, options, x, y, rand(0, 64)))
+        updateImgByPixelAt(imgData.data, [g, g, g, 255], loc2idx(loc, options, x, y, rand(0, 64)))
       }
       return false
     }
@@ -71,7 +71,7 @@ export async function encodeImg(imgData: ImageData, maskData: ImageData, options
   return imgData
 }
 
-export async function decodeImg(imgData: ImageData, maskData: ImageData, options: DecodeOptions) {
+export async function decodeImg(imgData: ImageData, maskData: Uint8ClampedArray, options: DecodeOptions) {
   const { size, copies, transformAlgorithm } = options
   const bits: Bit[] = []
   const acc = createAcc(options)

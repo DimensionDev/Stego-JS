@@ -7,22 +7,22 @@ export enum AlgorithmVersion {
 }
 
 export interface Options {
-  version: AlgorithmVersion
-  pass?: string
-  size: number
-  copies: number
-  tolerance: number
-  transformAlgorithm: TransformAlgorithm
-  verbose?: boolean
+  readonly version: AlgorithmVersion
+  readonly pass?: string
+  readonly size: number
+  readonly copies: number
+  readonly tolerance: number
+  readonly transformAlgorithm: TransformAlgorithm
+  readonly verbose?: boolean
 }
 
 export interface EncodeOptions extends Options {
-  text: string
-  narrow: number
-  grayscaleAlgorithm: GrayscaleAlgorithm
-  exhaustPixels: boolean
-  cropEdgePixels: boolean
-  fakeMaskPixels: boolean
+  readonly text: string
+  readonly narrow: number
+  readonly grayscaleAlgorithm: GrayscaleAlgorithm
+  readonly exhaustPixels: boolean
+  readonly cropEdgePixels: boolean
+  readonly fakeMaskPixels: boolean
 }
 
 export type DecodeOptions = Options
