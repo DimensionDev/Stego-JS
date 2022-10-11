@@ -9,7 +9,7 @@ export * from './constant.js'
 
 export const { encode, decode } = createAPI({
   async toImageData(data) {
-    let transformer = new Transformer(Buffer.from(data))
+    let transformer = new Transformer(Buffer.from(new Uint8Array(data)))
     let { width, height, colorType } = await transformer.metadata()
 
     if (colorType !== JsColorType.Rgba8 && colorType !== JsColorType.Rgb8) {
@@ -32,7 +32,9 @@ export const { encode, decode } = createAPI({
     return imageData
   },
   async toBuffer(imgData, height = imgData.height, width = imgData.width) {
-    return (await Transformer.fromRgbaPixels(imgData.data, width, height).crop(0, 0, width, height).png()).buffer
+    return new Uint8ClampedArray(
+      (await Transformer.fromRgbaPixels(imgData.data, width, height).crop(0, 0, width, height).png()).buffer,
+    )
   },
   preprocessImage(data) {
     return preprocessImage(data, (width, height) => ({

@@ -16,8 +16,8 @@ export type Encoder = (
 export type Decoder = (imgData: ImageData, maskData: Uint8ClampedArray, options: DecodeOptions) => Promise<string>
 
 export interface IO {
-  toImageData(data: ArrayBuffer): Promise<ImageData>
-  toBuffer(imgData: ImageData, height?: number, width?: number): Promise<ArrayBuffer>
+  toImageData(data: ArrayBufferLike | ArrayLike<number>): Promise<ImageData>
+  toBuffer(imgData: ImageData, height?: number, width?: number): Promise<Uint8ClampedArray>
   preprocessImage(data: ImageData): ImageData
 }
 

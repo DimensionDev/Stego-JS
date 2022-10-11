@@ -7,8 +7,9 @@ export * from './utils/types.js'
 export * from './constant.js'
 
 export const { encode, decode } = createAPI({
-  toImageData(data) {
-    const type = getImageType(new Uint8Array(data.slice(0, 8)))
+  toImageData(_data) {
+    const data = new Uint8Array(_data)
+    const type = getImageType(data)
     const blob = new Blob([data], { type })
     const url = URL.createObjectURL(blob)
     return new Promise((resolve, reject) => {
@@ -27,12 +28,12 @@ export const { encode, decode } = createAPI({
     const canvas = createCanvas(width, height)
     canvas.getContext('2d')!.putImageData(imgData, 0, 0, 0, 0, width, height)
     if (isOffscreenCanvas(canvas)) {
-      return toArrayBuffer(await canvas.convertToBlob({ type: 'image/png' }))
+      return toUint8ClampedArray(await canvas.convertToBlob({ type: 'image/png' }))
     }
-    return new Promise<ArrayBuffer>((resolve, reject) => {
+    return new Promise<Uint8ClampedArray>((resolve, reject) => {
       const callback: BlobCallback = (blob) => {
         if (blob) {
-          resolve(toArrayBuffer(blob))
+          resolve(toUint8ClampedArray(blob))
         } else {
           reject(new Error('fail to generate array buffer'))
         }
@@ -45,10 +46,10 @@ export const { encode, decode } = createAPI({
   },
 })
 
-function toArrayBuffer(blob: Blob) {
-  return new Promise<ArrayBuffer>((resolve, reject) => {
+function toUint8ClampedArray(blob: Blob) {
+  return new Promise<Uint8ClampedArray>((resolve, reject) => {
     const reader = new FileReader()
-    reader.addEventListener('load', () => resolve(reader.result as ArrayBuffer))
+    reader.addEventListener('load', () => resolve(new Uint8ClampedArray(reader.result as ArrayBuffer)))
     reader.addEventListener('error', () => reject(new Error('fail to generate array buffer')))
     reader.readAsArrayBuffer(blob)
   })
