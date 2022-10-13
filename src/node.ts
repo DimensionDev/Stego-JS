@@ -1,4 +1,5 @@
 import { JsColorType, Transformer } from '@napi-rs/image'
+import { randomFillSync } from 'crypto'
 import { createAPI } from './utils/expose.js'
 import { getImageType } from './utils/helper.js'
 import { preprocessImage } from './utils/image.js'
@@ -43,6 +44,9 @@ export const { encode, decode } = createAPI({
       colorSpace: 'srgb',
       data: new Uint8ClampedArray(width * height * 4),
     }))
+  },
+  defaultRandomSource(buffer) {
+    return randomFillSync(buffer)
   },
 })
 

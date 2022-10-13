@@ -16,6 +16,8 @@ export interface Options {
   readonly verbose?: boolean
 }
 
+/** crypto.getRandomValues.bind(crypto) is OK */
+export type RandomSource = (array: Uint8Array) => Uint8Array
 export interface EncodeOptions extends Options {
   readonly text: string
   readonly narrow: number
@@ -23,6 +25,7 @@ export interface EncodeOptions extends Options {
   readonly exhaustPixels: boolean
   readonly cropEdgePixels: boolean
   readonly fakeMaskPixels: boolean
+  readonly randomSource?: RandomSource
 }
 
 export type DecodeOptions = Options

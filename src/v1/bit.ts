@@ -86,15 +86,6 @@ export function mergeBits(dest: Bit[], ...src: Bit[][]) {
   return dest
 }
 
-export function createBits(size: number) {
-  const bits: Bit[] = new Array(size).fill(0)
-
-  for (let i = 0; i < size; i += 1) {
-    bits[i] = Math.floor(Math.random() * 2) as Bit
-  }
-  return bits
-}
-
 export function getBit(block: readonly number[], acc: Accumulator, loc: Locator, options: Options) {
   const pos = getPos(acc, loc, options)
   const { tolerance } = options

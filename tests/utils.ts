@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs'
 import { DEFAULT_COPIES, DEFAULT_SIZE, DEFAULT_TOLERANCE } from '../src/constant.js'
 import { clamp } from '../src/utils/helper.js'
 import { AlgorithmVersion, Options } from '../src/utils/stego-params.js'
@@ -31,4 +32,16 @@ export function decodeBitbyBlock(block: number[], transformAlgorithm: TransformA
 
 export function normalizeBlock(block: number[]) {
   for (let i = 0; i < block.length; i += 1) block[i] = clamp(Math.round(block[i]), 0, 255)
+}
+
+const rand = new Uint8Array(readFileSync(new URL('./random-source.bin', import.meta.url)))
+export function createRandomSource() {
+  let index = 0
+  return (u8: Uint8Array): Uint8Array => {
+    if (index + u8.length > rand.length) throw new Error('random source exhausted, please update test case')
+    const slice = rand.slice(index, index + u8.length)
+    u8.set(slice)
+    index += u8.length
+    return u8
+  }
 }

@@ -5,6 +5,7 @@ import { TransformAlgorithm } from '../src/utils/transform.js'
 import { Bit, bits2param, param2bits } from '../src/v2/bit.js'
 import { createOptions, decodeBitbyBlock, encodeBitbyBlock, normalizeBlock } from './utils.js'
 import { expect, test } from 'vitest'
+import { randomFillSync } from 'crypto'
 
 const testAlgs = [
   TransformAlgorithm.FFT1D,
@@ -33,7 +34,9 @@ test('block with random values', () => {
   for (const option of testOptions) {
     for (let v = 0; v < testSize; v += 1) {
       for (const bit of bits) {
-        const block = Array.apply(null, new Array(option.size * option.size)).map(() => rand(0, 255))
+        const block = Array.apply(null, new Array(option.size * option.size)).map(() =>
+          rand((u8) => randomFillSync(u8), 0, 255),
+        )
         testEncodeAndDecodeBlock(bit, block, option, option.transformAlgorithm)
       }
     }
