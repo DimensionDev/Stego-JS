@@ -11,6 +11,7 @@
   "module": "./esm/node.js",
   "browser": "./esm/dom.js",
   "bin": "./esm/cli/cli.js",
+  "types": "./esm/dom.js",
   "scripts": {
     "build": "pnpm run build:umd && pnpm run build:dist",
     "build:dist": "tsc -b ./tsconfig.json ./tests/tsconfig.json",
