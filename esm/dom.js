@@ -38,13 +38,9 @@ export const { encode, decode } = createAPI({
         return crypto.getRandomValues(buffer);
     },
 });
-function toUint8Array(blob) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => resolve(new Uint8Array(reader.result)));
-        reader.addEventListener('error', () => reject(new Error('fail to generate array buffer')));
-        reader.readAsArrayBuffer(blob);
-    });
+async function toUint8Array(blob) {
+    const buffer = await blob.arrayBuffer();
+    return new Uint8Array(buffer);
 }
 function createCanvas(width, height) {
     let canvas;
