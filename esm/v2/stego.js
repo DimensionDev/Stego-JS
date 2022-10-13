@@ -1,10 +1,10 @@
 import { GrayscaleAlgorithm, grayscale, narrow } from '../utils/grayscale.js';
 import { transform, inverseTransform } from '../utils/transform.js';
 import { cropImg, updateImgByBlock, updateImgByPixel, visitImgByBlock, updateImgByPixelAt, updateImgByPixelChannelAt, } from '../utils/image.js';
-import { mergeBits, createBits, str2bits, setBit, getBit, bits2str, param2bits, bits2param } from './bit.js';
+import { mergeBits, str2bits, setBit, getBit, bits2str, param2bits, bits2param } from './bit.js';
 import { createAcc, getPos } from './position.js';
 import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask.js';
-import { rand, shuffleGroupBy3, unshuffleGroupBy3 } from '../utils/helper.js';
+import { rand, randomBits, shuffleGroupBy3, unshuffleGroupBy3 } from '../utils/helper.js';
 import { loc2idx, loc2coord } from '../utils/locator.js';
 import { DEFAULT_PARAM_COPIES, SEED } from '../constant.js';
 function getCharfromIdx(idx, copies, text) {
@@ -16,13 +16,14 @@ function getCharfromIdx(idx, copies, text) {
     else
         return codes[charId] + '(charId: ' + charId + ', bitId: ' + bitId + ')';
 }
-export async function encodeImg(imgData, maskData, options) {
+export async function encodeImg(imgData, maskData, options, defaultRandomSource) {
     const { text, size, narrow: narrowSize, copies, grayscaleAlgorithm, transformAlgorithm, exhaustPixels } = options;
     const [width, height] = cropImg(imgData, options);
     const sizeOfBlocks = (width * height * 3) / (size * size);
     const textBits = str2bits(text, copies);
     const paramsBits = param2bits(options);
-    const bits = mergeBits(createBits(sizeOfBlocks), paramsBits, textBits, createBits(8 * copies).fill(1));
+    const randomSource = options.randomSource || defaultRandomSource;
+    const bits = mergeBits(randomBits(randomSource, sizeOfBlocks), paramsBits, textBits, Array(8 * copies).fill(1));
     const encodeLen = textBits.length + 8 * copies;
     if (encodeLen > sizeOfBlocks) {
         process.stderr.write('bits overflow! try to shrink text or reduce copies.\n');
@@ -73,8 +74,8 @@ export async function encodeImg(imgData, maskData, options) {
         if (!isBlockVisibleAt(maskData, loc, options)) {
             if (options.fakeMaskPixels && loc.c === 0) {
                 const [x, y] = loc2coord(loc, options);
-                const g = rand(10, 127);
-                updateImgByPixelAt(imgData.data, [g, g, g, 255], loc2idx(loc, options, x, y, rand(0, 64)));
+                const g = rand(randomSource, 10, 127);
+                updateImgByPixelAt(imgData.data, [g, g, g, 255], loc2idx(loc, options, x, y, rand(randomSource, 0, 64)));
             }
             return false;
         }

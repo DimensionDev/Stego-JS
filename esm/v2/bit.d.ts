@@ -11,7 +11,6 @@ export declare function bits2str(richBits: readonly {
 export declare function param2bits(options: Options): Bit[];
 export declare function bits2param(bits: Bit[]): number;
 export declare function mergeBits(dest: Bit[], ...src: Bit[][]): Bit[];
-export declare function createBits(size: number): Bit[];
 export declare function getBit(block: number[], acc: Accumulator, options: Options): {
     bit: Bit;
     diff: number;

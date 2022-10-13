@@ -340,13 +340,6 @@ export function mergeBits(dest, ...src) {
     }
     return dest;
 }
-export function createBits(size) {
-    const bits = new Array(size).fill(0);
-    for (let i = 0; i < size; i += 1) {
-        bits[i] = Math.floor(Math.random() * 2);
-    }
-    return bits;
-}
 export function getBit(block, acc, options) {
     const [pos1, pos2] = getPos(options);
     if (options.verbose)

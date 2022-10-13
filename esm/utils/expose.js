@@ -5,10 +5,11 @@ const algorithms = {
     [AlgorithmVersion.V1]: v1,
     [AlgorithmVersion.V2]: v2,
 };
-export function createAPI({ preprocessImage, toPNG: toBuffer, toImageData }) {
+export function createAPI(_) {
+    const { preprocessImage, toPNG: toBuffer, toImageData, defaultRandomSource } = _;
     return {
         async encode(image, mask, options) {
-            const { data, height, width } = await algorithms[options.version].encode(preprocessImage(await toImageData(image)), preprocessImage(await toImageData(mask)).data, options);
+            const { data, height, width } = await algorithms[options.version].encode(preprocessImage(await toImageData(image)), preprocessImage(await toImageData(mask)).data, options, defaultRandomSource);
             return toBuffer(data, height, width);
         },
         async decode(image, mask, options) {

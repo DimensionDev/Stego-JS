@@ -1,17 +1,18 @@
 import { GrayscaleAlgorithm, grayscale, narrow } from '../utils/grayscale.js';
 import { transform, inverseTransform } from '../utils/transform.js';
 import { cropImg, updateImgByBlock, updateImgByPixel, visitImgByBlock, updateImgByPixelAt } from '../utils/image.js';
-import { mergeBits, createBits, str2bits, setBit, getBit, bits2str } from './bit.js';
+import { mergeBits, str2bits, setBit, getBit, bits2str } from './bit.js';
 import { createAcc } from './position.js';
 import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask.js';
-import { rand } from '../utils/helper.js';
+import { rand, randomBits } from '../utils/helper.js';
 import { loc2idx, loc2coord } from '../utils/locator.js';
-export async function encodeImg(imgData, maskData, options) {
+export async function encodeImg(imgData, maskData, options, defaultRandomSource) {
     const { text, size, narrow: narrowSize, copies, grayscaleAlgorithm, transformAlgorithm, exhaustPixels } = options;
     const [width, height] = cropImg(imgData, options);
     const sizeOfBlocks = width * height * 3;
     const textBits = str2bits(text, copies);
-    const bits = mergeBits(createBits(exhaustPixels ? sizeOfBlocks : textBits.length + 8 * copies), textBits, createBits(8 * copies).fill(1));
+    const randomSource = options.randomSource || defaultRandomSource;
+    const bits = mergeBits(randomBits(randomSource, exhaustPixels ? sizeOfBlocks : textBits.length + 8 * copies), textBits, Array(8 * copies).fill(1));
     if (textBits.length + 8 * copies > sizeOfBlocks) {
         process.stderr.write('bits overflow! try to shrink text or reduce copies.\n');
     }
@@ -45,8 +46,8 @@ export async function encodeImg(imgData, maskData, options) {
         if (!isBlockVisibleAt(maskData, loc, options)) {
             if (options.fakeMaskPixels && loc.c === 0) {
                 const [x, y] = loc2coord(loc, options);
-                const g = rand(10, 127);
-                updateImgByPixelAt(imgData.data, [g, g, g, 255], loc2idx(loc, options, x, y, rand(0, 64)));
+                const g = rand(randomSource, 10, 127);
+                updateImgByPixelAt(imgData.data, [g, g, g, 255], loc2idx(loc, options, x, y, rand(randomSource, 0, 64)));
             }
             return false;
         }
