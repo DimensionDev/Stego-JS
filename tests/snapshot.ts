@@ -3,6 +3,7 @@ import { toMatchFile } from 'jest-file-snapshot'
 import { join } from 'path'
 import { encode, decode, TransformAlgorithm, GrayscaleAlgorithm, AlgorithmVersion, DEFAULT_MASK } from '../src/node.js'
 import { expect, test } from 'vitest'
+import { createRandomSource } from './utils.js'
 expect.extend({ toMatchFile })
 
 const original = readFile(join(__dirname, './original.png'))
@@ -49,6 +50,7 @@ test('old version', async () => {
 })
 
 test('v1', async () => {
+  const randomSource = createRandomSource()
   const outImage = await encode(await original, mask, {
     size: 8,
     narrow: 0,
@@ -62,10 +64,9 @@ test('v1', async () => {
     pass: 'Hello World',
     text: text,
     version: AlgorithmVersion.V1,
+    randomSource,
   })
-  // Note: the algorithm currently is non-deterministic.
-  // TODO: refactor to move random source out.
-  // expect(new Uint8Array(outImage)).toMatchFile(snapshot1)
+  expect(Buffer.from(outImage)).toMatchFile(snapshot1)
 
   const decodedText = await decode(outImage, mask, {
     size: 8,
@@ -79,6 +80,7 @@ test('v1', async () => {
 })
 
 test('v2', async () => {
+  const randomSource = createRandomSource()
   const outImage = await encode(await original, mask, {
     size: 8,
     narrow: 0,
@@ -92,10 +94,9 @@ test('v2', async () => {
     pass: 'Hello World',
     text: text,
     version: AlgorithmVersion.V2,
+    randomSource,
   })
-  // Note: the algorithm currently is non-deterministic.
-  // TODO: refactor to move random source out.
-  // expect(new Uint8Array(outImage)).toMatchFile(snapshot2)
+  expect(Buffer.from(outImage)).toMatchFile(snapshot2)
 
   const decodedText = await decode(outImage, mask, {
     size: 8,
