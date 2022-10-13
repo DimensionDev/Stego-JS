@@ -402,15 +402,6 @@ export function mergeBits(dest: Bit[], ...src: Bit[][]) {
   return dest
 }
 
-export function createBits(size: number) {
-  const bits: Bit[] = new Array(size).fill(0)
-
-  for (let i = 0; i < size; i += 1) {
-    bits[i] = Math.floor(Math.random() * 2) as Bit
-  }
-  return bits
-}
-
 export function getBit(block: number[], acc: Accumulator, options: Options) {
   const [pos1, pos2] = getPos(options)
   if (options.verbose) console.warn('decoded value: ', block[pos1], block[pos2])

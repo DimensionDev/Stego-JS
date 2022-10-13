@@ -34,6 +34,9 @@ export const { encode, decode } = createAPI({
   preprocessImage(data) {
     return preprocessImage(data, (w, h) => createCanvas(w, h).getContext('2d')?.createImageData(w, h) ?? null)
   },
+  defaultRandomSource(buffer) {
+    return crypto.getRandomValues(buffer)
+  },
 })
 
 function toUint8Array(blob: Blob) {

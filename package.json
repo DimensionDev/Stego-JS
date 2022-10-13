@@ -14,6 +14,7 @@
   "scripts": {
     "build": "pnpm run build:umd && pnpm run build:dist",
     "build:dist": "tsc -b ./tsconfig.json ./tests/tsconfig.json",
+    "watch:tsc": "tsc -b ./tsconfig.json ./tests/tsconfig.json -w",
     "build:umd": "rollup -c",
     "ci-build": "pnpm run lint && pnpm test && pnpm run build",
     "lint": "eslint . --ext .ts,.tsx",

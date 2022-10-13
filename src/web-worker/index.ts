@@ -20,7 +20,9 @@ self.addEventListener('message', async (event) => {
   if (payload.type === 'encode') {
     const { id, imgData, maskData, options } = payload
     const image = new ImageData(imgData.data, imgData.width, imgData.height)
-    const { data, height, width } = await algorithms[options.version].encode(image, maskData.data, options)
+    const { data, height, width } = await algorithms[options.version].encode(image, maskData.data, options, (u8) =>
+      crypto.getRandomValues(u8),
+    )
     self.postMessage({ id, data, height, width }, event.origin)
   } else if (payload.type === 'decode') {
     const { id, imgData, maskData, options } = payload
