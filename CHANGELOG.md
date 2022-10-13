@@ -1,5 +1,12 @@
 # @dimensiondev/stego-js
 
+## 0.14.1
+
+### Patch Changes
+
+- 623d96b: improve typescript definition
+- e4ef122: list @napi-rs/image as optional peer
+
 ## 0.14.0
 
 ### Minor Changes
