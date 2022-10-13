@@ -39,13 +39,9 @@ export const { encode, decode } = createAPI({
   },
 })
 
-function toUint8Array(blob: Blob) {
-  return new Promise<Uint8Array>((resolve, reject) => {
-    const reader = new FileReader()
-    reader.addEventListener('load', () => resolve(new Uint8Array(reader.result as ArrayBuffer)))
-    reader.addEventListener('error', () => reject(new Error('fail to generate array buffer')))
-    reader.readAsArrayBuffer(blob)
-  })
+async function toUint8Array(blob: Blob) {
+  const buffer = await blob.arrayBuffer()
+  return new Uint8Array(buffer)
 }
 
 function createCanvas(width: number, height: number) {
