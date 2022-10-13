@@ -1,9 +1,8 @@
 import { Transformer } from '@napi-rs/image';
 import { randomFillSync } from 'crypto';
 import { createAPI } from './utils/expose.js';
-import { getImageType } from './utils/helper.js';
 import { preprocessImage } from './utils/image.js';
-export { getImageType };
+export { getImageType } from './utils/helper.js';
 export * from './utils/types.js';
 export * from './constant.js';
 export const { encode, decode } = createAPI({
