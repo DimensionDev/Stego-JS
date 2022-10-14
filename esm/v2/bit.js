@@ -95,7 +95,7 @@ function char2code(c) {
 function code2char(c) {
     return URIcharCode.indexOf(c) !== -1 ? URIchars[URIcharCode.indexOf(c)] : '';
 }
-export function str2codes(text) {
+function str2codes(text) {
     const codes = [];
     Array.from(text).map((char) => {
         const URIcodes = Array.from(encodeURI(char));
@@ -103,7 +103,7 @@ export function str2codes(text) {
     });
     return codes;
 }
-export function codes2bits(codes, copies) {
+function codes2bits(codes, copies) {
     const bits = [];
     const pushByte = (byte, n) => {
         for (let i = 0; i < 8; i += 1) {
@@ -340,7 +340,7 @@ export function mergeBits(dest, ...src) {
     }
     return dest;
 }
-export function getBit(block, acc, options) {
+export function getBit(block, options) {
     const [pos1, pos2] = getPos(options);
     if (options.verbose)
         console.warn('decoded value: ', block[pos1], block[pos2]);

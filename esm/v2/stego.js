@@ -2,7 +2,7 @@ import { GrayscaleAlgorithm, grayscale, narrow } from '../utils/grayscale.js';
 import { transform, inverseTransform } from '../utils/transform.js';
 import { cropImg, updateImgByBlock, updateImgByPixel, visitImgByBlock, updateImgByPixelAt, updateImgByPixelChannelAt, } from '../utils/image.js';
 import { mergeBits, str2bits, setBit, getBit, bits2str, param2bits, bits2param } from './bit.js';
-import { createAcc, getPos } from './position.js';
+import { getPos } from './position.js';
 import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask.js';
 import { rand, randomBits, shuffleGroupBy3, unshuffleGroupBy3 } from '../utils/helper.js';
 import { loc2idx, loc2coord } from '../utils/locator.js';
@@ -141,7 +141,6 @@ export async function encodeImg(imgData, maskData, options, defaultRandomSource)
 export async function decodeImg(imgData, maskData, options) {
     const { size, transformAlgorithm } = options;
     const richBits = [];
-    const acc = createAcc(options);
     const im = new Array(size * size);
     const [width, height] = cropImg(imgData, options);
     const sizeOfBlocks = (width * height * 3) / (size * size);
@@ -159,10 +158,10 @@ export async function decodeImg(imgData, maskData, options) {
                 Math.floor(shuffleArr[i] / (8 * options.copies)) +
                 ', bitId: ' +
                 (shuffleArr[i] % (8 * options.copies)));
-            console.warn('bit: ' + getBit(block, acc, options).bit, block);
+            console.warn('bit: ' + getBit(block, options).bit, block);
         }
         // let { bit, diff } = getBit(block, acc, options);
-        richBits.push(getBit(block, acc, options));
+        richBits.push(getBit(block, options));
         blockId += 1;
         return true;
     });
