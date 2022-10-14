@@ -1,5 +1,5 @@
 import { Options } from '../utils/stego-params.js'
-import { getPos, Accumulator } from './position.js'
+import { getPos } from './position.js'
 import { TransformAlgorithm } from '../utils/transform.js'
 import { DEFAULT_PARAM_COPIES } from '../constant.js'
 
@@ -104,7 +104,7 @@ function code2char(c: number) {
   return URIcharCode.indexOf(c) !== -1 ? URIchars[URIcharCode.indexOf(c)] : ''
 }
 
-export function str2codes(text: string): number[] {
+function str2codes(text: string): number[] {
   const codes: number[] = []
   Array.from(text).map((char) => {
     const URIcodes = Array.from(encodeURI(char))
@@ -113,7 +113,7 @@ export function str2codes(text: string): number[] {
   return codes
 }
 
-export function codes2bits(codes: number[], copies: number): Bit[] {
+function codes2bits(codes: number[], copies: number): Bit[] {
   const bits: Bit[] = []
   const pushByte = (byte: Bit[], n: number) => {
     for (let i = 0; i < 8; i += 1) {
@@ -402,7 +402,7 @@ export function mergeBits(dest: Bit[], ...src: Bit[][]) {
   return dest
 }
 
-export function getBit(block: number[], acc: Accumulator, options: Options) {
+export function getBit(block: number[], options: Options) {
   const [pos1, pos2] = getPos(options)
   if (options.verbose) console.warn('decoded value: ', block[pos1], block[pos2])
   const diff = block[pos1] - block[pos2]

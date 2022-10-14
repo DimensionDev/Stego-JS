@@ -4,7 +4,6 @@ import { clamp } from '../src/utils/helper.js'
 import { AlgorithmVersion, Options } from '../src/utils/stego-params.js'
 import { inverseTransform, transform, TransformAlgorithm } from '../src/utils/transform.js'
 import { Bit, getBit as getBitV2, setBit as setBitV2 } from '../src/v2/bit.js'
-import { createAcc } from '../src/v2/position.js'
 
 export function createOptions(transformAlgorithm: TransformAlgorithm) {
   return {
@@ -25,9 +24,8 @@ export function encodeBitbyBlock(bit: Bit, block: number[], transformAlgorithm: 
 
 export function decodeBitbyBlock(block: number[], transformAlgorithm: TransformAlgorithm, options: Options): Bit {
   const im = new Array(options.size * options.size)
-  const acc = createAcc(options)
   transform(block, im.fill(0), transformAlgorithm, options)
-  return getBitV2(block, acc, options).bit
+  return getBitV2(block, options).bit
 }
 
 export function normalizeBlock(block: number[]) {

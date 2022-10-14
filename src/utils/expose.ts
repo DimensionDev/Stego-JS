@@ -30,7 +30,11 @@ const algorithms = {
 export function createAPI(_: IO) {
   const { preprocessImage, toPNG: toBuffer, toImageData, defaultRandomSource } = _
   return {
-    async encode(image: ArrayBuffer, mask: ArrayBuffer, options: EncodeOptions) {
+    async encode(
+      image: ArrayBufferLike | ArrayLike<number>,
+      mask: ArrayBufferLike | ArrayLike<number>,
+      options: EncodeOptions,
+    ) {
       const { data, height, width } = await algorithms[options.version].encode(
         preprocessImage(await toImageData(image)),
         preprocessImage(await toImageData(mask)).data,
@@ -39,7 +43,11 @@ export function createAPI(_: IO) {
       )
       return toBuffer(data, height, width)
     },
-    async decode(image: ArrayBuffer, mask: ArrayBuffer, options: DecodeOptions) {
+    async decode(
+      image: ArrayBufferLike | ArrayLike<number>,
+      mask: ArrayBufferLike | ArrayLike<number>,
+      options: DecodeOptions,
+    ) {
       return algorithms[options.version].decode(await toImageData(image), (await toImageData(mask)).data, options)
     },
   }

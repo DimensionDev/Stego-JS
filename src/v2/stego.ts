@@ -10,7 +10,7 @@ import {
   updateImgByPixelChannelAt,
 } from '../utils/image.js'
 import { mergeBits, str2bits, setBit, getBit, bits2str, param2bits, Bit, bits2param } from './bit.js'
-import { createAcc, getPos } from './position.js'
+import { getPos } from './position.js'
 import { isPixelVisibleAt, isBlockVisibleAt } from '../utils/mask.js'
 import { rand, randomBits, shuffleGroupBy3, unshuffleGroupBy3 } from '../utils/helper.js'
 import { loc2idx, loc2coord } from '../utils/locator.js'
@@ -183,7 +183,6 @@ export async function decodeImg(imgData: ImageData, maskData: Uint8ClampedArray,
     bit: Bit
     diff: number
   }[] = []
-  const acc = createAcc(options)
   const im = new Array(size * size)
 
   const [width, height] = cropImg(imgData, options)
@@ -205,10 +204,10 @@ export async function decodeImg(imgData: ImageData, maskData: Uint8ClampedArray,
           ', bitId: ' +
           (shuffleArr[i] % (8 * options.copies)),
       )
-      console.warn('bit: ' + getBit(block, acc, options).bit, block)
+      console.warn('bit: ' + getBit(block, options).bit, block)
     }
     // let { bit, diff } = getBit(block, acc, options);
-    richBits.push(getBit(block, acc, options))
+    richBits.push(getBit(block, options))
 
     blockId += 1
 
