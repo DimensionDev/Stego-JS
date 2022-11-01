@@ -1,4 +1,4 @@
-# @dimensiondev/stego-js
+# @masknet/stego-js
 
 ## 0.14.1
 

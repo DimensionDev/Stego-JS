@@ -1,6 +1,6 @@
 # Stego-JS
 
-[![npm module](https://img.shields.io/npm/v/@dimensiondev/stego-js)](https://www.npmjs.com/package/@dimensiondev/stego-js)
+[![npm module](https://img.shields.io/npm/v/@masknet/stego-js)](https://www.npmjs.com/package/@masknet/stego-js)
 
 [Example](https://dimensiondev.github.io/Stego-JS/example/index.html)
 
@@ -8,33 +8,33 @@
 
 ```bash
 # node
-npm install @dimensiondev/stego-js @napi-rs/image --global
+npm install @masknet/stego-js @napi-rs/image --global
 
 # dom
-npm install @dimensiondev/stego-js
+npm install @masknet/stego-js
 ```
 
 ## Usage
 
 ```bash
 # cli
-npx @dimensiondev/stego-js -h
+npx @masknet/stego-js -h
 
 # or
-npm install --global @dimensiondev/stego-js
+npm install --global @masknet/stego-js
 stego-js -h
 ```
 
 ```javascript
 // node
-import { encode, decode } from '@dimensiondev/stego-js/cjs/node'
+import { encode, decode } from '@masknet/stego-js/cjs/node'
 
 // dom
-import { encode, decode } from '@dimensiondev/stego-js/cjs/dom'
+import { encode, decode } from '@masknet/stego-js/cjs/dom'
 
 // in native  (using ./cjs/node)
 // in browser (using ./cjs/dom)
-import { encode, decode } from '@dimensiondev/stego-js'
+import { encode, decode } from '@masknet/stego-js'
 ```
 
 ## Refs

@@ -1,5 +1,5 @@
 {
-  "name": "@dimensiondev/stego-js",
+  "name": "@masknet/stego-js",
   "version": "0.14.1",
   "packageManager": "pnpm@7.13.2",
   "type": "module",

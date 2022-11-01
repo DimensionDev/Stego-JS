@@ -15,9 +15,6 @@ jobs:
         with:
           node-version: '18'
           cache: 'pnpm'
-      - uses: DimensionDev/github-token-action@latest
-        with:
-          registry: true
       - run: pnpm install
       - run: npx tsc --noEmit
       - run: pnpm run build

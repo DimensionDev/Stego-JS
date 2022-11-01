@@ -11,9 +11,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: DimensionDev/github-token-action@latest
-        with:
-          registry: true
       - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
@@ -26,3 +23,4 @@ jobs:
           publish: pnpm run publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
