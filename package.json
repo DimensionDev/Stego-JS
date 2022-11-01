@@ -20,7 +20,7 @@
     "ci-build": "pnpm run lint && pnpm test && pnpm run build",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "vitest",
-    "publish": "pnpm run build && npx changeset publish"
+    "release": "pnpm run build && npx changeset publish"
   },
   "dependencies": {
     "@rgba-image/lanczos": "^0.1.0",
