@@ -1,5 +1,11 @@
 # @masknet/stego-js
 
+## 0.14.2
+
+### Patch Changes
+
+- 7c6c24b: publish on npm
+
 ## 0.14.1
 
 ### Patch Changes
