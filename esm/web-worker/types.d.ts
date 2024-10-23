@@ -1,5 +1,5 @@
 import { DecodeOptions, EncodeOptions } from '../utils/stego-params.js';
-export declare type Payload = EncodePayload | DecodePayload;
+export type Payload = EncodePayload | DecodePayload;
 export interface EncodePayload {
     type: 'encode';
     id: unknown;

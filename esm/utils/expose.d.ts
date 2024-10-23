@@ -4,8 +4,8 @@ export interface EncodedImageData {
     readonly height: number;
     readonly width: number;
 }
-export declare type Encoder = (imgData: ImageData, maskData: Uint8ClampedArray, options: EncodeOptions, defaultRandomSource: RandomSource) => Promise<EncodedImageData>;
-export declare type Decoder = (imgData: ImageData, maskData: Uint8ClampedArray, options: DecodeOptions) => Promise<string>;
+export type Encoder = (imgData: ImageData, maskData: Uint8ClampedArray, options: EncodeOptions, defaultRandomSource: RandomSource) => Promise<EncodedImageData>;
+export type Decoder = (imgData: ImageData, maskData: Uint8ClampedArray, options: DecodeOptions) => Promise<string>;
 export interface IO {
     toImageData(data: ArrayBufferLike | ArrayLike<number>): Promise<ImageData>;
     toPNG(imgData: ImageData, height?: number, width?: number): Promise<Uint8Array>;

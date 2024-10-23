@@ -14,7 +14,7 @@ export var GrayscaleAlgorithm;
     GrayscaleAlgorithm["SIGNLE_R"] = "R";
     GrayscaleAlgorithm["SIGNLE_G"] = "G";
     GrayscaleAlgorithm["SIGNLE_B"] = "B";
-})(GrayscaleAlgorithm = GrayscaleAlgorithm || (GrayscaleAlgorithm = {}));
+})(GrayscaleAlgorithm || (GrayscaleAlgorithm = {}));
 export function grayscale(r, g, b, algorithm) {
     switch (algorithm) {
         case GrayscaleAlgorithm.AVERAGE:

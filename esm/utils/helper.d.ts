@@ -8,7 +8,7 @@ export declare function shuffle<T>(numbers: T[], seed: readonly number[], unshuf
 export declare function filterIndices(size: number, predicator: (i: number) => boolean): number[];
 export declare function squareCircleIntersect(size: number, radius: number): number[];
 export declare function getImageType(buf: ArrayLike<number>): "image/jpeg" | "image/png" | undefined;
-export declare type Bit = 0 | 1;
+export type Bit = 0 | 1;
 export declare function randomBits(randomSource: RandomSource, size: number): Bit[];
 /**
  * generate a number from range [min, max] (both inclusive)

@@ -1,4 +1,4 @@
-import { Transformer } from '@napi-rs/image';
+import { JsColorType, Transformer } from '@napi-rs/image';
 import { randomFillSync } from 'crypto';
 import { createAPI } from './utils/expose.js';
 import { preprocessImage } from './utils/image.js';
@@ -9,15 +9,15 @@ export const { encode, decode } = createAPI({
     async toImageData(data) {
         let transformer = new Transformer(Buffer.from(new Uint8Array(data)));
         let { width, height, colorType } = await transformer.metadata();
-        if (colorType !== 3 /* JsColorType.Rgba8 */ && colorType !== 2 /* JsColorType.Rgb8 */) {
+        if (colorType !== JsColorType.Rgba8 && colorType !== JsColorType.Rgb8) {
             transformer = new Transformer(await transformer.png());
             ({ width, height, colorType } = await transformer.metadata());
         }
-        if (colorType !== 3 /* JsColorType.Rgba8 */ && colorType !== 2 /* JsColorType.Rgb8 */) {
+        if (colorType !== JsColorType.Rgba8 && colorType !== JsColorType.Rgb8) {
             throw new TypeError('Cannot convert the given image to rgba8 format.');
         }
         let rgb = new Uint8ClampedArray(await transformer.rawPixels());
-        if (colorType === 2 /* JsColorType.Rgb8 */)
+        if (colorType === JsColorType.Rgb8)
             rgb = rgb_to_rgba(rgb);
         const imageData = {
             width,

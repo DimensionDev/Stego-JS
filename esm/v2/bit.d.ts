@@ -1,5 +1,5 @@
 import { Options } from '../utils/stego-params.js';
-export declare type Bit = 0 | 1;
+export type Bit = 0 | 1;
 export declare function str2bits(text: string, copies: number): Bit[];
 export declare function bits2str(richBits: readonly {
     readonly bit: Bit;

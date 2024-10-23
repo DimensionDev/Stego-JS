@@ -14,7 +14,7 @@ export interface Options {
     readonly verbose?: boolean;
 }
 /** crypto.getRandomValues.bind(crypto) is OK */
-export declare type RandomSource = (array: Uint8Array) => Uint8Array;
+export type RandomSource = (array: Uint8Array) => Uint8Array;
 export interface EncodeOptions extends Options {
     readonly text: string;
     readonly narrow: number;
@@ -24,5 +24,5 @@ export interface EncodeOptions extends Options {
     readonly fakeMaskPixels: boolean;
     readonly randomSource?: RandomSource;
 }
-export declare type DecodeOptions = Options;
+export type DecodeOptions = Options;
 //# sourceMappingURL=stego-params.d.ts.map

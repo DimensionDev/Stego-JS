@@ -1,6 +1,6 @@
 import { Options } from './stego-params.js';
 import { Locator } from './locator.js';
-export declare type Pixel = [r: number, g: number, b: number, a: number];
+export type Pixel = [r: number, g: number, b: number, a: number];
 export declare function preprocessImage(imageData: ImageData, getScaled: (w: number, h: number) => ImageData | null): ImageData;
 export declare function cropImg({ width, height }: ImageData, { size }: Options): readonly [number, number];
 export declare function divideImg({ width, height, data }: ImageData, { size, verbose }: Options): Generator<number[], void, unknown>;

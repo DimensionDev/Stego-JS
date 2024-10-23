@@ -7,7 +7,7 @@ export var TransformAlgorithm;
     TransformAlgorithm["FFT2D"] = "FFT2D";
     TransformAlgorithm["DCT"] = "DCT";
     TransformAlgorithm["FastDCT"] = "fastDCT";
-})(TransformAlgorithm = TransformAlgorithm || (TransformAlgorithm = {}));
+})(TransformAlgorithm || (TransformAlgorithm = {}));
 export function transform(re, im, algorithm, { size }) {
     switch (algorithm) {
         case TransformAlgorithm.FFT1D:

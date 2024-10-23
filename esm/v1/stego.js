@@ -14,7 +14,7 @@ export async function encodeImg(imgData, maskData, options, defaultRandomSource)
     const randomSource = options.randomSource || defaultRandomSource;
     const bits = mergeBits(randomBits(randomSource, exhaustPixels ? sizeOfBlocks : textBits.length + 8 * copies), textBits, Array(8 * copies).fill(1));
     if (textBits.length + 8 * copies > sizeOfBlocks) {
-        process.stderr.write('bits overflow! try to shrink text or reduce copies.\n');
+        console.error('bits overflow! try to shrink text or reduce copies.');
     }
     if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE || narrowSize > 0) {
         updateImgByPixel(imgData, ([r, g, b, a], loc) => {

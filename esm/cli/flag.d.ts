@@ -1,4 +1,4 @@
-import { EncodeOptions, AlgorithmVersion } from '../utils/stego-params.js';
+import { EncodeOptions, DecodeOptions, AlgorithmVersion } from '../utils/stego-params.js';
 import { GrayscaleAlgorithm } from '../utils/grayscale.js';
 import { TransformAlgorithm } from '../utils/transform.js';
 import { TypedFlags } from 'meow';
@@ -111,5 +111,5 @@ export declare const flags: {
 };
 export declare function normalizeFlags(rawFlags: TypedFlags<typeof flags>): Flags;
 export declare function validateFlags({ algorithmVersion, encode, message, size, copies, tolerance, grayscale, transform, }: Flags): string;
-export declare function flags2Options({ algorithmVersion, message, pass, narrow, size, copies, tolerance, grayscale, transform, exhaustPixels, cropEdgePixels, fakeMaskPixels, verbose, }: Flags): EncodeOptions & import("../utils/stego-params.js").Options;
+export declare function flags2Options({ algorithmVersion, message, pass, narrow, size, copies, tolerance, grayscale, transform, exhaustPixels, cropEdgePixels, fakeMaskPixels, verbose, }: Flags): EncodeOptions & DecodeOptions;
 //# sourceMappingURL=flag.d.ts.map

@@ -1,1 +1,1 @@
-{"program":{"fileNames":[],"fileInfos":[],"options":{"composite":true,"declaration":true,"declarationMap":true,"module":199,"outDir":"./","skipLibCheck":true,"sourceMap":true,"strict":true,"target":7},"referencedMap":[],"exportedModulesMap":[]},"version":"4.8.4"}
+{"root":["../tests/snapshot.ts","../tests/stego.ts","../tests/utils.ts"],"version":"5.6.3"}
