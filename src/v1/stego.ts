@@ -26,7 +26,7 @@ export async function encodeImg(
   )
 
   if (textBits.length + 8 * copies > sizeOfBlocks) {
-    process.stderr.write('bits overflow! try to shrink text or reduce copies.\n')
+    console.error('bits overflow! try to shrink text or reduce copies.')
   }
   if (grayscaleAlgorithm !== GrayscaleAlgorithm.NONE || narrowSize > 0) {
     updateImgByPixel(imgData, ([r, g, b, a], loc) => {

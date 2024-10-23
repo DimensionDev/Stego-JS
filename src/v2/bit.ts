@@ -420,10 +420,10 @@ export function setBit(block: number[], bit: Bit, options: Options, tolerance: n
     t0 > 1.5 * tolerance
       ? 0.5 * tolerance
       : t0 < 0.3 * tolerance
-      ? 1.5 * tolerance
-      : t0 < 0.5 * tolerance
-      ? 1.2 * tolerance
-      : tolerance
+        ? 1.5 * tolerance
+        : t0 < 0.5 * tolerance
+          ? 1.2 * tolerance
+          : tolerance
   ;[v1, v2] = v1 < v2 ? [v1 - t / 2, v2 + t / 2] : [v1 + t / 2, v2 - t / 2]
 
   if (options.verbose) console.warn('encoded value: ', v1, v2)
