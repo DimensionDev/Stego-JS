@@ -1,1 +1,1 @@
-{"root":["../tests/snapshot.ts","../tests/stego.ts","../tests/utils.ts"],"version":"5.6.3"}
+{"root":["../tests/image.ts","../tests/snapshot.ts","../tests/stego.ts","../tests/utils.ts"],"version":"5.6.3"}
