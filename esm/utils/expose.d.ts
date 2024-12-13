@@ -13,7 +13,7 @@ export interface IO {
     defaultRandomSource(buffer: Uint8Array): Uint8Array;
 }
 export declare function createAPI(_: IO): {
-    encode(image: ArrayBufferLike | ArrayLike<number>, mask: ArrayBufferLike | ArrayLike<number>, options: EncodeOptions): Promise<Uint8Array>;
+    encode(image: ArrayBufferLike | ArrayLike<number>, mask: ArrayBufferLike | ArrayLike<number>, options: EncodeOptions): Promise<Uint8Array<ArrayBufferLike>>;
     decode(image: ArrayBufferLike | ArrayLike<number>, mask: ArrayBufferLike | ArrayLike<number>, options: DecodeOptions): Promise<string>;
 };
 //# sourceMappingURL=expose.d.ts.map
