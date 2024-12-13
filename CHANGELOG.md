@@ -1,5 +1,11 @@
 # @masknet/stego-js
 
+## 0.15.1
+
+### Patch Changes
+
+- 40d94ae: fix: lanczos throwing when destination dimensions are not round
+
 ## 0.15.0
 
 ### Minor Changes
