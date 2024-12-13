@@ -15,7 +15,7 @@ export function preprocessImage(
   if (imageData.width <= MAX_WIDTH && imageData.height <= MAX_WIDTH) return imageData
   const scale = MAX_WIDTH / Math.max(imageData.width, imageData.height)
   const [w, h] = [imageData.width * scale, imageData.height * scale]
-  const scaled = getScaled(w, h)
+  const scaled = getScaled(Math.round(w), Math.round(h))
   if (scaled) {
     lanczos(imageData, scaled)
     return scaled
